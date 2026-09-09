@@ -11,4 +11,4 @@ Resolve the recorded final-review finding by carrying accepted payment effects i
 
 ## Realized by
 
-(none yet: recorded, not built)
+2f2a9b8 Suppress payment notices for rejected stale observations

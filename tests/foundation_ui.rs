@@ -1,6 +1,7 @@
 mod common;
 use common::Client;
 use directory::models::user::User;
+use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
 use suprnova::serde_json::json;
 
 #[tokio::test]
@@ -40,6 +41,23 @@ async fn administration_requires_an_explicit_permission() {
         guest.get("/admin").await.location.as_deref(),
         Some("/dashboard")
     );
+    // The starter now seeds this role with explicit permissions. Strip those in
+    // this disposable fixture so the same name-only denial remains meaningful.
+    use suprnova::rbac::entity::{
+        RoleColumn, RoleEntity, RolePermissionColumn, RolePermissionEntity,
+    };
+    let role = RoleEntity::find()
+        .filter(RoleColumn::Name.eq("administrator"))
+        .filter(RoleColumn::GuardName.eq("web"))
+        .one(suprnova::DB::connection().unwrap().inner())
+        .await
+        .unwrap()
+        .unwrap();
+    RolePermissionEntity::delete_many()
+        .filter(RolePermissionColumn::RoleId.eq(role.id))
+        .exec(suprnova::DB::connection().unwrap().inner())
+        .await
+        .unwrap();
     // A role name alone grants nothing; only the explicit permission does.
     suprnova::rbac::assign_role_to_model(
         "directory.user",

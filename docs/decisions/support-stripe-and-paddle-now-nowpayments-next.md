@@ -11,4 +11,6 @@ On 2026-09-08 Shawn selected Stripe and Paddle admin and configuration support f
 
 ## Realized by
 
-(none yet: recorded, not built)
+- a4cadb95e469f8467953e71c32a36035c63806e6 Establish Cairn specifications and draft foundation commitment
+
+This scope decision is realized by the two-provider specification and separate NOWPayments commitment. Runtime provider administration and the framework adapter remain future implementation; no provider behavior is claimed complete.

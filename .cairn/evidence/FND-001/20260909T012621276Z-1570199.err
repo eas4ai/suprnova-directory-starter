@@ -1,0 +1,8 @@
+   Compiling directory v0.1.0 (/tmp/directory-foundation-dP2JO5)
+    Finished `dev` profile [unoptimized] target(s) in 5.66s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /tmp/directory-foundation-dP2JO5/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts

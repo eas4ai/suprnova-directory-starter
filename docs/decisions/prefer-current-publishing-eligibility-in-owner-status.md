@@ -11,4 +11,4 @@ Owner dashboard status must prefer a currently valid free or live entitlement, t
 
 ## Realized by
 
-(none yet: recorded, not built)
+- cd5f7b1227631e6a94a177169dd5c0c255782b38 Prefer current paid periods in owner payment status

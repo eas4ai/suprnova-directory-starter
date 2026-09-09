@@ -11,4 +11,4 @@ Record owner notification intents in the same database transaction as moderation
 
 ## Realized by
 
-(none yet: recorded, not built)
+- 03a550417c359d6ac26543d46e82463435866b3e Complete durable owner notifications and starter adoption workflows

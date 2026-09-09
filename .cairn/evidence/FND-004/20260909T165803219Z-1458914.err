@@ -1,0 +1,8 @@
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-foundation-iY8Ndd/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-iY8Ndd)
+    Finished `test` profile [unoptimized] target(s) in 7.47s
+     Running tests/foundation_ui.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/foundation_ui-066e8f8758ed053e)

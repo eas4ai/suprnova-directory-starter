@@ -12,3 +12,5 @@ Keep the existing Eloquent user provider. Send verification after registration a
 ## Realized by
 
 (none yet: recorded, not built)
+
+- 4b5d9a47f43e3eec4b020e421d74e2d2e091e234 Complete framework account journeys with isolated HTTP verification

@@ -1,0 +1,24 @@
+command: node scripts/verify-complete-starter.mjs editorial
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+  - LICENSE
+  - THIRD_PARTY_NOTICES.md
+requirements:
+  - CNT-001
+  - CNT-002
+  - CNT-003
+  - CNT-004
+  - CNT-005
+  - CNT-006

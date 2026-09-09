@@ -1,7 +1,7 @@
 # Roadmap
 
 Status: Agreed 2026-09-08
-Current: paid-directory
+Current: complete-starter
 
 ## First starter delivery
 

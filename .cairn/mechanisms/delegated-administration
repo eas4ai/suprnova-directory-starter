@@ -1,0 +1,21 @@
+command: node scripts/verify-complete-starter.mjs administration
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+  - LICENSE
+  - THIRD_PARTY_NOTICES.md
+requirements:
+  - ADM-001
+  - ADM-002
+  - ADM-003

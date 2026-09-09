@@ -1,0 +1,23 @@
+command: node scripts/verify-complete-starter.mjs adoption
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+  - LICENSE
+  - THIRD_PARTY_NOTICES.md
+requirements:
+  - KIT-001
+  - KIT-002
+  - KIT-003
+  - KIT-004
+  - KIT-005

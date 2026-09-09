@@ -15,7 +15,7 @@ export function snapshot(source, prefix) {
   const scratchRoot = process.env.FOUNDATION_SCRATCH_DIR ?? resolve(source, '../scratchpads');
   mkdirSync(scratchRoot, { recursive: true });
   const destination = mkdtempSync(join(scratchRoot, prefix));
-  const roots = ['Cargo.toml', 'Cargo.lock', 'src/', 'cmd/', 'frontend/', 'lang/', 'scripts/', 'tests/', 'README.md', 'handoff.md', '.env.example'];
+  const roots = ['Cargo.toml', 'Cargo.lock', 'src/', 'cmd/', 'frontend/', 'lang/', 'scripts/', 'tests/', 'README.md', 'handoff.md', '.env.example', 'LICENSE', 'THIRD_PARTY_NOTICES.md'];
   try {
     for (const file of new Set(result.stdout.split('\0').filter(Boolean))) {
       if (!roots.some(root => root.endsWith('/') ? file.startsWith(root) : file === root)) continue;

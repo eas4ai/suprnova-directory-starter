@@ -14,3 +14,6 @@ pub mod public_pages;
 pub mod routes;
 
 pub mod accounts;
+
+pub mod demo;
+pub mod notifications;

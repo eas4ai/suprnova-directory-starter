@@ -7,6 +7,8 @@ inputs:
   - lang/
   - README.md
   - handoff.md
+  - LICENSE
+  - THIRD_PARTY_NOTICES.md
   - src/
   - cmd/
   - frontend/

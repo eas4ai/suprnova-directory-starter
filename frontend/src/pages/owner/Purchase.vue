@@ -49,11 +49,13 @@ function loadPaddle(): Promise<PaddleApi> {
 </script>
 
 <script setup lang="ts">
+import OwnerNotifications from '../../components/OwnerNotifications.vue'
+import type { OwnerNotice } from '../../types/notifications'
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 import { Head, Link, router, useForm } from '@inertiajs/vue3'
 import { billingTypeLabel, publishingPrice, publishingTerms, type PublishingPurchase } from '../../types/publishing'
 
-const props = defineProps<{ purchase: PublishingPurchase }>()
+const props = defineProps<{ purchase: PublishingPurchase; notifications: OwnerNotice[] }>()
 const actionForm = useForm({})
 const errors = computed(() => actionForm.errors as Record<string, string>)
 const errorSummary = ref<HTMLElement | null>(null)
@@ -130,7 +132,7 @@ function refreshStatus() {
   refreshing.value = true
   refreshNotice.value = ''
   router.reload({
-    only: ['purchase'],
+    only: ['purchase', 'notifications'],
     onSuccess: () => { refreshNotice.value = 'Status refreshed.'; if (!reloadRequired.value) clientError.value = '' },
     onError: () => { clientError.value = 'We couldn’t refresh your payment status. Please try again.'; void focusErrors() },
     onNetworkError: () => failedRequest('We couldn’t refresh your payment status. Your saved purchase is unchanged; please try again.'),
@@ -325,5 +327,6 @@ onBeforeUnmount(() => {
         </form>
       </div>
     </section>
+    <OwnerNotifications :notifications="notifications" />
   </section>
 </template>

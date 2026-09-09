@@ -137,6 +137,9 @@ pub(crate) async fn apply(
         .await
         .map_err(database_error)?;
     }
+    if let Some(id) = purchase_id {
+        crate::notifications::payment_facts(&tx, id, event_id, facts).await?;
+    }
     let now = chrono::Utc::now().timestamp();
     receipt::ActiveModel {
         event_record_id: Set(event_id.to_owned()),

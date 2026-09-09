@@ -421,6 +421,8 @@ pub async fn start(
         .await
         .map_err(database_error)?;
     }
+    crate::notifications::purchase(&tx, &id_string, &format!("purchase:{id_string}:created"))
+        .await?;
     tx.commit().await.map_err(database_error)?;
     continue_purchase(actor, &id_string, gateway).await?;
     Ok(id_string)
@@ -493,6 +495,7 @@ async fn claim(
     state: &str,
 ) -> Result<Option<purchase::Model>, FrameworkError> {
     let db = DB::connection()?;
+    let tx = db.inner().begin().await.map_err(database_error)?;
     let now = chrono::Utc::now().timestamp();
     let changed = purchase::Entity::update_many()
         .col_expr(purchase::Column::State, Expr::value(state))
@@ -501,13 +504,27 @@ async fn claim(
         .col_expr(purchase::Column::UpdatedAt, Expr::value(now))
         .filter(purchase::Column::Id.eq(&row.id))
         .filter(purchase::Column::Version.eq(row.version))
-        .exec(db.inner())
+        .exec(&tx)
         .await
         .map_err(database_error)?;
     if changed.rows_affected == 0 {
         return Ok(None);
     }
-    owned(row.owner_id, &row.id).await.map(Some)
+    if row.state != state {
+        crate::notifications::purchase(
+            &tx,
+            &row.id,
+            &format!("purchase:{}:{}:{state}", row.id, row.version + 1),
+        )
+        .await?;
+    }
+    let updated = purchase::Entity::find_by_id(&row.id)
+        .one(&tx)
+        .await
+        .map_err(database_error)?
+        .ok_or_else(missing)?;
+    tx.commit().await.map_err(database_error)?;
+    Ok(Some(updated))
 }
 
 async fn failed(
@@ -516,7 +533,8 @@ async fn failed(
     error: GatewayError,
 ) -> Result<(), FrameworkError> {
     let db = DB::connection()?;
-    purchase::Entity::update_many()
+    let tx = db.inner().begin().await.map_err(database_error)?;
+    let changed = purchase::Entity::update_many()
         .col_expr(purchase::Column::State, Expr::value(state))
         .col_expr(purchase::Column::ErrorCode, Expr::value(error.0))
         .col_expr(
@@ -525,9 +543,20 @@ async fn failed(
         )
         .filter(purchase::Column::Id.eq(&row.id))
         .filter(purchase::Column::Version.eq(row.version))
-        .exec(db.inner())
+        .exec(&tx)
         .await
         .map_err(database_error)?;
+    if changed.rows_affected == 1
+        && (row.state != state || row.error_code.as_deref() != Some(error.0))
+    {
+        crate::notifications::purchase(
+            &tx,
+            &row.id,
+            &format!("purchase:{}:{}:{state}:failed", row.id, row.version),
+        )
+        .await?;
+    }
+    tx.commit().await.map_err(database_error)?;
     Ok(())
 }
 
@@ -597,6 +626,8 @@ pub async fn continue_purchase(
             return Ok(());
         }
         link_reference(&tx, &row, "customer", &customer, None).await?;
+        crate::notifications::purchase(&tx, id, &format!("purchase:{id}:{}:reserved", row.version))
+            .await?;
         tx.commit().await.map_err(database_error)?;
         row = owned(actor, id).await?;
     }
@@ -701,6 +732,8 @@ pub async fn continue_purchase(
         .map_err(database_error)?;
     if changed.rows_affected == 1 {
         link_reference(&tx, &row, "session", &session, None).await?;
+        crate::notifications::purchase(&tx, id, &format!("purchase:{id}:{}:open", row.version))
+            .await?;
     }
     tx.commit().await.map_err(database_error)
 }

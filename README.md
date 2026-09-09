@@ -2,7 +2,8 @@
 
 A free directory starter built on Suprnova, with owner submissions, moderation,
 directory search and free or paid publication through Stripe and Paddle.
-See [the roadmap](docs/spec/roadmap.md) for the remaining starter work.
+Licensed under [MIT](LICENSE), with [third-party notices](THIRD_PARTY_NOTICES.md).
+See [the roadmap](docs/spec/roadmap.md) for the current verification status.
 
 The framework and both payment adapters are pinned to Suprnova commit
 `107e6e7a122d5145160ea1547ca90ddc37459c27` for the reviewed checkout repairs.
@@ -388,3 +389,167 @@ transaction interruption, replay, renewals, refunds, disputes and recovery in bo
 modes. It runs local HTTP contracts for the pinned SDKs and checkout adapters, then
 browser journeys for plans and purchases. Payment screenshots go to
 `target/payments-ui`; directory screenshots go to `target/directory-ui`.
+
+## Demonstration installation
+
+Use a fresh local database for demonstrations. The seed creates clearly identified
+categories, listings in representative states and published/draft articles. It
+creates no fixed privileged password. Provision your own verified administrator
+with the host command above. Demo entitlements are synthetic; no payment API is
+called. Repeating these commands preserves operator records and avoids duplicates.
+
+<!-- adoption:seed -->
+```sh
+cargo run --locked --bin console -- directory:categories
+cargo run --locked --bin console -- directory:demo
+```
+
+`directory:demo` refuses production mode unless the host operator deliberately adds
+`--allow-production`. That override authorizes demo records in the production
+database; prefer a separate demonstration installation.
+
+## Owner notifications
+
+Owners can read their latest 20 moderation and payment notifications on listing
+edit and purchase status pages. Domain changes and notification intents commit together. A failed mail send
+retains the intent; restarting does not discard it. Run the delivery command every
+minute using the same database, application origin and SMTP configuration as the
+web process. The batch defaults to 25 intents; `--limit` accepts 1 through 100.
+Each send has a 15-second timeout, each lease lasts 60 seconds, and a batch has a
+120-second deadline. The worker checks the remaining budget before starting the
+next send. Automatic delivery stops after eight failed attempts. Retry delays are
+`30 × 2^attempt` seconds: the first is 60 seconds and the eighth is 7,680 seconds.
+
+<!-- adoption:operations -->
+```sh
+cargo run --locked --bin console -- billing:reconcile --limit 25
+cargo run --locked --bin console -- billing:reconcile --status --limit 100
+cargo run --locked --bin console -- notifications:deliver --limit 25
+cargo run --locked --bin console -- notifications:deliver --status --limit 100
+```
+
+After correcting SMTP configuration, explicitly retry a retained notification by
+its local ID. This renews the attempt budget only when it is unsent and has no
+live worker lease:
+
+```sh
+cargo run --locked --bin console -- notifications:deliver --retry ID
+```
+
+Monitor failures and exhausted attempts. SMTP delivery is at least once: a lost
+acknowledgment can produce a duplicate email. History remains available even when
+mail delivery fails. Never put provider credentials or raw webhook payloads in mail.
+
+## Production operation
+
+Build both frontend bundles and the Rust binaries from the locked dependencies
+before deployment. Set `APP_ENV=production`, `APP_DEBUG=false`, an explicit stable
+`APP_KEY`, `APP_URL=https://your-domain.example`, `SESSION_SECURE=true` and
+`SESSION_COOKIE_PREFIX=__Host-`. Use an absolute writable `DATABASE_URL` and private
+`DIRECTORY_MEDIA_ROOT`; retain them outside replaceable release directories.
+Configure authenticated encrypted SMTP and a real sender; the example local
+unencrypted capture server is not a production relay.
+
+Terminate TLS at a reverse proxy and forward requests to the application bound
+on loopback or a private network. Keep the SSR worker private; never expose its
+port publicly. Forward the original host and HTTPS scheme only from the trusted
+proxy, strip client-supplied forwarding headers, and restrict backend access to
+that proxy. Set the canonical origin explicitly through `APP_URL`. Check secure
+cookies, login redirects, uploads and canonical URLs through the actual proxy.
+Serve the production assets from the built release and do not run Vite in production.
+
+Supervise the application and `node --env-file=.env frontend/bootstrap/ssr/ssr.js`
+with restart-on-failure and bounded logs. The application command is
+`cargo run --locked --bin directory -- serve --no-migrate`; an installed release
+may run its compiled `directory serve --no-migrate` directly. Run migrations once
+before starting the new release. Schedule the two bounded processing commands in
+`adoption:operations` every minute and inspect their status commands during recovery.
+These commands process persisted work; no separate undocumented queue daemon is
+required. Run all processes as the dedicated application OS user.
+
+The implemented media store is local private storage. Suprnova offers other storage
+adapters, but switching this starter to one requires an application integration and
+a provider smoke test; setting cloud credentials alone does not move existing media.
+Keep read/write access limited to the application user and backup operator.
+
+## Backup, restore and permission recovery
+
+Stop the web process, notification/reconciliation schedules and any other database
+writers before this procedure. Set `BACKUP_DIR` to a new private directory on
+protected backup storage. The following SQLite recipe uses Python's online backup
+API, includes the media tree, and saves the matching key separately with mode 0600.
+It assumes `DATABASE_URL` is a plain `sqlite://` file URL without query options;
+use your database tooling for other URL forms. Export the same values used by the
+application first. Never print `APP_KEY` or commit backups.
+
+<!-- adoption:backup -->
+```sh
+python3 - <<'PYBACKUP'
+import os, pathlib, shutil, sqlite3
+backup = pathlib.Path(os.environ['BACKUP_DIR'])
+backup.mkdir(mode=0o700, parents=True, exist_ok=False)
+url = os.environ['DATABASE_URL']
+assert url.startswith('sqlite://') and '?' not in url, 'Use a plain SQLite file URL'
+with sqlite3.connect(url[9:]) as source, sqlite3.connect(backup / 'database.db') as target:
+    source.backup(target)
+shutil.copytree(os.environ['DIRECTORY_MEDIA_ROOT'], backup / 'media')
+key = backup / 'APP_KEY'
+key.write_text(os.environ['APP_KEY'])
+key.chmod(0o600)
+PYBACKUP
+```
+
+Restore into new paths while writers remain stopped. Set `RESTORE_DIR` to a new
+private directory, then run:
+
+<!-- adoption:restore -->
+```sh
+python3 - <<'PYRESTORE'
+import os, pathlib, shutil, sqlite3
+backup = pathlib.Path(os.environ['BACKUP_DIR'])
+restore = pathlib.Path(os.environ['RESTORE_DIR'])
+restore.mkdir(mode=0o700, parents=True, exist_ok=False)
+shutil.copy2(backup / 'database.db', restore / 'database.db')
+shutil.copytree(backup / 'media', restore / 'media')
+shutil.copy2(backup / 'APP_KEY', restore / 'APP_KEY')
+with sqlite3.connect(restore / 'database.db') as db:
+    assert db.execute('PRAGMA integrity_check').fetchone()[0] == 'ok'
+PYRESTORE
+```
+
+Configure the restored database/media paths and load the saved key into deployment
+secret storage without logging it. Restore ownership to the application OS user;
+private directories require owner read/write/traverse access, files owner read/write.
+Keep parent directories inaccessible to public serving. Start the restored release,
+run migration, inspect notification/payment status, and verify an existing account,
+private image and encrypted billing settings before reopening traffic. Resume
+schedules only after that inspection. Preserve the old deployment until recovery
+is confirmed. A database without its matching key cannot recover encrypted provider
+credentials. A database without its matching media backup cannot recover images.
+
+If all administrator permissions were removed, use `admin:access grant --user-id 42`
+against the restored verified account, substituting its actual ID. This also
+reinstates a suspended account. Do not modify verification state with SQL or create
+a shared emergency password. Revoke temporary recovery access after restoring the
+intended administrators. Backups contain account and payment data: encrypt off-host
+copies, limit access, define retention and rehearse restoration regularly.
+
+## Complete-starter acceptance and external limits
+
+Run `node scripts/verify-complete-starter.mjs adoption` from the source checkout.
+It creates a disposable source snapshot, uses locked build inputs and executes the
+marked seed, operations, backup and restore blocks above. The helper
+`scripts/verify-adoption-install.mjs` runs only inside that supplied disposable
+workspace; it does not read the checkout's operator configuration. Foundation
+setup checks execute the install/serve blocks and browser account and moderation
+journeys exercise the real application. The complete-starter groups are
+`editorial`, `administration` and `adoption`; run the earlier verification commands
+as regressions as well. Passing editing-time checks are not Cairn receipts.
+
+Local acceptance establishes SQLite, captured mail, local persistent media and
+synthetic Stripe/Paddle behavior. PostgreSQL, external SMTP, cloud storage, TLS
+proxy deployment and real Stripe/Paddle accounts remain **untested externally**.
+For each deployment, verify the public HTTPS flow and authenticated relay delivery,
+restore a backup on the actual storage/database service, and exercise both selected
+provider sandboxes with real webhook deliveries before enabling live payments.
+No production credentials are required or expected in the local acceptance suite.

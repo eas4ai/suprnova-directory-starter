@@ -349,6 +349,14 @@ pub async fn decide(actor_id: i64, id: i64, input: Decision) -> Result<(), Frame
         &format!("Revision {}: {}", input.revision_id, reason),
     )
     .await?;
+    crate::notifications::moderation(
+        &transaction,
+        id,
+        &format!("listing:{id}:revision:{}:{status}", input.revision_id),
+        status,
+        reason,
+    )
+    .await?;
     transaction.commit().await.map_err(database_error)
 }
 
@@ -390,6 +398,18 @@ pub async fn suspend(actor_id: i64, id: i64, input: Suspension) -> Result<(), Fr
         &transaction,
         actor_id,
         id,
+        if input.suspended {
+            "suspended"
+        } else {
+            "reinstated"
+        },
+        reason,
+    )
+    .await?;
+    crate::notifications::moderation(
+        &transaction,
+        id,
+        &format!("listing:{id}:suspension:{}", input.version),
         if input.suspended {
             "suspended"
         } else {

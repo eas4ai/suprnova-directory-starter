@@ -18,3 +18,6 @@
 pub mod admin_access;
 pub mod billing_reconcile;
 pub mod directory_categories;
+
+pub mod demo_seed;
+pub mod notifications_deliver;

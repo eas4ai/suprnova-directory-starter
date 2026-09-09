@@ -20,6 +20,7 @@ pub struct OffersProps {
 }
 #[derive(InertiaProps)]
 pub struct PurchaseProps {
+    pub notifications: Vec<crate::notifications::Notice>,
     pub purchase: checkout::PurchaseView,
 }
 
@@ -91,8 +92,17 @@ pub async fn start(req: Request) -> Response {
 #[handler]
 pub async fn show(req: Request) -> Response {
     // Return URLs and query parameters never trigger provider writes or fulfillment.
-    let purchase = checkout::view(actor_id().await?, &purchase_id(&req)?).await?;
-    inertia_response!(&req, "owner/Purchase", PurchaseProps { purchase })
+    let actor = actor_id().await?;
+    let purchase = checkout::view(actor, &purchase_id(&req)?).await?;
+    let notifications = crate::notifications::recent(actor, purchase.listing_id).await?;
+    inertia_response!(
+        &req,
+        "owner/Purchase",
+        PurchaseProps {
+            purchase,
+            notifications
+        }
+    )
 }
 #[handler]
 pub async fn continue_purchase(req: Request) -> Response {

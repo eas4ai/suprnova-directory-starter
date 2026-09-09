@@ -36,6 +36,7 @@ pub struct OwnerListingsProps {
 }
 #[derive(InertiaProps)]
 pub struct ListingEditProps {
+    pub notifications: Vec<crate::notifications::Notice>,
     pub listing: Option<OwnerListing>,
     pub categories: Vec<Category>,
 }
@@ -138,6 +139,7 @@ pub async fn create(req: Request) -> Response {
         "owner/ListingEdit",
         ListingEditProps {
             listing: None,
+            notifications: Vec::new(),
             categories: queries::categories().await?
         }
     )
@@ -145,12 +147,15 @@ pub async fn create(req: Request) -> Response {
 
 #[handler]
 pub async fn edit(req: Request) -> Response {
-    let listing = queries::owner_listing(actor_id().await?, route_id(&req)?).await?;
+    let actor = actor_id().await?;
+    let listing = queries::owner_listing(actor, route_id(&req)?).await?;
+    let notifications = crate::notifications::recent(actor, listing.id).await?;
     inertia_response!(
         &req,
         "owner/ListingEdit",
         ListingEditProps {
             listing: Some(listing),
+            notifications,
             categories: queries::categories().await?
         }
     )

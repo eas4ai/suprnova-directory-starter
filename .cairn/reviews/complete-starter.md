@@ -175,3 +175,93 @@ two with 133 generated-output findings, none outside public assets or generated
 SSR. Edit-check could not resolve the Vue component by Index; source inspection,
 Vue checks and the runtime browser assertions cover this small change. Git diff
 whitespace check passed. This is a focused regression repair, not final acceptance.
+
+## Adoption mechanism construction — 2026-09-09
+
+Reviewed KIT-001 through KIT-005 against the new notification modules and all
+moderation, checkout, cancellation and fulfillment call sites; demo seed/schema;
+site configuration and private media implementation; owner status components;
+LICENSE/THIRD_PARTY_NOTICES; README; and the actual adoption runner/tests.
+The grouped baseline at 20260909T214340258Z failed because adoption verification
+was deliberately unimplemented. No acceptance criterion was relaxed.
+
+The runner builds both locked binaries and frozen Vue client/SSR assets in a
+source-only disposable install. It runs five real demo-console tests, executes
+README commands and actual database/media/key backup/restoration, exercises HTTP
+and transaction notification contracts and separate configuration/media processes,
+then opens the real production application in Chromium with the SSR worker.
+License and notice files are declared inputs and included in source snapshots.
+No local environment, operator database, credentials or external provider account
+is copied. The helper refuses a preexisting environment or installation database.
+
+The first combined run failed because repeating directory:categories advanced
+SQLite's internal listing_categories sequence from 6 to 10. Instrumented SQL dumps
+showed no other changed line. Seed comparisons now exclude exactly that internal
+category counter; all schema, business records, other sequences, migration replay
+and backup/restore comparisons remain exact. The demo seed itself rolls back its
+repeat lock and preserves all persisted data. It refuses unknown/production modes
+without the explicit override, detects reserved-key collisions, serializes two
+seeds and rolls back a controlled late write failure. It generates one unverified,
+unprivileged synthetic owner with a random unprinted password and no payment or
+notification calls. Existing operator records and credentials are preserved.
+
+Notification intents share the domain transaction and a unique event identity.
+Tests make intent insertion fail and require moderation and payment/receipt writes
+to roll back; replay must retain one intent. A new console process sees the same
+pending rows. Controlled mail failure retains safe failure codes and pending work,
+respects backoff and eight attempts, and explicit retry delivers through Suprnova's
+captured transport. Two workers cannot own the same live lease; expired leases
+recover. Success acknowledgment retains the intent. A lost SMTP acknowledgment
+can redeliver, as documented. Owner DTOs are independently scoped and limited to
+20 rows. Reasons are plain escaped text. Payment messages contain no raw payloads,
+credentials or provider customer references. Internal ordering uses microseconds
+while owner timestamps remain Unix seconds, preventing misleading order for
+several checkout steps in one second. Live lease ownership is rechecked before
+send. Payment wording was separated from fulfillment state-transition logic.
+
+Configured public/admin branding and metadata passed raw HTML and JavaScript-off
+browser checks. Invalid name/accent/origin/logo values fail with the relevant
+configuration field. A fresh process reads the encoded image persisted earlier.
+Desktop/mobile owner history and both shells fit and have no browser exceptions;
+viewed the owner mobile artifact and corrected one undefined border token.
+The browser restarts the application and requires unchanged owner history.
+
+Distribution review compared tracked source hashes with the Pulsar and purchased
+Laravel references, excluding dependencies/builds. Six exact Pulsar file matches
+are listed with its full MIT notice; no exact Laravel file match or tracked stock
+photo/font/logo assets were found. This hash inventory supplements source review;
+it does not alone establish provenance. MIT uses the established repository owner
+Shawn McAllister. External SMTP, PostgreSQL, cloud storage, actual Stripe/Paddle
+accounts and proxy/hosting deployment are explicitly unverified local boundaries.
+
+Failure sensitivity was demonstrated in isolated source copies using unchanged
+assertions. Omitting intent recording, discarding delivery errors, ignoring the
+configured name and bypassing production demo refusal each compiled and failed
+its targeted runtime test (exit 101, named test FAILED). Removing LICENSE failed
+the distribution check; replacing the documented notification command with an
+unknown command failed actual README execution. The harness required these exact
+failure modes, removed every copy, and never put violating source in this checkout.
+Logs: /tmp/adoption-negative-{outbox,delivery,branding,demo,license,guide}.log;
+summary /tmp/adoption-negative-summary.log. All six demonstrations passed.
+
+The full corrected adoption runner passed at /tmp/adoption-final-source-proof.log:
+formatting, both binaries, Vue type/client/SSR builds, five demo tests, README
+commands/restoration, notification/configuration/storage tests and browser journey.
+A previous focused runner deliberately skipped install/demo stages to debug the
+notification/browser work; its group labels are not acceptance evidence.
+Ripwire edit-check(record) and git whitespace check passed. Quality-delta exited
+two (158 findings, many ignored generated bundles); the substantive growth in
+fulfillment complexity was resolved by separating mail wording. Remaining source
+flags are typed ORM/DTO query similarities, schema/trait/command macro dispatch,
+explicit test fixtures, local browser lifecycle helpers and required cross-domain
+notification calls. No suppression or clean-gate claim is made. Test-gate exited
+four, names six regression tests and misses framework/controller dispatch; all
+named regressions must pass again before final commitment acceptance.
+
+The final focused notification contract also passed after adding direct refund
+and open-dispute assertions. Each reconciled event must have its own retained
+notice with the corresponding safe explanation, alongside the settlement replay
+and transaction rollback checks. /tmp/adoption-refund-dispute-positive.log records
+one passed test, zero failed; the external driver asserted exit zero. Its reused
+console summary label says "violating copy" but this positive run replaced no
+source behavior and checked success, not an expected failure.

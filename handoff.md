@@ -122,7 +122,8 @@ ephemeral renderer and cleans it up.
 and browser workflows in a disposable installation. Six isolated violating copies
 compiled and failed their intended assertions. Refer to Cairn for current evidence;
 the editing-time run is not a committed receipt. Delegated account administration,
-notification delivery, demo data and final adoption verification remain unfinished.
+notification delivery, demo data and adoption verification are being completed under
+the current commitment. Use Cairn evidence for the current result.
 
 ## Settled product direction
 
@@ -165,3 +166,25 @@ runtime evidence. No sibling test pass or deployed-production claim is implied.
 Apply the imported machine production rules. Use graph discovery first, focused
 source reads when graph metadata is stale, and rtk-prefixed shell commands.
 The developer asked for scratchpads in the workspace and cleanup after each run.
+
+## Adoption operations and distribution
+
+`LICENSE` supplies MIT under the established Shawn McAllister attribution.
+`THIRD_PARTY_NOTICES.md` preserves Pulsar's full notice and records exact reused
+source, dependency-lock provenance and the purchased-reference boundary. No
+purchased Laravel source/assets belong in this distribution.
+
+README now documents demonstration data, notification delivery/status/retry,
+production TLS/proxy and supervision, SQLite/media/key backup and restoration,
+and host permission recovery. Its marked adoption blocks are executed by
+`scripts/verify-adoption-install.mjs` inside the adoption verifier's disposable
+workspace. That helper requires `ADOPTION_INSTALL_DISPOSABLE=1` and the parent's
+`CARGO_TARGET_DIR`; it creates its own database/media/key and refuses existing
+operator configuration. It checks real command exit statuses, repeated migration
+and seed data, administrator grant/revoke/refusals, and restored database/media/key.
+
+The shared verifier owns locked builds and HTTP/browser acceptance; the helper
+alone does not establish those journeys. PostgreSQL, external SMTP/cloud storage,
+actual provider accounts and a production TLS deployment remain external operator
+smoke tests, not claims made by local acceptance. Never substitute production
+credentials into these local checks. Committed Cairn receipts remain authoritative.

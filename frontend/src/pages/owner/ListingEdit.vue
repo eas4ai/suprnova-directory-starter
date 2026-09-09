@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import OwnerNotifications from '../../components/OwnerNotifications.vue'
+import type { OwnerNotice } from '../../types/notifications'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { Head, Link, useForm } from '@inertiajs/vue3'
 import ListingForm from '../../components/ListingForm.vue'
 import type { Category, ListingInput, OwnerListing } from '../../types/listings'
-const props = defineProps<{ listing: OwnerListing | null; categories: Category[] }>()
+const props = defineProps<{ listing: OwnerListing | null; categories: Category[]; notifications: OwnerNotice[] }>()
 function initial(): ListingInput {
   const revision = props.listing?.current
   return { version: props.listing?.version ?? 0, title: revision?.title ?? '', summary: revision?.summary ?? '', description: revision?.description ?? '', url: revision?.url ?? '', category_ids: [...(revision?.category_ids ?? [])], media_id: revision?.media_id ?? null, media_alt: revision?.media_alt ?? '' }
@@ -44,5 +46,6 @@ function mutate(kind: 'submit' | 'archive') {
     <p v-if="saved" role="status" class="billing-saved">Draft saved.</p>
     <form @submit.prevent="save"><ListingForm :model-value="form.data()" :categories="categories" :errors="errors" :disabled="busy || Boolean(listing?.archived)" :media-url="listing?.current.media_url ?? null" @update:model-value="update" @uploading="uploading = $event" /><div class="directory-actions"><button type="submit" class="button button-primary" :disabled="busy || listing?.archived">{{ form.processing ? 'Saving…' : 'Save draft' }}</button><button v-if="listing && !listing.archived && listing.current.status === 'draft'" type="button" class="button button-secondary" :disabled="busy || form.isDirty" @click="mutate('submit')">Submit for review</button></div><p v-if="form.isDirty && listing" class="field-help">Save your changes before submitting for review.</p><p v-if="listing?.current.status === 'submitted'" class="field-help">This revision is awaiting review. Saving changes creates a new draft to submit.</p></form>
     <section v-if="listing && !listing.archived" class="directory-archive"><h2>Archive listing</h2><p>Remove this listing from the directory while keeping its history.</p><button type="button" class="button button-secondary" :disabled="busy || form.isDirty" @click="mutate('archive')">Archive listing</button></section>
+    <OwnerNotifications :notifications="notifications" />
   </section>
 </template>

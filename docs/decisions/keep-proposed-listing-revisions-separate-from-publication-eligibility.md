@@ -11,4 +11,4 @@ Use relational listing, immutable revision, revision-category, media and audit r
 
 ## Realized by
 
-(none yet: recorded, not built)
+fdd6e8b7626c88efd6b7d103ea34ca3e50488798 Implement owned listing revisions, moderation and bounded discovery

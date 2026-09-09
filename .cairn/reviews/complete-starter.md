@@ -282,3 +282,17 @@ actual locator, the full verifier passed formatting/build, Vue type/client/SSR,
 media, HTTP and browser journeys (/tmp/directory-notification-selector-final.log).
 Node syntax and git whitespace checks passed. Ripwire test-gate exited zero;
 quality-delta exited two with 145 generated-only findings and no source findings.
+
+
+## Final review finding — stale payment notices — 2026-09-09
+
+Reviewed payment notification transaction boundaries, unique event identities,
+delivery leases and retries, owner scoping and safe message content against the
+fulfillment observation ordering rules. All 43 requirement checks currently pass,
+but the review found a KIT-001 correctness gap: adverse() rejects an older
+same-source observation while apply() forwards the original rejected fact to
+notification wording. An older open-dispute read committed after a newer resolved
+read can therefore produce a false newest suspension notice. Cancellation has
+the same unfiltered-fact path. Existing sequential and replay checks miss this
+overlap. Final acceptance is withheld pending a separate repair and controlled
+reverse-commit regression. No application code changed during this review.

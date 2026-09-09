@@ -11,7 +11,7 @@ Persist immutable publishing purchase terms, an exclusive listing purchase slot,
 
 ## Realized by
 
-a45de12131a40da5cc1b3a373fc8e29b5cf37881 Implement verified paid publication and recovery for Stripe and Paddle
+- a45de12131a40da5cc1b3a373fc8e29b5cf37881 Implement verified paid publication and recovery for Stripe and Paddle
 
 The publishing migration and `src/billing/{plans,checkout,events,collect,fulfillment,reconcile}.rs`
 implement the saved terms, exclusive slot, authenticated ingress and transactional

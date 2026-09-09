@@ -302,7 +302,7 @@ async fn payment_notifications(admin: i64, owner: i64, listing_id: i64) {
         lifecycle_entities::{purchase, receipt},
         plans, reconcile,
     };
-    let gateway = fixtures::FakeGateway::default();
+    let gateway = std::sync::Arc::new(fixtures::FakeGateway::default());
     plans::save(admin,None,serde_json::from_value(json!({"key":"adoption-paid","name":"Adoption plan","description":"Fixture","enabled":true,"billing_type":"one_time","amount":1000,"currency":"USD","version":0})).unwrap()).await.unwrap();
     billing::save(Mode::Test,serde_json::from_value(json!({"revision":0,"default_provider":"stripe","stripe":{"enabled":true,"public_key":"pk_test_ADOPTION_PUBLIC","api_key":"sk_test_ADOPTION_SECRET","webhook_key":fixtures::STRIPE_SIGNING,"clear_secrets":false},"paddle":{"enabled":false,"public_key":"","api_key":"","webhook_key":"","clear_secrets":false},"mappings":[{"plan":"adoption-paid","stripe":"price_adoption","paddle":""}]})).unwrap()).await.unwrap();
     let id = checkout::start(
@@ -312,7 +312,7 @@ async fn payment_notifications(admin: i64, owner: i64, listing_id: i64) {
             plan_key: "adoption-paid".into(),
             provider: Some(billing::Provider::Stripe),
         },
-        &gateway,
+        gateway.as_ref(),
     )
     .await
     .unwrap();
@@ -326,7 +326,7 @@ async fn payment_notifications(admin: i64, owner: i64, listing_id: i64) {
     assert!(checkout_count > 4);
     let resource = gateway.settle(&row, 0, chrono::Utc::now().timestamp(), None);
     sql("CREATE TRIGGER reject_payment_notice BEFORE INSERT ON owner_notifications WHEN NEW.event_key LIKE 'payment-event:%' BEGIN SELECT RAISE(ABORT, 'controlled outbox fault'); END").await;
-    let failed = reconcile::recover(&id, Some(&resource), &gateway, false)
+    let failed = reconcile::recover(&id, Some(&resource), gateway.as_ref(), false)
         .await
         .unwrap();
     assert_ne!(failed.status, "applied");
@@ -349,7 +349,7 @@ async fn payment_notifications(admin: i64, owner: i64, listing_id: i64) {
     assert_eq!(count().await, checkout_count);
     sql("DROP TRIGGER reject_payment_notice").await;
     assert_eq!(
-        reconcile::process_event(&failed.event_id, &gateway, true, false)
+        reconcile::process_event(&failed.event_id, gateway.as_ref(), true, false)
             .await
             .unwrap()
             .status,
@@ -357,7 +357,7 @@ async fn payment_notifications(admin: i64, owner: i64, listing_id: i64) {
     );
     assert_eq!(count().await, checkout_count + 1);
     assert_eq!(
-        reconcile::process_event(&failed.event_id, &gateway, true, false)
+        reconcile::process_event(&failed.event_id, gateway.as_ref(), true, false)
             .await
             .unwrap()
             .status,
@@ -374,7 +374,7 @@ async fn payment_notifications(admin: i64, owner: i64, listing_id: i64) {
         state["disputed"] = json!(disputed);
         gateway.set("stripe", "charge", &charge, state);
         gateway.set("stripe", "disputes", &charge, if disputed { json!([{"id":fixtures::reference(&row,"dp",0),"charge":charge,"livemode":false,"currency":"usd","status":"needs_response"}]) } else { json!([]) });
-        let result = reconcile::recover(&id, None, &gateway, false)
+        let result = reconcile::recover(&id, None, gateway.as_ref(), false)
             .await
             .unwrap();
         assert_eq!(result.status, "applied");
@@ -390,6 +390,71 @@ async fn payment_notifications(admin: i64, owner: i64, listing_id: i64) {
             notification.body
         );
     }
+    // Retain the newer resolved observation before releasing the older open dispute.
+    let gate = gateway.gate_read("stripe", "disputes", &charge);
+    let older_gateway = gateway.clone();
+    let older_id = id.clone();
+    let older = tokio::spawn(async move {
+        reconcile::recover(&older_id, None, older_gateway.as_ref(), false)
+            .await
+            .unwrap()
+    });
+    gate.arrived.notified().await;
+    let mut state = gateway.get("stripe", "charge", &charge);
+    state["disputed"] = json!(false);
+    gateway.set("stripe", "charge", &charge, state);
+    gateway.set("stripe", "disputes", &charge, json!([]));
+    let newer = reconcile::recover(&id, None, gateway.as_ref(), false)
+        .await
+        .unwrap();
+    assert_eq!(newer.status, "applied");
+    let retained_count = count().await;
+    gate.release.notify_one();
+    let rejected = older.await.unwrap();
+    assert_eq!(rejected.status, "applied");
+    assert_eq!(
+        directory::billing::lifecycle_entities::payment::Entity::find()
+            .filter(directory::billing::lifecycle_entities::payment::Column::PurchaseId.eq(&id))
+            .one(db.inner())
+            .await
+            .unwrap()
+            .unwrap()
+            .status,
+        "paid"
+    );
+    assert_eq!(
+        count().await,
+        retained_count,
+        "stale observation must not create a notice"
+    );
+    assert!(
+        notice::Entity::find()
+            .filter(notice::Column::EventKey.eq(format!("payment-event:{}", rejected.event_id)))
+            .one(db.inner())
+            .await
+            .unwrap()
+            .is_none()
+    );
+    let retained = notice::Entity::find()
+        .filter(notice::Column::EventKey.eq(format!("payment-event:{}", newer.event_id)))
+        .one(db.inner())
+        .await
+        .unwrap()
+        .unwrap();
+    assert!(!retained.body.contains("open dispute suspended"));
+    let captured = Mail::fake();
+    assert_eq!(
+        delivery::process(&retained.id).await.unwrap().status,
+        "sent"
+    );
+    assert_eq!(captured.captured().len(), 1);
+    assert!(
+        !captured.captured()[0]
+            .text
+            .as_deref()
+            .unwrap()
+            .contains("open dispute suspended")
+    );
     let rows = notice::Entity::find()
         .filter(notice::Column::PurchaseId.eq(&id))
         .all(db.inner())

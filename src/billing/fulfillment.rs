@@ -28,6 +28,14 @@ pub(crate) enum Fact {
     Ignored,
 }
 
+/// Effects accepted by fulfillment, separate from untrusted or stale observations.
+pub(crate) enum Effect {
+    Settled,
+    Adverse(AdverseState),
+    Cancellation,
+    CheckoutEnded,
+}
+
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct Observation {
     read_started_at: i64,
@@ -88,16 +96,29 @@ pub(crate) async fn apply(
             .await
             .map_err(database_error)?
             .ok_or_else(missing)?;
+        let mut effects = Vec::new();
         for fact in facts {
             match fact {
-                Fact::Settled(value) => settled(&tx, &mut row, value).await?,
+                Fact::Settled(value) => {
+                    if settled(&tx, &mut row, value).await? {
+                        effects.push(Effect::Settled);
+                    }
+                }
                 Fact::Adverse {
                     payment_ref,
                     source,
                     state,
-                } => adverse(&tx, &row, payment_ref, source, state, read_started_at).await?,
+                } => {
+                    if let Some(retained) =
+                        adverse(&tx, &row, payment_ref, source, state, read_started_at).await?
+                    {
+                        effects.push(Effect::Adverse(retained));
+                    }
+                }
                 Fact::Cancellation(value) => {
-                    cancellation(&tx, &mut row, value, read_started_at).await?
+                    if cancellation(&tx, &mut row, value, read_started_at).await? {
+                        effects.push(Effect::Cancellation);
+                    }
                 }
                 Fact::CheckoutEnded => {
                     // A terminal initial session must not close a settled purchase.
@@ -108,6 +129,9 @@ pub(crate) async fn apply(
                         .map_err(database_error)?
                         .is_none()
                     {
+                        if row.state != "expired" {
+                            effects.push(Effect::CheckoutEnded);
+                        }
                         row.state = "expired".into();
                         release(&tx, &row).await?;
                     }
@@ -136,9 +160,7 @@ pub(crate) async fn apply(
         .update(&tx)
         .await
         .map_err(database_error)?;
-    }
-    if let Some(id) = purchase_id {
-        crate::notifications::payment_facts(&tx, id, event_id, facts).await?;
+        crate::notifications::payment_effects(&tx, id, event_id, &effects).await?;
     }
     let now = chrono::Utc::now().timestamp();
     receipt::ActiveModel {
@@ -182,7 +204,7 @@ async fn settled(
     tx: &DatabaseTransaction,
     row: &mut purchase::Model,
     value: &Settlement,
-) -> Result<(), FrameworkError> {
+) -> Result<bool, FrameworkError> {
     if row.customer_ref.as_deref() != Some(&value.customer_ref)
         || value.amount_total <= 0
         || value
@@ -207,6 +229,7 @@ async fn settled(
         .one(tx)
         .await
         .map_err(database_error)?;
+    let newly_paid = existing.is_none();
     let paid = if let Some(paid) = existing {
         if paid.amount_total != value.amount_total
             || paid.period_end != value.period_end
@@ -284,7 +307,7 @@ async fn settled(
     if !matches!(row.state.as_str(), "canceled" | "expired") {
         row.state = "active".into();
     }
-    Ok(())
+    Ok(newly_paid)
 }
 
 async fn adverse(
@@ -294,7 +317,7 @@ async fn adverse(
     source: &str,
     value: &AdverseState,
     marker: i64,
-) -> Result<(), FrameworkError> {
+) -> Result<Option<AdverseState>, FrameworkError> {
     let paid = payment::Entity::find()
         .filter(payment::Column::ProviderPaymentId.eq(payment_ref))
         .filter(payment::Column::PurchaseId.eq(&row.id))
@@ -311,7 +334,7 @@ async fn adverse(
         .get(source)
         .is_some_and(|prior| prior.read_started_at >= marker)
     {
-        return Ok(());
+        return Ok(None);
     }
     observations.insert(
         source.into(),
@@ -362,7 +385,16 @@ async fn adverse(
         .exec(tx)
         .await
         .map_err(database_error)?;
-    Ok(())
+    Ok(Some(AdverseState {
+        refund_total: observations
+            .values()
+            .map(|v| v.state.refund_total)
+            .max()
+            .unwrap_or(0),
+        disputed,
+        lost_dispute: lost,
+        observed_at: value.observed_at,
+    }))
 }
 
 async fn cancellation(
@@ -370,10 +402,11 @@ async fn cancellation(
     row: &mut purchase::Model,
     value: &Cancellation,
     marker: i64,
-) -> Result<(), FrameworkError> {
+) -> Result<bool, FrameworkError> {
     if row.cancel_event_at >= marker {
-        return Ok(());
+        return Ok(false);
     }
+    let previous = (row.state.clone(), row.cancel_at, row.cancel_requested);
     row.cancel_event_at = marker;
     if let Some(end) = value.effective_at {
         // Effective cancellation is terminal; a stale active subscription read
@@ -415,7 +448,7 @@ async fn cancellation(
             row.cancel_requested = false;
         }
     }
-    Ok(())
+    Ok(previous != (row.state.clone(), row.cancel_at, row.cancel_requested))
 }
 
 use sea_orm::{QuerySelect, QueryTrait};

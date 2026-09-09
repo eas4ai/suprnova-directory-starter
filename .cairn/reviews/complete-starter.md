@@ -296,3 +296,32 @@ read can therefore produce a false newest suspension notice. Cancellation has
 the same unfiltered-fact path. Existing sequential and replay checks miss this
 overlap. Final acceptance is withheld pending a separate repair and controlled
 reverse-commit regression. No application code changed during this review.
+
+
+### Stale observation repair and proof
+
+Fulfillment now returns accepted effects separately from input facts. Repeated
+settlements, rejected adverse reads, unchanged cancellation and already-ended
+checkout observations do not invent a new effect. Accepted adverse wording uses
+the retained aggregate across sources. The intent remains in the receipt/domain
+transaction with the same unique event key. The handoff now describes the
+implemented administration and adoption modules accurately.
+
+The controlled regression starts an older open-dispute read, commits a newer
+resolved read, then releases the old read. It requires retained paid state, no
+new old-event notice, and captured delivery of the safe newer notice. An isolated
+copy that forwards rejected adverse evidence compiled and failed specifically
+at the notice count (14 instead of 13); the negative harness passed. Logs:
+/tmp/adoption-negative-stale-notice.log and /tmp/stale-notice-negative-summary.log.
+Two early manual runs used the owner page's test-mode label as a payment-state
+assertion and failed there. That test now reads the retained payment row.
+
+The complete corrected adoption verifier exited zero: formatting, locked Rust
+binaries, frozen Vue type/client/SSR builds, demo tests, actual README operations
+and restoration, notification/configuration/storage contracts and browser journeys
+all passed (/tmp/adoption-stale-final.log). Git whitespace and focused Ripwire
+edit-check passed. Ripwire quality-delta exited two: generated bundles plus
+explicit effect branches, expected edit churn, test length and alias/type-use
+false dead-code flags. The branches keep ordering decisions with their transaction;
+no gate was suppressed. Test-gate exited four and names inherited regressions;
+these remain due on the committed repair before final acceptance.

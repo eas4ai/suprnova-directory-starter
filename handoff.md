@@ -11,7 +11,8 @@ named action. `docs/spec/roadmap.md` names `complete-starter` as Current.
 The developer confirmed both remaining commitments, their requirements, falsifiers
 and policies. Foundation and provider administration are complete; the repaired
 framework integration is verified. Paid-directory has completed its evidence and
-final review. Complete-starter implementation and verification are in progress.
+final review. Complete-starter modules are implemented; Cairn records the current verification
+and final-review status.
 Larafast Directories is the selected working reference, not Pulsar.
 
 Do not restart discovery or ask the developer to repeat settled choices.
@@ -122,8 +123,8 @@ ephemeral renderer and cleans it up.
 and browser workflows in a disposable installation. Six isolated violating copies
 compiled and failed their intended assertions. Refer to Cairn for current evidence;
 the editing-time run is not a committed receipt. Delegated account administration,
-notification delivery, demo data and adoption verification are being completed under
-the current commitment. Use Cairn evidence for the current result.
+notification delivery, safe demo data and adoption verification are implemented.
+Use Cairn evidence for the current result.
 
 ## Settled product direction
 

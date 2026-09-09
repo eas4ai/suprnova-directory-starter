@@ -1,0 +1,24 @@
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-foundation-uFRLGP/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-uFRLGP)
+warning: methods `inertia_get` and `signed_request` are never used
+   --> tests/common/mod.rs:78:18
+    |
+ 42 | impl Client {
+    | ----------- methods in this implementation
+...
+ 78 |     pub async fn inertia_get(&mut self, path: &str) -> Response {
+    |                  ^^^^^^^^^^^
+...
+116 |     pub async fn signed_request(
+    |                  ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `directory` (test "foundation_ui") generated 1 warning
+    Finished `test` profile [unoptimized] target(s) in 16.00s
+     Running tests/foundation_ui.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/foundation_ui-7ede3543fe9eab09)

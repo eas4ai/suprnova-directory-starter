@@ -4,6 +4,7 @@ inputs:
   - Cargo.toml
   - Cargo.lock
   - lang/
+  - README.md
   - src/
   - cmd/
   - frontend/

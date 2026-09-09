@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const source = resolve(process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const task = process.argv[2];
-const requirements = { build: 'FND-001' };
+const requirements = { build: 'FND-001', database: 'FND-002' };
 const requirement = requirements[task];
 
 function run(command, args, cwd, options = {}) {
@@ -79,6 +79,31 @@ function build(root) {
   assert.ok(existsSync(join(root, 'frontend/bootstrap/ssr/ssr.js')), 'SSR bundle is missing');
 }
 
+function database(root) {
+  const databasePath = join(root, 'database.db');
+  assert.ok(!existsSync(databasePath), 'Migration check must start with an empty database');
+  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+  Object.assign(env, {
+    APP_ENV: 'test',
+    APP_DEBUG: 'false',
+    DATABASE_URL: `sqlite://${databasePath}`,
+    DB_LOGGING: 'false',
+    CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2',
+    CARGO_PROFILE_DEV_DEBUG: '0',
+    CARGO_TARGET_DIR: join(source, 'target'),
+  });
+  const command = ['run', '--locked', '--bin', 'directory', '--', 'migrate'];
+  const inspect = (args = []) => run('bun', ['scripts/check-schema.mjs', databasePath, ...args], root, {
+    env, encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'],
+  });
+  console.log('[database] first migration run');
+  run('cargo', command, root, { env });
+  const first = JSON.parse(inspect(['--seed-probe']));
+  console.log('[database] repeat migration run');
+  run('cargo', command, root, { env });
+  assert.deepEqual(JSON.parse(inspect()), first, 'Repeated migrations changed the schema, migration history or existing account data');
+}
+
 if (!requirement) {
   console.error(`Foundation mechanism is not implemented for: ${task ?? '(missing task)'}`);
   process.exitCode = 1;
@@ -86,7 +111,7 @@ if (!requirement) {
   let working;
   try {
     working = snapshot(source);
-    build(working);
+    ({ build, database })[task](working);
     console.log(`cairn: ${requirement}: pass`);
   } catch (error) {
     console.error(error.stack ?? error.message);

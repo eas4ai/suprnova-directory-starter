@@ -16,8 +16,9 @@ Review occurs before payment. Payment eligibility and moderation approval are se
 | --- | --- | --- |
 | Build, accounts and UI foundation | foundation.md | FND; first commitment requirements |
 | Provider configuration and paid publication | payments.md | PAY; selected scope, detailed policy pending |
-| Directory discovery, ownership and moderation | docs/feature-map.md and docs/architecture-proposal.md | Baseline only; specify for its commitment |
-| Editorial, taxonomy, RSS and SEO | docs/feature-map.md | Baseline only; specify for its commitment |
-| Notifications, media and starter adoption | docs/feature-map.md | Baseline only; specify for its commitment |
+| Directory discovery, ownership and moderation | directory.md | DIR; paid-directory draft |
+| Editorial, taxonomy, RSS and SEO | content.md | CNT; complete-starter draft |
+| Delegated administration and audit | administration.md | ADM; complete-starter draft |
+| Notifications, media and starter adoption | adoption.md | KIT; complete-starter draft |
 
-Read glossary.md, foundation.md, payments.md and roadmap.md after this overview. Paths in the map are repository-relative except sibling spec filenames, which are relative to docs/spec. Existing implementation evidence and unverified findings remain in docs/recon.md and docs/pulsar-assessment.md.
+Read glossary.md, foundation.md, payments.md, directory.md, content.md, administration.md, adoption.md and roadmap.md after this overview. Paths in the map are repository-relative except sibling spec filenames, which are relative to docs/spec. Existing implementation evidence and unverified findings remain in docs/recon.md and docs/pulsar-assessment.md.

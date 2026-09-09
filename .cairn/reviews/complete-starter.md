@@ -149,3 +149,29 @@ FND-004 failed because its old fixture assigned the now-seeded administrator rol
 The inherited directory check caught a real regression: replacing listing audit summaries with field names had discarded the required suspension and reinstatement reasons. A dedicated nullable private_reason column now retains those details in the same audit transaction, with actor and action. The migration copies historical listing summary text into that detail without overwriting the historical summary; rollback retains newly recorded reasons. The model excludes private_reason from serialization, and the explicit shared audit DTO still redacts listing free text. Directory assertions retain the exact required reason values in the dedicated field and verify their absence from the shared audit response. This satisfies both the recorded-reason and safe-summary contracts; the failure was repaired in code.
 
 The first manual run passed HTTP but exposed an independent browser-test timing error: its two-card assertion could match the old document before a search navigation finished, so the next input was overwritten by navigation/hydration. It now waits for the exact submitted query URL and settled document before the next search. The final whole directory verifier passed Rust format/build, media tests, HTTP and browser journeys (/tmp/complete-private-reason-directory-final.log). A separate cargo check --locked --tests passed with the serialization guard (/tmp/complete-private-reason-check.log); only existing shared test-helper dead-code warnings remained. Focused audit edit-check and git diff --check returned 0.
+
+## Directory hydration regression — 2026-09-09
+
+Cairn DIR-001 through DIR-007 at 20260909T213115953Z failed in the browser
+keyboard journey: Compact remained false. The HTTP and moderation-reason
+assertions had passed. Source inspection confirmed SSR emitted enabled buttons
+while main.ts still awaited the locale catalog before mounting event handlers.
+Disable layout controls until onMounted. Native search remains available.
+The browser test now holds JavaScript behind an explicit promise, asserts the
+SSR control is disabled, releases the bundle, then checks activation and compact
+layout. The later keyboard assertion waits for the submitted document and the
+enabled control. This fixes a user-visible lost-click window.
+
+The first manual run passed the delayed-bundle check but exposed a new test URL
+expectation missing the native form's empty category parameter. Corrected the
+expectation to the actual submitted URL. The full corrected directory verifier
+passed Rust formatting/build, Vue type/client/SSR builds, four media tests, HTTP
+contracts and the production browser journey (/tmp/directory-hydration-final.log).
+An isolated copy with only the readiness guards removed failed specifically at
+toBeDisabled with Received: enabled (/tmp/directory-hydration-negative.log).
+The negative harness exited zero only after asserting that failure. No violating
+source entered this checkout. Ripwire test-gate exited zero; quality-delta exited
+two with 133 generated-output findings, none outside public assets or generated
+SSR. Edit-check could not resolve the Vue component by Index; source inspection,
+Vue checks and the runtime browser assertions cover this small change. Git diff
+whitespace check passed. This is a focused regression repair, not final acceptance.

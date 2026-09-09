@@ -119,12 +119,27 @@ try {
   await expect(owner.getByLabel('Summary', { exact: true })).toHaveValue('A stale summary to preserve.');
   await second.close();
 
+  // Hold the browser bundle so the SSR control is tested before hydration.
+  let releaseBundle;
+  const bundleGate = new Promise(resolve => { releaseBundle = resolve; });
+  const holdBundle = async route => { await bundleGate; await route.continue(); };
+  await visitor.route('**/assets/**/*.js', holdBundle);
+  await visitor.goto(`${origin}/listings`, { waitUntil: 'commit' });
+  const compact = visitor.getByRole('button', { name: 'Compact', exact: true });
+  try { await expect(compact).toBeDisabled(); }
+  finally { releaseBundle(); }
+  await expect(compact).toBeEnabled();
+  await visitor.unroute('**/assets/**/*.js', holdBundle);
+  await compact.click();
+  await expect(compact).toHaveAttribute('aria-pressed', 'true');
   await visitor.goto(origin);
   await expect(visitor.getByRole('heading', { name: 'A place for good discoveries.', exact: true })).toBeVisible();
   await expect(visitor.getByRole('link', { name: 'Pagination Alpha', exact: true })).toBeVisible();
   await visitor.getByLabel('Search listings', { exact: true }).fill('Pagination');
   await visitor.getByRole('button', { name: 'Search', exact: true }).click();
   await expect(visitor.locator('.directory-card')).toHaveCount(2);
+  await expect(visitor).toHaveURL(origin + '/listings?q=Pagination&category=');
+  await expect(visitor.getByRole('button', { name: 'Compact', exact: true })).toBeEnabled();
   await visitor.getByRole('button', { name: 'Compact', exact: true }).focus();
   await visitor.keyboard.press('Enter');
   await expect(visitor.getByRole('button', { name: 'Compact', exact: true })).toHaveAttribute('aria-pressed', 'true');

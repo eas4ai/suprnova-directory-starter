@@ -94,3 +94,5 @@ Current todo:
 - Complete: prepare Cairn records and verify spec structure.
 - In progress: obtain confirmation of FND-001 through FND-005 and their falsifiers.
 - Pending: implement and demonstrate the foundation mechanisms, then execute the Cairn loop.
+
+Foundation execution update: the developer confirmed FND-001 through FND-005 and their falsifiers. The agreement escalation is answered and committed. Current action is FND-001 implementation. Cargo.lock and frontend/bun.lock are generated; the disposable build verifier is being implemented. The initial Cairn receipt is unverified because that verifier did not exist at baseline, not a reproduced application defect. Account, database and UI mechanisms remain to be implemented.

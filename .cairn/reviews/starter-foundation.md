@@ -11,3 +11,7 @@ findings:
 This is a specification review, not the final implementation review. The final review needs a committed candidate and fresh mechanism evidence.
 
 Setup verification: spec lint passed over docs/spec. A disposable Agreed DEMO-001 fixture without a Falsifier line exited 1 with SPEC-002; adding the line exited 0. This proves the lint wrapper invokes the installed checker and detects that structural violation. It does not prove any application requirement.
+
+FND-001 mechanism development: a disposable Git fixture pinned to v1.3.5 reached the framework-version assertion and reported FND-001 fail. A separate frontend fixture changed the Vue dependency without updating bun.lock; bun install --frozen-lockfile rejected it with the expected frozen-lockfile error. The original client and SSR builds passed. The pinned Rust binary build and full corrected build mechanism are still running/pending; these partial checks are not FND-001 completion.
+
+FND-001 corrected case: node scripts/verify-foundation.mjs build passed in a disposable copy, including both Rust binaries, frozen Bun installation, client and SSR builds, artifact checks and unchanged lockfile assertions. The preceding direct Rust build passed in 8m30s. This completes the wrong-tag/frozen-lock failure demonstration for the build mechanism; Cairn receipt recording follows its implementation commit.

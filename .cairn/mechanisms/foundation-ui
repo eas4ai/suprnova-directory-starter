@@ -2,6 +2,8 @@ command: node scripts/verify-foundation.mjs ui
 results: per-requirement
 inputs:
   - Cargo.toml
+  - Cargo.lock
+  - lang/
   - src/
   - cmd/
   - frontend/

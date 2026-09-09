@@ -1,0 +1,21 @@
+requirement: PAY-005
+requirement_digest: sha256:3e21fa178775710b8917f2ed0152338b584eade7c5238e84c77124f4d5f543a4
+sequence: 8
+history_digest: sha256:9e124a94fec003348ef1f2e8cd3f1c79e8f7660d7ca887b2e907d97c58970399
+mechanism: provider-administration
+commit: 078bcac
+inputs_digest: sha256:9e631673a65dbe9795716090732d52267b7a68d1b6b85cd57e837988594418e3
+mechanism_digest: sha256:1442215638df203531be10f1a591a25ce2f5892a0d7bdafab4a17266a1d418cd
+inputs_detail: .cairn/evidence/PAY-001/20260909T211819949Z-994079.inputs.json
+command: node scripts/verify-provider-administration.mjs
+cwd: .
+exit: 0
+output_digest: sha256:ccb665734a789249e4a4bdbbe6b7106114b2564a4fccb4945736e868cf8d0b3f
+output: .cairn/evidence/PAY-001/20260909T211819949Z-994079.out
+stderr_output: .cairn/evidence/PAY-001/20260909T211819949Z-994079.err
+stderr_digest: sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-09T21:19:13.284Z

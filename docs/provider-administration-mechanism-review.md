@@ -61,7 +61,7 @@ and decryption have separate authenticated operations and error messages.
 suites. Its three untested symbols are exercised outside its resolved graph: provider
 resolution by integration tests, the application entry point by browser/setup runners,
 and the billing migration by fresh database setup. Fresh foundation regression checks
-are required before completion. `--edit-check` for billing save and administrator
+subsequently passed with committed Cairn evidence. `--edit-check` for billing save and administrator
 access returned 0 with no incompatible callers; name-based graph results are advisory.
 
 ## Limits

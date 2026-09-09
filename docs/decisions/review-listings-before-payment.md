@@ -11,4 +11,6 @@ On 2026-09-08 Shawn confirmed review before payment. An owner submits a listing,
 
 ## Realized by
 
-(none yet: recorded, not built)
+- a4cadb95e469f8467953e71c32a36035c63806e6 Establish Cairn specifications and draft foundation commitment
+
+This scope decision is realized in the payment specification and roadmap. Runtime enforcement belongs to the later paid-directory commitment; no payment implementation is claimed.

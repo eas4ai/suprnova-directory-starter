@@ -1151,6 +1151,38 @@ async fn renewal_contract(
             processed(&renewal, fake).await;
             assert_eq!(count_entitlements(id).await, 2);
             visible(id, live).await;
+            // Project an old refund received after the current paid period.
+            // Test-mode owners must still see their current test eligibility.
+            let db = DB::connection().unwrap();
+            let old = entitlement::Entity::find()
+                .filter(entitlement::Column::ListingId.eq(id))
+                .filter(entitlement::Column::ValidUntil.eq(now - 3600))
+                .one(db.inner())
+                .await
+                .unwrap()
+                .unwrap();
+            entitlement::Entity::update_many()
+                .col_expr(entitlement::Column::Status, Expr::value("refunded"))
+                .col_expr(entitlement::Column::UpdatedAt, Expr::value(now + 10))
+                .filter(entitlement::Column::Id.eq(&old.id))
+                .exec(db.inner())
+                .await
+                .unwrap();
+            assert_eq!(
+                queries::owner_listing(owner.id, id)
+                    .await
+                    .unwrap()
+                    .payment_status,
+                if live { "paid" } else { "test" },
+                "a historical refund must not hide the current paid period"
+            );
+            entitlement::Entity::update_many()
+                .col_expr(entitlement::Column::Status, Expr::value(old.status))
+                .col_expr(entitlement::Column::UpdatedAt, Expr::value(old.updated_at))
+                .filter(entitlement::Column::Id.eq(&old.id))
+                .exec(db.inner())
+                .await
+                .unwrap();
             assert_eq!(
                 checkout::view(owner.id, &purchase)
                     .await

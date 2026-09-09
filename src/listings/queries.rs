@@ -457,7 +457,7 @@ async fn owner_views(
         .filter(
             entitlement::Column::ListingId.is_in(rows.iter().map(|row| row.id).collect::<Vec<_>>()),
         )
-        .filter(Expr::cust_with_values("publication_entitlements.id = (SELECT preferred.id FROM publication_entitlements preferred WHERE preferred.listing_id = publication_entitlements.listing_id ORDER BY CASE WHEN preferred.status = 'active' AND preferred.mode IN ('free', 'live') AND preferred.valid_from <= ? AND (preferred.valid_until IS NULL OR preferred.valid_until > ?) THEN 0 ELSE 1 END, preferred.updated_at DESC, preferred.id DESC LIMIT 1)", [now, now]))
+        .filter(Expr::cust_with_values("publication_entitlements.id = (SELECT preferred.id FROM publication_entitlements preferred WHERE preferred.listing_id = publication_entitlements.listing_id ORDER BY CASE WHEN preferred.status = 'active' AND preferred.valid_from <= ? AND (preferred.valid_until IS NULL OR preferred.valid_until > ?) THEN CASE preferred.mode WHEN 'free' THEN 0 WHEN 'live' THEN 0 WHEN 'test' THEN 1 ELSE 2 END ELSE 2 END, preferred.updated_at DESC, preferred.id DESC LIMIT 1)", [now, now]))
         .order_by_desc(entitlement::Column::UpdatedAt)
         .order_by_desc(entitlement::Column::Id)
         .all(db.inner())

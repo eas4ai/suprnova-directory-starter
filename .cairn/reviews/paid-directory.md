@@ -154,3 +154,14 @@ parsers, transactional fulfillment, schema declarations and sequential integrati
 tests required by the shared runtime. Those functions retain their domain checks;
 splitting them solely to lower the metric would hide policy without improving it.
 The named account, UI, provider and directory regression suites remain mandatory.
+
+## Owner projection correction during evidence refresh
+
+A source review found that owner status prioritized current free/live periods but
+not current test periods. A later update to an old refund could therefore hide the
+owner's current test eligibility. The added lifecycle regression failed at runtime:
+the expected `test` status was `refunded`. The query now orders current free/live
+eligibility first, current test eligibility second, and historical periods last.
+Public eligibility is unchanged. Both complete live and test lifecycle contracts,
+formatting and whitespace checks passed after the correction. Refresh the committed
+evidence again for this changed candidate.

@@ -1,0 +1,20 @@
+[payments] cargo fmt --check
+[payments] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-PzuKRI)
+    Finished `dev` profile [unoptimized] target(s) in 7.21s
+Error: The paid lifecycle mechanism is not implemented yet.
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:48:11
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+cairn: DIR-008: fail
+cairn: PAY-002: fail
+cairn: PAY-003: fail
+cairn: PAY-009: fail
+cairn: PAY-010: fail
+cairn: PAY-011: fail
+cairn: PAY-012: fail
+cairn: PAY-013: fail
+cairn: PAY-014: fail
+cairn: PAY-015: fail
+cairn: PAY-016: fail

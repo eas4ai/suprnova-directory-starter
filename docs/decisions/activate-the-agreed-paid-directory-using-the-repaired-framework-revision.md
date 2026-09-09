@@ -11,4 +11,4 @@ The developer confirmed the remaining requirement text, falsifiers, publishing a
 
 ## Realized by
 
-(none yet: recorded, not built)
+- 6d1ce77b15c0c309215808eb4e8a24ffdb8dc44b Activate agreed paid directory and repaired framework integration

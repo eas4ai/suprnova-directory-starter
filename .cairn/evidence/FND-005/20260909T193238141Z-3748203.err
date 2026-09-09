@@ -1,0 +1,9 @@
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-KMrF1O)
+    Finished `dev` profile [unoptimized] target(s) in 12.89s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-foundation-KMrF1O/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+    Finished `dev` profile [unoptimized] target(s) in 0.29s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`

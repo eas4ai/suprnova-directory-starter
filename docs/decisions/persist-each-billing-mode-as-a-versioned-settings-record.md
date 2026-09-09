@@ -11,4 +11,4 @@ Store one schema-versioned settings document per test/live mode in a relational 
 
 ## Realized by
 
-(none yet: recorded, not built)
+- d26450611c8453453559f89de53c7e10d16ae3c3 Add protected Stripe and Paddle administration

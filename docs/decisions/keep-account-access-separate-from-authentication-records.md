@@ -12,3 +12,5 @@ Use an application account-access table for versioned suspension, checked by a d
 ## Realized by
 
 (none yet: recorded, not built)
+
+- 9c11f99d0c03be91c61bd1e1e82f936ca40f12ef Add delegated roles, account suspension, recovery and transactional audit pages

@@ -11,4 +11,4 @@ Keep the scaffold users schema and documented SQLite default for this foundation
 
 ## Realized by
 
-(none yet: recorded, not built)
+- 25e0b79a8d099275e019de6da0344782c84219ed Verify account migrations and data preservation on disposable SQLite

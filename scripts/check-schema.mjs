@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import { Database } from 'bun:sqlite';
 
 const seedProbe = process.argv[3] === '--seed-probe';
-const db = new Database(process.argv[2], { readonly: !seedProbe, create: false });
+const db = new Database(process.argv[2], seedProbe ? { readwrite: true, create: false } : { readonly: true });
 try {
   const schema = db.query("SELECT type, name, tbl_name, sql FROM sqlite_master WHERE name NOT LIKE 'sqlite_%' ORDER BY type, name").all();
   const tables = new Set(schema.filter(row => row.type === 'table').map(row => row.name));

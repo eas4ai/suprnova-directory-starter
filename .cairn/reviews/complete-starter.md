@@ -1,5 +1,9 @@
 # Complete-starter review
 
+commit: 0a6d92eea2c2f0013f826ba977dc554a133cfdeb
+findings:
+  - resolved: Rejected stale payment observations no longer generate owner notices; controlled reverse-commit and failure-sensitivity tests passed.
+
 ## Editorial mechanism construction — 2026-09-09
 
 Reviewed CNT-001 through CNT-006 against `tests/editorial_workflows.rs`,
@@ -325,3 +329,49 @@ explicit effect branches, expected edit churn, test length and alias/type-use
 false dead-code flags. The branches keep ordering decisions with their transaction;
 no gate was suppressed. Test-gate exited four and names inherited regressions;
 these remain due on the committed repair before final acceptance.
+
+
+## Final production review — 2026-09-09
+
+Reviewed the complete-starter contract and inherited payment/publication guarantees
+against the final implementation and the recorded failure demonstrations above.
+The final regression series produced 43 current passes, from FND-001 at
+20260909T223437281Z through KIT-005 at 20260909T224247238Z. All receipts and captured
+outputs are committed. The candidate remained unchanged during these checks.
+
+Attacked the boundaries that green happy-path checks can miss: independent
+capabilities and suspended sessions; concurrent last-admin changes; unpublished
+revision and private-media exposure; shared public eligibility across HTML/feeds;
+audit/outbox rollback; replay, stale provider reads and delivery leases; bounded
+pagination/retries; production seed refusal; and documentation/provenance claims.
+The stale-notice finding was recorded before its separate repair. Reinspection
+confirms rejected observations return no notification effect, accepted adverse
+wording uses retained observations, and intent insertion still shares the payment
+and receipt transaction. Cancellation/checkout no-ops cannot fabricate an effect.
+The unchanged inherited payment suite and new negative/positive regression passed.
+No additional unresolved correctness finding remains from this review.
+
+### Production rules self-audit
+
+1. Outcome and runtime boundaries were traced against the agreed specifications.
+2. Changes stay inside the complete-starter footprint and preserve framework ownership.
+3. Domain rules, safe presentation and delivery are separated without a parallel mail/payment engine.
+4. HTTP capabilities, validation, DTOs, migrations and callers agree; direct denial paths are tested.
+5. Errors retain safe actionable codes; credentials and raw provider evidence stay out of owner/audit output.
+6. Permission, CSRF, suspension, private media and rendered-content boundaries have denial coverage.
+7. Transactions, uniqueness, lease recovery, observation ordering and rollback have controlled tests.
+8. Reads, lists, processing batches, delivery timeouts and retries are bounded at their exposed boundaries.
+9. The delivery todo stayed in progress until implementation, verification and this review were complete.
+10. Locked Rust builds, formatting, Vue type/client/SSR builds, HTTP/browser workflows and executable installation/restoration checks ran and passed.
+11. Failed intermediate runs and nonzero static-analysis results remain recorded; none is claimed as a pass.
+12. The agreed policies were followed without expanding into another provider or deployment workstream.
+13. I am satisfied the implementation meets the production rules and agreed local acceptance contract; no known required revision remains.
+14. README, handoff and decision records use concrete operating instructions and distinguish verification from assumptions.
+
+The source-level static flags were reviewed as documented above; no suppression
+was added. Their inherited regression obligations are now covered by current
+passes. External SMTP, PostgreSQL, cloud storage, actual Stripe/Paddle accounts
+and a deployed TLS/proxy installation remain explicitly separate operator smoke
+tests. Local evidence uses SQLite, captured mail and synthetic provider responses.
+This acceptance authorizes no deployment or next framework commitment. No
+application code changed while this final review was performed.

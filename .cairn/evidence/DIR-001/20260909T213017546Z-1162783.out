@@ -1,0 +1,478 @@
+[directory] cargo fmt --check
+[directory] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-PLO52X)
+    Finished `dev` profile [unoptimized] target(s) in 14.53s
+[directory] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [781.00ms]
+[directory] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 689 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-PLO52X/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main--veh0MIi.css   58.24 kB │ gzip:  10.01 kB
+../public/assets/assets/main-CH19Nr_2.js   380.96 kB │ gzip: 120.28 kB
+
+✓ built in 952ms
+[directory] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 76 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  195.10 kB │ gzip: 31.71 kB
+
+✓ built in 463ms
+[directory] cargo test --locked --lib listings::media::tests -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-PLO52X)
+    Finished `test` profile [unoptimized] target(s) in 11.46s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-3c24bf58db703432)
+
+running 4 tests
+test listings::media::tests::generated_keys_and_private_root_reject_traversal ... ok
+test listings::media::tests::reencoding_discards_jpeg_comment_metadata ... ok
+test listings::media::tests::persists_complete_bytes_with_generated_name ... ok
+test listings::media::tests::accepts_only_decodable_raster_images_and_bounds_dimensions ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.00s
+
+[directory] node scripts/with-ssr.mjs cargo test --locked --test directory_workflows -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-PLO52X)
+    Finished `test` profile [unoptimized] target(s) in 2.12s
+     Running tests/directory_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory_workflows-8c9fedbac16a1e1e)
+
+running 1 test
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> GET /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /dashboard/listings/media/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /dashboard/listings/media/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /dashboard/listings/media/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard/listings/1/edit
+<-- Request complete
+--> GET /dashboard/listings/1/edit
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /dashboard/listings/1/archive
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/4e9239ca-0479-431b-985f-cf9591211f70
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/2/submit
+<-- Request complete
+--> POST /admin/listings/2/decision
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/3/submit
+<-- Request complete
+--> POST /admin/listings/3/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /dashboard/listings/1/archive
+<-- Request complete
+--> GET /listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c
+<-- Request complete
+--> GET /media/listings/original-100-tool-67ad5f5f832046ee99e8850f741b0c0c/f0a8f81d-a9ea-4ce7-93b3-0530b3192937
+<-- Request complete
+test directory_workflows_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.03s
+
+[directory] node scripts/with-ssr.mjs node frontend/tests/directory-workflows.mjs
+{"timestamp":"2026-09-09T21:30:58.087987Z","level":"WARN","fields":{"message":"booting production with a mail driver that discards messages - outgoing mail, including password resets, will NOT be delivered","driver":"log","override_env":"MAIL_ALLOW_NON_DELIVERING_IN_PRODUCTION"},"target":"suprnova::mail::boot"}
+{"timestamp":"2026-09-09T21:30:58.088071Z","level":"INFO","fields":{"message":"suprnova server listening","addr":"127.0.0.1:39055"},"target":"suprnova::server"}
+--> GET /login
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /dashboard/listings
+<-- Request complete
+--> GET /dashboard/listings/create
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /dashboard/listings/media/bf73127f-6449-4476-ac3b-629f7b47adc9
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+{"timestamp":"2026-09-09T21:30:59.466995Z","level":"INFO","fields":{"message":"shutdown signal received","signal":"SIGTERM"},"target":"suprnova::signals"}
+{"timestamp":"2026-09-09T21:30:59.467121Z","level":"INFO","fields":{"message":"draining in-flight connections (max 10s)","in_flight":3},"target":"suprnova::server"}
+{"timestamp":"2026-09-09T21:31:05.483831Z","level":"WARN","fields":{"message":"booting production with a mail driver that discards messages - outgoing mail, including password resets, will NOT be delivered","driver":"log","override_env":"MAIL_ALLOW_NON_DELIVERING_IN_PRODUCTION"},"target":"suprnova::mail::boot"}
+{"timestamp":"2026-09-09T21:31:05.483917Z","level":"INFO","fields":{"message":"suprnova server listening","addr":"127.0.0.1:39055"},"target":"suprnova::server"}
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/bf73127f-6449-4476-ac3b-629f7b47adc9
+<-- Request complete
+--> POST /dashboard/listings/4/submit
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> GET /admin/listings/4
+<-- Request complete
+--> GET /dashboard/listings/media/bf73127f-6449-4476-ac3b-629f7b47adc9
+<-- Request complete
+--> POST /admin/listings/4/decision
+<-- Request complete
+--> GET /admin/listings/4
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/bf73127f-6449-4476-ac3b-629f7b47adc9
+<-- Request complete
+--> POST /dashboard/listings/4
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> POST /dashboard/listings/4/submit
+--> GET /admin/listings/4
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/bf73127f-6449-4476-ac3b-629f7b47adc9
+<-- Request complete
+--> POST /admin/listings/4/decision
+<-- Request complete
+--> GET /admin/listings/4
+<-- Request complete
+--> GET /dashboard/listings
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/bf73127f-6449-4476-ac3b-629f7b47adc9
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/bf73127f-6449-4476-ac3b-629f7b47adc9
+<-- Request complete
+--> POST /dashboard/listings/4
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> POST /dashboard/listings/4
+{"timestamp":"2026-09-09T21:31:07.606029Z","level":"WARN","fields":{"message":"client error","status":422,"error":"Validation failed","request_id":"Some(\"ef743f64-7800-4e4e-af3e-bd3bc23c97c6\")"},"target":"suprnova::http::response","span":{"method":"POST","path":"/dashboard/listings/4","request_id":"ef743f64-7800-4e4e-af3e-bd3bc23c97c6","name":"request"},"spans":[{"method":"POST","path":"/dashboard/listings/4","request_id":"ef743f64-7800-4e4e-af3e-bd3bc23c97c6","name":"request"}]}
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CH19Nr_2.js
+<-- Request complete
+<-- Request complete
+
+node:internal/modules/run_main:105
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toHaveAttribute(expected) failed
+
+Locator:  getByRole('button', { name: 'Compact', exact: true })
+Expected: "true"
+Received: "false"
+Timeout:  5000ms
+
+Call log:
+  - Expect "toHaveAttribute" getByRole('button', { name: 'Compact', exact: true }) with timeout 5000ms
+  - waiting for getByRole('button', { name: 'Compact', exact: true })
+    14 × locator resolved to <button type="button" aria-pressed="false" class="button button-quiet">Compact</button>
+       - unexpected value "false"
+
+    at captureRawStack (/home/shawn/workspace2/scratchpads/directory-paid-PLO52X/frontend/node_modules/playwright-core/lib/coreBundle.js:8588:17)
+    at callMatcherAsStep (/home/shawn/workspace2/scratchpads/directory-paid-PLO52X/frontend/node_modules/playwright/lib/matchers/expect.js:13310:57)
+    at Object.toHaveAttribute (/home/shawn/workspace2/scratchpads/directory-paid-PLO52X/frontend/node_modules/playwright/lib/matchers/expect.js:13302:23)
+    at /home/shawn/workspace2/scratchpads/directory-paid-PLO52X/frontend/tests/directory-workflows.mjs:130:79 {
+  matcherResult: {
+    name: 'toHaveAttribute',
+    expected: 'true',
+    message: 'expect(locator).toHaveAttribute(expected) failed\n' +
+      '\n' +
+      "Locator:  getByRole('button', { name: 'Compact', exact: true })\n" +
+      'Expected: "true"\n' +
+      'Received: "false"\n' +
+      'Timeout:  5000ms\n' +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toHaveAttribute" getByRole('button', { name: 'Compact', exact: true }) with timeout 5000ms\n` +
+      "  - waiting for getByRole('button', { name: 'Compact', exact: true })\n" +
+      '    14 × locator resolved to <button type="button" aria-pressed="false" class="button button-quiet">Compact</button>\n' +
+      '       - unexpected value "false"\n',
+    pass: false,
+    actual: 'false',
+    log: [
+      `  - Expect "toHaveAttribute" getByRole('button', { name: 'Compact', exact: true }) with timeout 5000ms`,
+      "  - waiting for getByRole('button', { name: 'Compact', exact: true })",
+      '    14 × locator resolved to <button type="button" aria-pressed="false" class="button button-quiet">Compact</button>',
+      '       - unexpected value "false"'
+    ],
+    timeout: 5000,
+    ariaSnapshot: '- button "Compact"'
+  }
+}
+
+Node.js v24.1.0
+AssertionError [ERR_ASSERTION]: Verification command exited 1
+
+1 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/directory-paid-PLO52X/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 39213...
+Inertia SSR server started.
+
+AssertionError [ERR_ASSERTION]: node exited 1 (signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:27:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:61:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+cairn: DIR-001: fail
+cairn: DIR-002: fail
+cairn: DIR-003: fail
+cairn: DIR-004: fail
+cairn: DIR-005: fail
+cairn: DIR-006: fail
+cairn: DIR-007: fail

@@ -11,8 +11,4 @@ Paid-directory now has current passing evidence and a clean accepted review. The
 
 ## Realized by
 
-(none yet: recorded, not built)
-
-## Realized by
-
 - 9c9b8e198d8d9a2a4ae3cc44c77cbde7c85558f4 Activate the agreed complete starter commitment

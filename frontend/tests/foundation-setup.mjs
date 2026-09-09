@@ -64,10 +64,14 @@ try {
   assert.equal(schema.status, 0, `README database schema is incomplete: ${schema.stderr}`);
 
   env.SERVER_PORT = String(await freePort());
-  env.VITE_PORT = String(await freePort());
+    env.VITE_PORT = String(await freePort());
+    env.SSR_PORT = String(await freePort());
+    env.SSR_URL = `http://127.0.0.1:${env.SSR_PORT}`;
   env.APP_URL = `http://localhost:${env.SERVER_PORT}`;
   const vite = start('vite');
-  await ready(`http://localhost:${env.VITE_PORT}/@vite/client`, vite);
+    await ready(`http://localhost:${env.VITE_PORT}/@vite/client`, vite);
+    const ssr = start('ssr');
+    await ready(`${env.SSR_URL}/health`, ssr);
   const app = start('serve');
   await ready(`${env.APP_URL}/_suprnova/health`, app);
 

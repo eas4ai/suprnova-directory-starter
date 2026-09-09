@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { Head, Link } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3'
+import PublicMetadata from '../../components/PublicMetadata.vue'
+import type { Seo } from '../../types/articles'
 import type { Category, Paged, PublicCard } from '../../types/listings'
-const props = defineProps<{ heading?: string; listings: PublicCard[]; categories: Category[]; q: string; category: string; pagination: Paged }>()
+const props = defineProps<{ heading?: string; listings: PublicCard[]; categories: Category[]; q: string; category: string; pagination: Paged; seo: Seo }>()
 const query = ref(props.q)
 const selected = ref(props.category)
 const compact = ref(false)
@@ -10,7 +12,7 @@ watch(() => [props.q, props.category], () => { query.value = props.q; selected.v
 const resultsUrl = (category: string, page = 1) => `/listings?${new URLSearchParams({ q: props.q, category, page: String(page) })}`
 </script>
 <template>
-  <Head title="Explore the directory" />
+  <PublicMetadata :seo="seo" />
   <section class="directory-page">
     <header class="directory-heading"><h1>{{ heading ?? 'Explore the directory' }}</h1><p>Find a listing by title, summary or category.</p></header>
     <form action="/listings" method="get" role="search" class="directory-search">

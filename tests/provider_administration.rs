@@ -117,9 +117,26 @@ async fn provider_administration_contract() {
     change_access(admin.id, AccessAction::Grant).await.unwrap();
     assert_eq!(
         permission_count(&admin).await,
-        3,
+        5,
         "repeat grants must be idempotent"
     );
+    for capability in [
+        "admin.access",
+        "billing.configure",
+        "listings.moderate",
+        "articles.manage",
+        "taxonomy.manage",
+    ] {
+        assert!(
+            suprnova::rbac::has_permission_for_model(
+                "directory.user",
+                &admin.id.to_string(),
+                capability
+            )
+            .await
+            .unwrap()
+        );
+    }
 
     let mut guest = Client::new();
     guest.get("/login").await;

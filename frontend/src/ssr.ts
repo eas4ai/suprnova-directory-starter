@@ -3,6 +3,7 @@ import createServer from '@inertiajs/vue3/server'
 import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
 import { resolvePage } from './resolve'
+import process from 'node:process'
 
 // `suprnova ssr:start` runs this bundle under Node - `npm run build:ssr`
 // (`vite build --ssr src/ssr.ts`) produces it. `createServer` (from
@@ -17,6 +18,8 @@ import { resolvePage } from './resolve'
 // for the SSR pass. `lib/lang.ts`'s `useLang()` is a module-level
 // composable with no context requirement, unlike React's, so no
 // provider wrapper is needed here.
+const port = Number(process.env.SSR_PORT ?? '13714')
+if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('SSR_PORT must be an integer from 1 to 65535.')
 createServer((page) =>
   createInertiaApp({
     page,
@@ -25,5 +28,5 @@ createServer((page) =>
     setup({ App, props, plugin }) {
       return createSSRApp({ render: () => h(App, props) }).use(plugin)
     },
-  }),
+  }), { port, host: process.env.SSR_HOST ?? '127.0.0.1' },
 )

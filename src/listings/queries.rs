@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use sea_orm::{
     ColumnTrait, Condition, EntityTrait, PaginatorTrait, QueryFilter, QueryOrder, QuerySelect,
-    sea_query::Expr,
+    QueryTrait, sea_query::Expr,
 };
 use serde::Serialize;
 use suprnova::{DB, FrameworkError};
@@ -75,6 +75,37 @@ pub async fn categories() -> Result<Vec<Category>, FrameworkError> {
     let db = DB::connection()?;
     Ok(category::Entity::find()
         .filter(category::Column::Active.eq(true))
+        .order_by_asc(category::Column::Name)
+        .order_by_asc(category::Column::Id)
+        .limit(1000)
+        .all(db.inner())
+        .await
+        .map_err(database_error)?
+        .into_iter()
+        .map(|row| Category {
+            id: row.id,
+            slug: row.slug,
+            name: row.name,
+        })
+        .collect())
+}
+
+/// Public taxonomy navigation uses the same eligibility predicate as results.
+pub async fn public_categories(now: i64) -> Result<Vec<Category>, FrameworkError> {
+    let revisions = listing::Entity::find()
+        .select_only()
+        .column(listing::Column::ApprovedRevisionId)
+        .filter(eligible(now))
+        .into_query();
+    let terms = revision_category::Entity::find()
+        .select_only()
+        .column(revision_category::Column::CategoryId)
+        .filter(revision_category::Column::RevisionId.in_subquery(revisions))
+        .into_query();
+    let db = DB::connection()?;
+    Ok(category::Entity::find()
+        .filter(category::Column::Active.eq(true))
+        .filter(category::Column::Id.in_subquery(terms))
         .order_by_asc(category::Column::Name)
         .order_by_asc(category::Column::Id)
         .limit(1000)

@@ -7,6 +7,7 @@ mod m20240101_000004_create_auth_flow_tokens_table;
 mod m20260909_000005_create_billing_settings;
 mod m20260909_000006_create_directory;
 mod m20260909_000007_create_publishing;
+mod m20260909_000008_create_articles;
 
 pub struct Migrator;
 
@@ -22,6 +23,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260909_000005_create_billing_settings::Migration),
             Box::new(m20260909_000006_create_directory::Migration),
             Box::new(m20260909_000007_create_publishing::Migration),
+            Box::new(m20260909_000008_create_articles::Migration),
         ]
     }
 }

@@ -11,9 +11,10 @@ const user = computed(() => page.props.auth.user)
 const open = ref(false)
 const logout = useForm({})
 const links = computed(() => props.admin
-  ? [{ href: '/admin', label: 'Overview' }, ...(user.value?.can_moderate ? [{ href: '/admin/listings', label: 'Listing reviews' }] : []), ...(user.value?.can_billing ? [{ href: '/admin/plans', label: 'Publishing plans' }, { href: '/admin/billing', label: 'Payment providers' }] : []), { href: '/dashboard', label: 'Your account' }, { href: '/listings', label: 'View directory' }]
+  ? [{ href: '/admin', label: 'Overview' }, ...(user.value?.can_moderate ? [{ href: '/admin/listings', label: 'Listing reviews' }] : []), ...(user.value?.can_edit ? [{ href: '/admin/articles', label: 'Articles' }] : []), ...(user.value?.can_taxonomy ? [{ href: '/admin/taxonomy', label: 'Categories and tags' }] : []), ...(user.value?.can_billing ? [{ href: '/admin/plans', label: 'Publishing plans' }, { href: '/admin/billing', label: 'Payment providers' }] : []), { href: '/dashboard', label: 'Your account' }, { href: '/listings', label: 'View directory' }]
   : [
       { href: '/listings', label: 'Explore' },
+      { href: '/articles', label: 'Articles' },
       ...(user.value ? [{ href: '/dashboard/listings', label: 'Your listings' }] : []),
       ...(user.value ? [{ href: '/dashboard', label: 'Your account' }] : [{ href: '/login', label: 'Sign in' }]),
       ...(user.value?.can_admin ? [{ href: '/admin', label: 'Administration' }] : []),

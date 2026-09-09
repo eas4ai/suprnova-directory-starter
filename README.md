@@ -16,6 +16,7 @@ Cargo.lock records that exact revision; no local framework checkout is required.
   specification lint and evidence recording, not to run the application.
 - A C/C++ toolchain, pkg-config and OpenSSL development headers for native dependencies.
 - Git and network access for the first dependency installation.
+- Python 3 for XML parsing in the editorial verification suite.
 
 ## Install and migrate
 
@@ -30,6 +31,7 @@ cargo build --locked --bins
 cd frontend
 bun install --frozen-lockfile
 bun run build
+bun run build:ssr
 cd ..
 cargo run --locked --bin directory -- migrate
 ```
@@ -50,7 +52,14 @@ cd frontend
 bun run dev
 ```
 
-In a second terminal, from the repository root:
+In a second terminal, run the public-page renderer from the repository root:
+
+<!-- foundation:ssr -->
+```sh
+node --env-file=.env frontend/bootstrap/ssr/ssr.js
+```
+
+In a third terminal, from the repository root:
 
 <!-- foundation:serve -->
 ```sh
@@ -58,15 +67,23 @@ cargo run --locked --bin directory -- serve --no-migrate
 ```
 
 Open `http://localhost:8765`. The public directory and account forms should render.
-Keep both terminals running; stop each with Ctrl+C. Local mode loads modules from
+Keep all three terminals running; stop each with Ctrl+C. Local mode loads modules from
 Vite on port 5765. `bun run build` checks production assets but does not replace
 Vite in local mode. The guide uses the application binaries directly, so the
 separately installed Suprnova developer CLI is not required.
 
+Public content and metadata are rendered in the initial HTML by the Vue SSR worker.
+The worker binds to loopback port 13714. A stopped worker produces an explicit page
+error instead of a blank public shell. Private account and administration forms
+remain available. After changing Vue pages, run `bun run --cwd frontend build:ssr`
+and restart the renderer. Supervise this worker alongside the application in production.
+
 If either port is occupied, export `SERVER_PORT`, `VITE_PORT`, and `APP_URL` with
-matching free ports in both terminals before running the commands. The backend
+matching free ports in the relevant terminals before running the commands. The backend
 reads these before `.env`, and Vite reads `VITE_PORT` from the terminal environment.
 The setup verifier uses this documented override with ephemeral local ports.
+If the renderer port is occupied, also export matching `SSR_PORT` and `SSR_URL`
+in the renderer and application terminals. Keep the renderer on a private interface.
 
 ## Account mail
 
@@ -93,7 +110,8 @@ From the application host, replace `42` below with that exact ID:
 cargo run --locked --bin console -- admin:access grant --user-id 42
 ```
 
-The command grants `admin.access`, `billing.configure` and `listings.moderate` using Suprnova RBAC.
+The command grants `admin.access`, `billing.configure`, `listings.moderate`,
+`articles.manage` and `taxonomy.manage` using Suprnova RBAC.
 It refuses unknown or unverified accounts. Repeating a grant is safe. Sign in and
 open **Administration → Payment providers**. An existing session sees the grant
 on its next request; registration itself never grants administrative access.
@@ -104,10 +122,40 @@ To revoke access, including access in an existing session:
 cargo run --locked --bin console -- admin:access revoke --user-id 42
 ```
 
-Revocation removes these three direct permissions and any role memberships granting
+Revocation removes these direct permissions and any role memberships granting
 any of them. Other role memberships remain. Roles and their permissions
 are not deleted. The same host command can recover access if no administrators
 remain; no public bootstrap endpoint is exposed.
+
+## Articles, taxonomy and public metadata
+
+Editors use **Administration → Articles** to create an article, save a draft and
+preview the saved version. Saving changes to a published article keeps the current
+public version intact. Use **Publish saved changes** to replace it explicitly, or
+**Unpublish article** to remove it from public pages, RSS and sitemap output.
+Conflicting saves preserve your entered text and offer a link to reload the latest
+revision. A deliberate published slug change redirects the old URL while the
+article remains published; old slugs cannot be assigned to another article.
+
+**Taxonomy** manages listing categories separately from article categories and tags.
+Rename or disable an in-use term to preserve existing relationships. Removing an
+in-use term is rejected. Article covers use the same private disk and safe image
+limits as listings; draft previews and their media require editorial permission.
+Markdown renders without raw HTML or executable links.
+
+Public article search is at `/articles`, RSS at `/feed.xml`, the sitemap index at
+`/sitemap.xml` and crawler instructions at `/robots.txt`. RSS contains the latest
+50 published articles. The sitemap uses pages of 100 eligible URLs. Content and
+canonical, Open Graph and structured metadata appear in initial HTML through the
+SSR worker. Set `APP_URL` to the site's public origin; request headers never choose
+canonical hosts.
+
+Set `APP_NAME`, `SITE_DESCRIPTION`, `SITE_LOGO_URL` and `SITE_ACCENT` in the deployment
+environment to customize both shells and metadata. A logo can use an absolute
+HTTP(S) URL or a site-relative path such as `/brand/logo.png`. Quote the hex accent
+in `.env`, for example `SITE_ACCENT="#146b56"`; it must contrast with white text by
+at least 4.5:1. Invalid settings return a diagnostic error. Restart the application
+after changing configuration.
 
 ## Listings and moderation
 

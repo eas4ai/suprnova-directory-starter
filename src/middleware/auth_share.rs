@@ -24,14 +24,30 @@ impl InertiaSharedData for AuthShare {
                     && user
                         .has_permission_to(crate::listings::MODERATE_PERMISSION)
                         .await?;
+                let can_edit = can_admin
+                    && user
+                        .has_permission_to(crate::articles::EDIT_PERMISSION)
+                        .await?;
+                let can_taxonomy = can_admin
+                    && user
+                        .has_permission_to(crate::articles::TAXONOMY_PERMISSION)
+                        .await?;
                 json!({"name": user.name, "email": user.email,
-                    "verified": user.email_verified_at.is_some(), "can_admin": can_admin, "can_billing": can_billing, "can_moderate": can_moderate})
+                    "verified": user.email_verified_at.is_some(), "can_admin": can_admin, "can_billing": can_billing, "can_moderate": can_moderate,
+                    "can_edit": can_edit, "can_taxonomy": can_taxonomy})
             }
             None => suprnova::serde_json::Value::Null,
         };
-        Ok(IndexMap::from([(
-            "auth".to_owned(),
-            Prop::eager(json!({"user": user})),
-        )]))
+        Ok(IndexMap::from([
+            ("auth".to_owned(), Prop::eager(json!({"user": user}))),
+            (
+                "site".to_owned(),
+                Prop::eager(
+                    suprnova::serde_json::to_value(crate::config::site::read()?).map_err(|_| {
+                        FrameworkError::internal("Could not share site configuration.")
+                    })?,
+                ),
+            ),
+        ]))
     }
 }

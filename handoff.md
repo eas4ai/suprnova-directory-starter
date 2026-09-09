@@ -7,16 +7,17 @@ Origin: https://github.com/eas4ai/suprnova-directory-starter.git
 ## Current contract
 
 This repository uses Cairn. Read `AGENTS.md`, run `cairn wake`, and follow the
-named action. `docs/spec/roadmap.md` names `paid-directory` as Current.
+named action. `docs/spec/roadmap.md` names `complete-starter` as Current.
 The developer confirmed both remaining commitments, their requirements, falsifiers
 and policies. Foundation and provider administration are complete; the repaired
-framework integration is verified. Paid-directory implementation and its evidence
-are in progress.
+framework integration is verified. Paid-directory has completed its evidence and
+final review. Complete-starter implementation and verification are in progress.
 Larafast Directories is the selected working reference, not Pulsar.
 
 Do not restart discovery or ask the developer to repeat settled choices.
 Read `docs/spec/glossary.md`, `docs/spec/payments.md`, the roadmap,
-`docs/commitments/paid-directory.md`, and its decision records first.
+`docs/commitments/complete-starter.md`, the content/administration/adoption specs,
+and their decision records first.
 Cairn receipts and their output are tracked under `.cairn/evidence`; freshness
 and the final review determine completion, not this handoff's prose.
 
@@ -36,7 +37,7 @@ and the final review determine completion, not this handoff's prose.
   for the `directory.user` model type; neither registration nor a role name
   grants it. Directory content uses moderated owner revisions and publication eligibility.
 - The local setup guide supplies a generated local key, install/migration commands,
-  and separate Vite/application terminal commands. The setup verifier executes
+  and separate Vite/SSR/application terminal commands. The setup verifier executes
   those README blocks and checks rendering plus a visible invalid-login error.
 
 The frontend uses Inertia's current XSRF cookie support. Do not reintroduce the
@@ -75,8 +76,8 @@ price lookup, checkout or webhook delivery is established by this commitment.
 
 SQLite is verified; PostgreSQL is not. Account tests capture mail inside the
 process. Setup renders forms without sending email. External SMTP delivery,
-production deployment, runtime SSR, payments and listing features are not
-established by these passes. For local account mail, provide the SMTP capture
+production deployment and real provider accounts are not established by these passes.
+For local account mail, provide the SMTP capture
 server declared in README and `.env.example`.
 
 The foundation's final review is `.cairn/reviews/starter-foundation.md`; its notes
@@ -103,16 +104,33 @@ tests, frontend builds and paid browser journeys. The standalone pinned adapter
 tests use the framework revision's committed dependency lock; application wire
 tests use this starter's lock. Local signatures and provider responses are synthetic.
 The seven-case mutation driver also passed: every violating copy compiled and
-failed at its runtime assertion. Committed Cairn evidence and final review remain
-the next steps. Do not infer completion from this paragraph.
+failed at its runtime assertion. Paid-directory subsequently completed committed
+Cairn evidence and its final review. Later source changes still require fresh
+regressions under complete-starter.
+
+## Complete-starter editorial work
+
+`src/articles` keeps saved revisions separate from the published revision.
+Article and taxonomy administration, safe previews/media, public discovery,
+canonical metadata, RSS, sitemap pages and robots output are implemented.
+Public listing and article HTML now requires the actual Vue SSR worker; private
+forms retain their existing rendering path. README documents the worker and site
+identity configuration. `scripts/with-ssr.mjs` runs verification with a bounded,
+ephemeral renderer and cleans it up.
+
+`node scripts/verify-complete-starter.mjs editorial` builds and checks the HTTP
+and browser workflows in a disposable installation. Six isolated violating copies
+compiled and failed their intended assertions. Refer to Cairn for current evidence;
+the editing-time run is not a committed receipt. Delegated account administration,
+notification delivery, demo data and final adoption verification remain unfinished.
 
 ## Settled product direction
 
 The product is a free MIT source starter that operators can monetize. The first
 full delivery includes owner listings, categories, bounded discovery, moderation,
 paid publishing, editorial content, taxonomy, RSS, SEO, administration,
-notifications, storage, demo data and adoption documentation. This foundation
-commitment does not authorize implementing those later modules.
+notifications, storage, demo data and adoption documentation. The developer agreed
+these modules under the current complete-starter commitment.
 
 Use Suprnova's authentication, RBAC and payment adapters rather than parallel
 engines. Stripe and Paddle are both selected for provider administration.

@@ -9,13 +9,12 @@ import { snapshot } from './verification-workspace.mjs';
 const task = process.argv[2];
 const source = resolve(process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const groups = {
-  directory: Array.from({ length: 7 }, (_, index) => `DIR-${String(index + 1).padStart(3, '0')}`),
-  // DIR-008 requires following the checkout action through the paid owner journey.
-  payments: ['DIR-008', 'PAY-002', 'PAY-003', ...Array.from({ length: 8 }, (_, index) => `PAY-${String(index + 9).padStart(3, '0')}`)],
+  editorial: Array.from({ length: 6 }, (_, index) => `CNT-${String(index + 1).padStart(3, '0')}`),
+  administration: Array.from({ length: 3 }, (_, index) => `ADM-${String(index + 1).padStart(3, '0')}`),
+  adoption: Array.from({ length: 5 }, (_, index) => `KIT-${String(index + 1).padStart(3, '0')}`),
 };
 const requirements = groups[task];
 let working;
-
 function run(command, args, env) {
   console.log(`[${task}] ${command} ${args.join(' ')}`);
   const result = spawnSync(command, args, { cwd: working, env, detached: true, stdio: 'inherit', timeout: 30 * 60 * 1000 });
@@ -26,15 +25,15 @@ function run(command, args, env) {
   if (result.error) throw result.error;
   assert.equal(result.status, 0, `${command} exited ${result.status} (signal ${result.signal ?? 'none'})`);
 }
-
 try {
-  assert.ok(requirements, 'Choose directory or payments verification.');
-  working = snapshot(source, 'directory-paid-');
+  assert.ok(requirements, 'Choose editorial, administration or adoption verification.');
+  assert.equal(task, 'editorial', `${task} verification is not implemented yet.`);
+  working = snapshot(source, 'directory-complete-');
   const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
-    APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
+    APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'https://catalog.example.test', APP_NAME: 'Directory',
     APP_KEY: randomBytes(32).toString('base64url'), MAIL_FROM: 'test@example.test',
-    DATABASE_URL: `sqlite://${join(working, 'directory.db')}`, DB_LOGGING: 'false', SESSION_SECURE: 'false',
+    DATABASE_URL: `sqlite://${join(working, 'editorial.db')}`, DB_LOGGING: 'false', SESSION_SECURE: 'false',
     DIRECTORY_MEDIA_ROOT: join(working, 'storage/private/directory'), TMPDIR: working,
     CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',
     CARGO_INCREMENTAL: '0', CARGO_TARGET_DIR: join(source, 'target'),
@@ -44,25 +43,8 @@ try {
   run('bun', ['install', '--frozen-lockfile', '--cwd', 'frontend'], env);
   run('bun', ['run', '--cwd', 'frontend', 'build'], env);
   run('bun', ['run', '--cwd', 'frontend', 'build:ssr'], env);
-  if (task === 'directory') {
-    run('cargo', ['test', '--locked', '--lib', 'listings::media::tests', '--', '--nocapture'], env);
-    run('node', ['scripts/with-ssr.mjs', 'cargo', 'test', '--locked', '--test', 'directory_workflows', '--', '--nocapture'], env);
-  } else {
-    run('cargo', ['test', '--locked', '--lib', 'billing::', '--', '--nocapture'], env);
-    run('cargo', ['test', '--locked', '--test', 'payment_sdk_wire', '--', '--nocapture'], env);
-    for (const mode of ['live', 'test']) {
-      run('node', ['scripts/with-ssr.mjs', 'cargo', 'test', '--locked', '--test', 'paid_lifecycle', '--', '--nocapture'], {
-        ...env, BILLING_CHECKOUT_MODE: mode, DATABASE_URL: `sqlite://${join(working, `paid-${mode}.db`)}`,
-      });
-    }
-    run('node', ['scripts/verify-pinned-checkout.mjs'], env);
-  }
-  if (task === 'directory') {
-    run('node', ['scripts/with-ssr.mjs', 'node', 'frontend/tests/directory-workflows.mjs'], { ...env, DIRECTORY_ARTIFACT_DIR: join(source, 'target/directory-ui') });
-  } else {
-    run('node', ['scripts/with-ssr.mjs', 'node', 'frontend/tests/paid-workflows.mjs'], { ...env, BILLING_CHECKOUT_MODE: 'live',
-      DATABASE_URL: `sqlite://${join(working, 'paid-browser.db')}`, PAID_ARTIFACT_DIR: join(source, 'target/payments-ui') });
-  }
+  run('node', ['scripts/with-ssr.mjs', 'cargo', 'test', '--locked', '--test', 'editorial_workflows', '--', '--nocapture'], env);
+  run('node', ['scripts/with-ssr.mjs', 'node', 'frontend/tests/editorial-workflows.mjs'], { ...env, EDITORIAL_ARTIFACT_DIR: join(source, 'target/editorial-ui') });
   for (const requirement of requirements) console.log(`cairn: ${requirement}: pass`);
 } catch (error) {
   console.error(error.stack ?? error.message);

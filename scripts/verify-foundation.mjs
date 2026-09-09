@@ -107,9 +107,10 @@ function setup(root) {
 function ui(root) {
   run('bun', ['install', '--frozen-lockfile'], join(root, 'frontend'));
   run('bun', ['run', 'build'], join(root, 'frontend'));
+  run('bun', ['run', 'build:ssr'], join(root, 'frontend'));
   const env = accounts(root, 'foundation_ui');
   env.FOUNDATION_ARTIFACT_DIR = join(source, 'target/foundation-ui');
-  run('node', ['frontend/tests/foundation-ui.mjs'], root, { env });
+  run('node', ['scripts/with-ssr.mjs', 'node', 'frontend/tests/foundation-ui.mjs'], root, { env });
 }
 
 if (!requirement) {

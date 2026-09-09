@@ -1,5 +1,6 @@
 mod database;
 mod mail;
+pub mod site;
 
 pub use database::DatabaseConfig;
 pub use mail::MailConfig;

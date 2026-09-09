@@ -1,4 +1,6 @@
 body { margin: 0; background: var(--surface-canvas); color: var(--text-primary); font-family: var(--font-body); font-size: var(--text-body); line-height: 1.6; }
+.public-shell, .admin-shell { --button-bg: var(--brand-accent); --button-hover: color-mix(in srgb, var(--brand-accent) 80%, var(--neutral-900)); --surface-accent: color-mix(in srgb, var(--brand-accent) 8%, var(--neutral-0)); }
+.site-brand > img { object-fit: contain; margin-right: var(--space-3); }
 * { box-sizing: border-box; }
 h1, h2, h3, p { margin: 0; }
 h1, h2, h3 { line-height: 1.15; letter-spacing: -.035em; font-weight: 600; }

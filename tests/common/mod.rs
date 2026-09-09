@@ -35,6 +35,8 @@ pub struct Response {
     pub body: String,
     #[allow(dead_code)]
     pub body_bytes: Vec<u8>,
+    #[allow(dead_code)]
+    pub headers: http::HeaderMap,
 }
 
 impl Client {
@@ -155,16 +157,13 @@ impl Client {
             hyper::server::conn::http1::Builder::new()
                 .serve_connection(TokioIo::new(server), service)
                 .await
-                .expect("serve HTTP request");
         });
-        tokio::time::timeout(Duration::from_secs(15), async {
+        let response = tokio::time::timeout(Duration::from_secs(15), async {
             let (mut sender, connection) =
                 hyper::client::conn::http1::handshake::<_, Full<Bytes>>(TokioIo::new(client))
                     .await
                     .expect("HTTP handshake");
-            tasks.spawn(async move {
-                connection.await.expect("client connection");
-            });
+            tasks.spawn(connection);
             let mut request = hyper::Request::builder()
                 .method(method)
                 .uri(path)
@@ -179,6 +178,10 @@ impl Client {
             if inertia {
                 request = request
                     .header("X-Inertia", "true")
+                    .header(
+                        "X-Inertia-Version",
+                        suprnova::InertiaConfig::new().version.resolve(),
+                    )
                     .header("Referer", format!("http://directory.test{path}"));
             }
             if !self.cookies.is_empty() {
@@ -232,9 +235,35 @@ impl Client {
                     .map(|value| value.to_str().unwrap().to_owned()),
                 body: String::from_utf8_lossy(&body_bytes).into_owned(),
                 body_bytes,
+                headers: parts.headers,
             }
         })
         .await
-        .expect("HTTP exchange exceeded 15 seconds")
+        .expect("HTTP exchange exceeded 15 seconds");
+        tasks.abort_all();
+        while let Some(result) = tasks.join_next().await {
+            match result {
+                Ok(Ok(())) => {}
+                Err(error) if error.is_cancelled() => {}
+                Ok(Err(error)) => {
+                    // The server may reject an oversized body before the client
+                    // finishes writing it. Only that response permits BrokenPipe.
+                    let mut source: Option<&(dyn std::error::Error + 'static)> = Some(&error);
+                    let mut broken_pipe = false;
+                    while let Some(error) = source {
+                        broken_pipe |= error
+                            .downcast_ref::<std::io::Error>()
+                            .is_some_and(|error| error.kind() == std::io::ErrorKind::BrokenPipe);
+                        source = error.source();
+                    }
+                    assert!(
+                        response.status == 413 && broken_pipe,
+                        "HTTP connection failed: {error}"
+                    );
+                }
+                Err(error) => panic!("HTTP task failed: {error}"),
+            }
+        }
+        response
     }
 }

@@ -60,7 +60,7 @@ try {
   run('frontend install', 'bun', ['install', '--frozen-lockfile', '--cwd', 'frontend'], env);
   run('frontend build', 'bun', ['run', '--cwd', 'frontend', 'build'], env);
   run('frontend SSR build', 'bun', ['run', '--cwd', 'frontend', 'build:ssr'], env);
-  run('browser administration journeys', 'node', ['frontend/tests/provider-administration.mjs'], { ...env, BILLING_OPERATOR_ID: userId, PROVIDER_ARTIFACT_DIR: join(source, 'target/provider-ui') });
+  run('browser administration journeys', 'node', ['scripts/with-ssr.mjs', 'node', 'frontend/tests/provider-administration.mjs'], { ...env, BILLING_OPERATOR_ID: userId, PROVIDER_ARTIFACT_DIR: join(source, 'target/provider-ui') });
   for (const requirement of requirements) console.log(`cairn: ${requirement}: pass`);
 } catch (error) {
   console.error(error.stack ?? error.message);

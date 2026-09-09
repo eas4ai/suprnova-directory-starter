@@ -152,10 +152,12 @@ pub async fn change_access(user_id: i64, action: AccessAction) -> Result<(), Fra
     transaction.commit().await.map_err(database_error)
 }
 
-pub const ADMIN_PERMISSIONS: [&str; 3] = [
+pub const ADMIN_PERMISSIONS: [&str; 5] = [
     ADMIN_PERMISSION,
     BILLING_PERMISSION,
     crate::listings::MODERATE_PERMISSION,
+    crate::articles::EDIT_PERMISSION,
+    crate::articles::TAXONOMY_PERMISSION,
 ];
 
 fn database_error(error: sea_orm::DbErr) -> FrameworkError {

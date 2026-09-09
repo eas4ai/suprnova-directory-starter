@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3'
+import PublicMetadata from '../../components/PublicMetadata.vue'
+import type { Seo } from '../../types/articles'
 import type { PublicDetail } from '../../types/listings'
-defineProps<{ listing: PublicDetail }>()
+defineProps<{ listing: PublicDetail; seo: Seo }>()
 </script>
 <template>
-  <Head :title="listing.title" />
+  <PublicMetadata :seo="seo" />
   <article class="directory-page directory-detail">
     <Link href="/listings" class="text-link">Back to directory</Link>
     <header class="directory-heading"><h1>{{ listing.title }}</h1><p>{{ listing.summary }}</p><ul class="directory-tags" aria-label="Categories"><li v-for="category in listing.categories" :key="category.id"><Link :href="`/listings?category=${encodeURIComponent(category.slug)}`">{{ category.name }}</Link></li></ul></header>

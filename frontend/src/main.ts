@@ -1,5 +1,6 @@
 import './app.css'
 import './directory.css'
+import './editorial.css'
 import { createInertiaApp } from '@inertiajs/vue3'
 import { createApp, createSSRApp, h } from 'vue'
 import { initLang } from './lib/lang'

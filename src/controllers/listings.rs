@@ -22,10 +22,12 @@ pub struct DirectoryIndexProps {
     pub q: String,
     pub category: String,
     pub pagination: Pagination,
+    pub seo: crate::public_pages::Seo,
 }
 #[derive(InertiaProps)]
 pub struct DirectoryDetailProps {
     pub listing: PublicDetail,
+    pub seo: crate::public_pages::Seo,
 }
 #[derive(InertiaProps)]
 pub struct OwnerListingsProps {
@@ -78,17 +80,27 @@ pub(super) async fn render_index(req: Request, heading: &str) -> Response {
     let category = req.query_param("category").unwrap_or_default();
     let (listings, pagination) =
         queries::search(&q, &category, page(&req)?, chrono::Utc::now().timestamp()).await?;
+    let seo = crate::public_pages::directory_index(
+        heading,
+        &listings,
+        &q,
+        &category,
+        &pagination,
+        req.path() == "/",
+    )?;
     inertia_response!(
         &req,
         "directory/Index",
         DirectoryIndexProps {
             heading: heading.to_owned(),
             listings,
-            categories: queries::categories().await?,
+            categories: queries::public_categories(chrono::Utc::now().timestamp()).await?,
             q,
             category,
             pagination,
-        }
+            seo,
+        },
+        crate::public_pages::config()?
     )
 }
 
@@ -96,7 +108,13 @@ pub(super) async fn render_index(req: Request, heading: &str) -> Response {
 pub async fn show(req: Request) -> Response {
     let slug = req.param("slug").map_err(|_| listings::missing())?;
     let listing = queries::detail(slug, chrono::Utc::now().timestamp()).await?;
-    inertia_response!(&req, "directory/Show", DirectoryDetailProps { listing })
+    let seo = crate::public_pages::listing(&listing)?;
+    inertia_response!(
+        &req,
+        "directory/Show",
+        DirectoryDetailProps { listing, seo },
+        crate::public_pages::config()?
+    )
 }
 
 #[handler]
@@ -248,7 +266,7 @@ pub async fn upload(req: Request) -> Response {
     )
 }
 
-fn media_error(error: media::MediaError) -> FrameworkError {
+pub(crate) fn media_error(error: media::MediaError) -> FrameworkError {
     match error {
         media::MediaError::InvalidImage
         | media::MediaError::TooLarge
@@ -261,8 +279,8 @@ fn media_error(error: media::MediaError) -> FrameworkError {
     }
 }
 
-async fn media_response(row: entities::media::Model) -> Response {
-    let bytes = media::read(&row.storage_key).await.map_err(media_error)?;
+pub(crate) async fn image_response(storage_key: &str) -> Response {
+    let bytes = media::read(storage_key).await.map_err(media_error)?;
     Ok(HttpResponse::bytes(bytes.into(), "image/png")
         .header("X-Content-Type-Options", "nosniff")
         .header("Cache-Control", "private, no-store")
@@ -282,7 +300,7 @@ pub async fn private_media(req: Request) -> Response {
     if row.owner_id != actor {
         workflow::require_moderator(actor).await?;
     }
-    media_response(row).await
+    image_response(&row.storage_key).await
 }
 
 #[handler]
@@ -307,5 +325,5 @@ pub async fn public_media(req: Request) -> Response {
         .await
         .map_err(listings::database_error)?
         .ok_or_else(listings::missing)?;
-    media_response(row).await
+    image_response(&row.storage_key).await
 }

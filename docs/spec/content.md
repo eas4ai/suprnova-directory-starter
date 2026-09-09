@@ -1,6 +1,6 @@
 # Editorial content and public metadata
 
-Status: Draft
+Status: Agreed 2026-09-09
 Prefix: CNT
 
 [CNT-001] The starter MUST let an authorized editor create, revise, preview, publish and unpublish articles through administration.
@@ -27,7 +27,7 @@ Mechanism: Proposed feed/XML parsing and cross-surface visibility tests with eno
 Falsifier: Script, executable links or unsafe uploads run in a public article or preview, or an unauthorized request fetches draft article media.
 Mechanism: Proposed editorial-content fixtures and browser security/preview authorization checks reusing the verified media boundary.
 
-## Proposed operating rules
+## Agreed operating rules
 
 - Articles have title, summary, Markdown body, stable slug, optional cover image and
   alternative text, categories and tags. Publishing is explicit; scheduled publishing

@@ -1,6 +1,6 @@
 # Delegated starter administration
 
-Status: Draft
+Status: Agreed 2026-09-09
 Prefix: ADM
 
 [ADM-001] The starter MUST enforce distinct Suprnova permissions for listing moderation, editorial work, taxonomy, account administration and billing.
@@ -15,7 +15,7 @@ Mechanism: Proposed account-administration HTTP, existing-session revocation and
 Falsifier: A successful moderation, account-access, taxonomy, editorial-publication or billing-plan change lacks an attributable record, a failed transaction records a successful decision, or audit output exposes passwords or provider secrets.
 Mechanism: Proposed administrative-audit transaction and secret-marker tests with permission-restricted audit pages.
 
-## Proposed operating rules
+## Agreed operating rules
 
 - Seed explicit roles for administrator, moderator and editor through Suprnova RBAC.
   Role names themselves grant nothing. Operator provisioning grants the full starter

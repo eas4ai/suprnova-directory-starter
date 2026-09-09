@@ -5,9 +5,9 @@ Prefix: FND
 
 These proposed requirements define the first independently verifiable commitment. They do not claim the existing scaffold already meets them. Mechanisms are declared now and implemented during this commitment.
 
-[FND-001] The starter MUST build both Rust binaries against Suprnova v1.3.7 from committed dependency locks.
-Falsifier: A clean dependency install changes the lockfile, resolves another Suprnova tag, or fails to build either binary.
-Mechanism: foundation-build; locked Cargo build, version assertion and frontend frozen install/build in a disposable checkout.
+[FND-001] The starter MUST build both Rust binaries against Suprnova revision `107e6e7a122d5145160ea1547ca90ddc37459c27` from committed dependency locks.
+Falsifier: A clean dependency install changes the lockfile, resolves another Suprnova revision, or fails to build either binary.
+Mechanism: foundation-build; locked Cargo build, exact revision assertion and frontend frozen install/build in a disposable checkout.
 
 [FND-002] The starter MUST initialize its account schema on a disposable database using the documented migration command.
 Falsifier: The documented command fails on an empty test database, or repeating it fails or changes the completed schema unexpectedly.

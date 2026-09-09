@@ -1,0 +1,25 @@
+command: node scripts/verify-paid-directory.mjs payments
+results: per-requirement
+inputs:
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - PAY-002
+  - PAY-003
+  - PAY-009
+  - PAY-010
+  - PAY-011
+  - PAY-012
+  - PAY-013
+  - PAY-014
+  - PAY-015
+  - PAY-016

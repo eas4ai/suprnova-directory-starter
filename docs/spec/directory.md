@@ -1,10 +1,10 @@
 # Directory and moderation
 
-Status: Draft
+Status: Agreed 2026-09-09
 Prefix: DIR
 
 This domain owns listings and their approved public revisions. Payment eligibility
-is owned by payments.md. The defaults below are proposed for the remaining starter.
+is owned by payments.md. The operating rules below were confirmed for the remaining starter.
 
 [DIR-001] The starter MUST let a verified owner create, save, edit and archive their own listing drafts through the owner UI.
 Falsifier: A valid draft cannot be reopened after restart, another owner can read a private draft or mutate it by direct request, or an unverified account can submit a mutation.
@@ -38,7 +38,7 @@ Mechanism: Proposed directory-suspension permission and visibility tests across 
 Falsifier: An owner cannot distinguish pending review from awaiting payment, an approved unpaid listing has no checkout action, a rejected revision hides its reason, or another owner's status is disclosed.
 Mechanism: Proposed directory-owner-dashboard HTTP and keyboard/browser journeys through the complete lifecycle.
 
-## Proposed operating rules
+## Agreed operating rules
 
 - Listing fields: title (1–120 characters), summary (1–280), Markdown description
   (1–20,000), absolute HTTP(S) destination URL (at most 2,048), one to five active

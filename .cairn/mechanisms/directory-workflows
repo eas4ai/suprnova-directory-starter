@@ -1,0 +1,23 @@
+command: node scripts/verify-paid-directory.mjs directory
+results: per-requirement
+inputs:
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - DIR-001
+  - DIR-002
+  - DIR-003
+  - DIR-004
+  - DIR-005
+  - DIR-006
+  - DIR-007
+  - DIR-008

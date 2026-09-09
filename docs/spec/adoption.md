@@ -1,6 +1,6 @@
 # Starter operations and distribution
 
-Status: Draft
+Status: Agreed 2026-09-09
 Prefix: KIT
 
 [KIT-001] The starter MUST record owner-facing moderation and payment notifications durably for retryable delivery.
@@ -23,7 +23,7 @@ Mechanism: Proposed distribution inventory and provenance review, backed by lice
 Falsifier: The documented build, migrate, seed, serve, account, moderation, payment, notification or recovery commands fail in the disposable acceptance environment, or the guide labels untested external integrations as verified.
 Mechanism: Proposed complete-starter clean-install browser journey, command checks and all prior commitment regressions.
 
-## Proposed operating rules
+## Agreed operating rules
 
 - Notifications appear in owner status pages and are sent through Suprnova mail.
   Persist one intent per domain event; retry failed delivery through a bounded command.

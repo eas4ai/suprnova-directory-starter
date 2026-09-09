@@ -1,11 +1,11 @@
 # Payment scope
 
-Status: Draft
+Status: Agreed 2026-09-09
 Prefix: PAY
 
-The developer confirmed PAY-001 and PAY-004 through PAY-008, their falsifiers and operating rules on 2026-09-09. PAY-002 and PAY-003 remain Draft. Entitlement duration, recurring plans, refunds, disputes, renewal failure and reinstatement remain open.
+The developer confirmed all requirements, falsifiers and operating rules on 2026-09-09. The repaired framework revision and Larafast directory reference were confirmed before implementation resumed.
 
-[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova v1.3.7 adapters.
+[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters at revision `107e6e7a122d5145160ea1547ca90ddc37459c27`.
 Falsifier: Either provider requires application source edits, saved configuration disappears after restart, or a guest or account without the permission can read or change billing configuration through a direct request.
 Mechanism: Proposed provider-administration-access HTTP tests and provider-administration-browser journeys, including both providers, restart persistence, denied actors and invalid CSRF tokens.
 Status: Agreed 2026-09-09
@@ -54,12 +54,12 @@ These details belong to PAY-001 and PAY-004 through PAY-008 and were confirmed w
 - Plan identifiers and price identifiers are entered manually. Mapping does not establish provider-side price existence, currency, recurrence or entitlement duration. Those policies belong to paid-directory. No purchase is offered by this commitment.
 - Adapter resolution reads committed configuration by provider and mode. It does not mutate process environment variables or rely on an old process-global registration after a save. No production network call is needed to save configuration.
 
-PAY-001 and PAY-004 through PAY-008 form the provider-administration commitment. PAY-002 and PAY-003 remain future Draft requirements. NOWPayments work is recorded in docs/commitments/nowpayments-framework-adapter.md.
+PAY-001 and PAY-004 through PAY-008 form the provider-administration commitment. PAY-002 and PAY-003 belong to the agreed paid-directory commitment. NOWPayments work is recorded in docs/commitments/nowpayments-framework-adapter.md.
 
 ## Remaining payment lifecycle
 
-The following requirements and operating rules are Draft. They complete PAY-002
-and PAY-003 for the proposed paid-directory commitment.
+The following requirements and operating rules complete PAY-002 and PAY-003 for
+the agreed paid-directory commitment.
 
 [PAY-009] The starter MUST let a billing administrator manage local free, one-time and recurring publishing plans without altering existing purchase terms.
 Falsifier: A non-billing actor can change plans, an invalid or disabled plan can start checkout, or editing a plan changes a previously created purchase's price reference, currency or entitlement policy.
@@ -93,7 +93,7 @@ Mechanism: Proposed paid-provider-lifecycle tests for disabled providers, creden
 Falsifier: An adapter silently drops required purchase correlation, claims an unsupported retry guarantee, cannot recover a recorded checkout's authoritative state, or fails to encode the configured price in a valid provider request.
 Mechanism: Proposed adapter wire-contract tests with a local HTTP fixture server and signed webhook fixtures, including timeouts and unsupported operations.
 
-## Proposed paid-directory operating rules
+## Agreed paid-directory operating rules
 
 - Offer free, one-time and recurring plans. One-time payment grants publication
   without an expiry date, subject to moderation, refund and dispute rules. Recurring
@@ -146,10 +146,10 @@ Mechanism: Proposed adapter wire-contract tests with a local HTTP fixture server
   requires operator-owned accounts, prices and webhook delivery. Local passes do
   not claim an external provider account was successfully charged.
 - The developer selected and completed framework adapter repairs in Suprnova.
-  The proposed integration pins Suprnova and its adapters to commit
+  The agreed integration pins Suprnova and its adapters to commit
   `107e6e7a122d5145160ea1547ca90ddc37459c27`, which contains the fixes, until a
-  reviewed release tag includes them. This is a proposed amendment to the v1.3.7
-  constraint in FND-001 and PAY-001, not a claim that the starter already uses it.
+  reviewed release tag includes them. This amends the v1.3.7 constraint in FND-001 and PAY-001; implementation and
+  verification establish when the starter actually uses it.
   Never invent a provider idempotency feature: when unsupported, retain an
   ambiguous attempt and recover through verified correlation/state or an explicit
   operator recovery path instead of issuing another create request. Verify the exact

@@ -1,7 +1,7 @@
 # Roadmap
 
 Status: Agreed 2026-09-08
-Current: provider-administration
+Current: paid-directory
 
 ## First starter delivery
 
@@ -10,7 +10,7 @@ Current: provider-administration
 3. paid-directory — owner listings, bounded discovery, review-before-payment, checkout, publication and payment recovery for both providers.
 4. complete-starter — editorial content, taxonomy, RSS, SEO, full administration, notifications, storage, demo data and adoption documentation.
 
-The foundation is complete. Provider administration is agreed for implementation. Later entries record delivery order, not permission to infer their unresolved policies. Paid publishing remains in the first delivery.
+The foundation and provider administration are complete. The developer confirmed paid-directory and complete-starter, including their requirement text, falsifiers and operating policies, on 2026-09-09. Implement them in this order. Paid publishing remains in the first delivery.
 
 ## Next framework iteration
 

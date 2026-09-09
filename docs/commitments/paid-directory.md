@@ -1,7 +1,7 @@
 # Paid directory
 
-Status: Draft
-Requirements: DIR-001, DIR-002, DIR-003, DIR-004, DIR-005, DIR-006, DIR-007, DIR-008, PAY-002, PAY-003, PAY-009, PAY-010, PAY-011, PAY-012, PAY-013, PAY-014, PAY-015, PAY-016
+Status: Agreed 2026-09-09
+Requirements: FND-001, FND-002, FND-003, FND-004, FND-005, PAY-001, PAY-004, PAY-005, PAY-006, PAY-007, PAY-008, DIR-001, DIR-002, DIR-003, DIR-004, DIR-005, DIR-006, DIR-007, DIR-008, PAY-002, PAY-003, PAY-009, PAY-010, PAY-011, PAY-012, PAY-013, PAY-014, PAY-015, PAY-016
 
 ## Outcome
 
@@ -15,7 +15,7 @@ live in docs/spec/payments.md. Provider administration is the completed predeces
 
 ## Execution and verification
 
-1. Integrate the repaired Suprnova revision proposed in payments.md and establish
+1. Integrate the repaired Suprnova revision agreed in payments.md and establish
    the adapter wire contracts. Do not rely on mocks to hide adapter limitations.
 2. Build listings, revisions, media, ownership and moderation with direct-request
    and public-visibility checks. Supply the minimal operator category setup.
@@ -41,10 +41,10 @@ sandbox acceptance is a separate documented operator exercise, not a local test 
 Application changes may include manifests/locks, framework integration, schema,
 domain actions, routes, controllers, operator commands, frontend pages/styles/types,
 media handling, scripts, tests and documentation. Framework adapter repairs were
-authorized and completed separately. The proposed exact dependency revision is
-part of this draft agreement; no further sibling changes or release are implied.
+authorized and completed separately. The exact dependency revision is
+part of this agreement; no further sibling changes or release are implied.
 
 Done requires every named requirement Agreed, current passing evidence, demonstrated
 failure sensitivity and a clean final review. This commitment does not require the
 later editorial or delegated administration UI. The remaining starter follows in
-complete-starter after its draft is agreed. No production deployment is included.
+complete-starter under its confirmed requirements. No production deployment is included.

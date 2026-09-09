@@ -5,6 +5,7 @@ mod m20240101_000002_create_sessions_table;
 mod m20240101_000003_create_remember_tokens_table;
 mod m20240101_000004_create_auth_flow_tokens_table;
 mod m20260909_000005_create_billing_settings;
+mod m20260909_000006_create_directory;
 
 pub struct Migrator;
 
@@ -18,6 +19,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240101_000004_create_auth_flow_tokens_table::Migration),
             Box::new(suprnova::rbac::migrations::CreateRbacTables),
             Box::new(m20260909_000005_create_billing_settings::Migration),
+            Box::new(m20260909_000006_create_directory::Migration),
         ]
     }
 }

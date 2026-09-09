@@ -1,0 +1,384 @@
+use sea_orm_migration::prelude::*;
+
+pub struct Migration;
+
+impl MigrationName for Migration {
+    fn name(&self) -> &str {
+        "m20260909_000006_create_directory"
+    }
+}
+
+#[async_trait::async_trait]
+impl MigrationTrait for Migration {
+    async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        manager
+            .create_table(
+                Table::create()
+                    .table(Alias::new("listing_categories"))
+                    .col(
+                        ColumnDef::new(Alias::new("id"))
+                            .big_integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("slug"))
+                            .string_len(140)
+                            .not_null()
+                            .unique_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("name"))
+                            .string_len(120)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("active"))
+                            .boolean()
+                            .not_null()
+                            .default(true),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+        manager
+            .create_table(
+                Table::create()
+                    .table(Alias::new("listing_media"))
+                    .col(
+                        ColumnDef::new(Alias::new("id"))
+                            .string_len(36)
+                            .not_null()
+                            .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("owner_id"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("storage_key"))
+                            .string_len(40)
+                            .not_null()
+                            .unique_key(),
+                    )
+                    .col(ColumnDef::new(Alias::new("width")).integer().not_null())
+                    .col(ColumnDef::new(Alias::new("height")).integer().not_null())
+                    .col(
+                        ColumnDef::new(Alias::new("created_at"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(Alias::new("listing_media"), Alias::new("owner_id"))
+                            .to(Alias::new("users"), Alias::new("id"))
+                            .on_delete(ForeignKeyAction::Restrict),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+        manager
+            .create_table(
+                Table::create()
+                    .table(Alias::new("listings"))
+                    .col(
+                        ColumnDef::new(Alias::new("id"))
+                            .big_integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("owner_id"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("slug"))
+                            .string_len(160)
+                            .not_null()
+                            .unique_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("version"))
+                            .big_integer()
+                            .not_null()
+                            .default(0),
+                    )
+                    .col(ColumnDef::new(Alias::new("current_revision_id")).big_integer())
+                    .col(ColumnDef::new(Alias::new("approved_revision_id")).big_integer())
+                    .col(
+                        ColumnDef::new(Alias::new("archived"))
+                            .boolean()
+                            .not_null()
+                            .default(false),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("suspended"))
+                            .boolean()
+                            .not_null()
+                            .default(false),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("created_at"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(Alias::new("listings"), Alias::new("owner_id"))
+                            .to(Alias::new("users"), Alias::new("id"))
+                            .on_delete(ForeignKeyAction::Restrict),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+        manager
+            .create_table(
+                Table::create()
+                    .table(Alias::new("listing_revisions"))
+                    .col(
+                        ColumnDef::new(Alias::new("id"))
+                            .big_integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("listing_id"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("title"))
+                            .string_len(120)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("summary"))
+                            .string_len(280)
+                            .not_null(),
+                    )
+                    .col(ColumnDef::new(Alias::new("search_text")).text().not_null())
+                    .col(ColumnDef::new(Alias::new("description")).text().not_null())
+                    .col(ColumnDef::new(Alias::new("url")).text().not_null())
+                    .col(ColumnDef::new(Alias::new("media_id")).string_len(36))
+                    .col(
+                        ColumnDef::new(Alias::new("media_alt"))
+                            .string_len(280)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("status"))
+                            .string_len(12)
+                            .not_null(),
+                    )
+                    .col(ColumnDef::new(Alias::new("reason")).text())
+                    .col(ColumnDef::new(Alias::new("decided_by")).big_integer())
+                    .col(ColumnDef::new(Alias::new("decided_at")).big_integer())
+                    .col(
+                        ColumnDef::new(Alias::new("created_at"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(Alias::new("listing_revisions"), Alias::new("listing_id"))
+                            .to(Alias::new("listings"), Alias::new("id"))
+                            .on_delete(ForeignKeyAction::Restrict),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(Alias::new("listing_revisions"), Alias::new("media_id"))
+                            .to(Alias::new("listing_media"), Alias::new("id"))
+                            .on_delete(ForeignKeyAction::Restrict),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+        manager
+            .create_table(
+                Table::create()
+                    .table(Alias::new("listing_revision_categories"))
+                    .col(
+                        ColumnDef::new(Alias::new("revision_id"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("category_id"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .primary_key(
+                        Index::create()
+                            .col(Alias::new("revision_id"))
+                            .col(Alias::new("category_id")),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(
+                                Alias::new("listing_revision_categories"),
+                                Alias::new("revision_id"),
+                            )
+                            .to(Alias::new("listing_revisions"), Alias::new("id"))
+                            .on_delete(ForeignKeyAction::Restrict),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(
+                                Alias::new("listing_revision_categories"),
+                                Alias::new("category_id"),
+                            )
+                            .to(Alias::new("listing_categories"), Alias::new("id"))
+                            .on_delete(ForeignKeyAction::Restrict),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+        manager
+            .create_table(
+                Table::create()
+                    .table(Alias::new("publication_entitlements"))
+                    .col(
+                        ColumnDef::new(Alias::new("id"))
+                            .string_len(64)
+                            .not_null()
+                            .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("listing_id"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .col(ColumnDef::new(Alias::new("mode")).string_len(8).not_null())
+                    .col(
+                        ColumnDef::new(Alias::new("status"))
+                            .string_len(16)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("valid_from"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .col(ColumnDef::new(Alias::new("valid_until")).big_integer())
+                    .col(
+                        ColumnDef::new(Alias::new("updated_at"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .foreign_key(
+                        ForeignKey::create()
+                            .from(
+                                Alias::new("publication_entitlements"),
+                                Alias::new("listing_id"),
+                            )
+                            .to(Alias::new("listings"), Alias::new("id"))
+                            .on_delete(ForeignKeyAction::Restrict),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+        manager
+            .create_table(
+                Table::create()
+                    .table(Alias::new("administrative_audit"))
+                    .col(
+                        ColumnDef::new(Alias::new("id"))
+                            .big_integer()
+                            .not_null()
+                            .auto_increment()
+                            .primary_key(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("actor_id"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("target_type"))
+                            .string_len(40)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("target_id"))
+                            .string_len(64)
+                            .not_null(),
+                    )
+                    .col(
+                        ColumnDef::new(Alias::new("action"))
+                            .string_len(64)
+                            .not_null(),
+                    )
+                    .col(ColumnDef::new(Alias::new("summary")).text().not_null())
+                    .col(
+                        ColumnDef::new(Alias::new("created_at"))
+                            .big_integer()
+                            .not_null(),
+                    )
+                    .to_owned(),
+            )
+            .await?;
+        for (name, table, columns) in [
+            (
+                "listing_owner_order",
+                "listings",
+                vec!["owner_id", "created_at", "id"],
+            ),
+            ("listing_public_order", "listings", vec!["created_at", "id"]),
+            (
+                "revision_listing",
+                "listing_revisions",
+                vec!["listing_id", "id"],
+            ),
+            (
+                "revision_review_queue",
+                "listing_revisions",
+                vec!["status", "id"],
+            ),
+            (
+                "category_revision_lookup",
+                "listing_revision_categories",
+                vec!["category_id", "revision_id"],
+            ),
+            (
+                "entitlement_listing",
+                "publication_entitlements",
+                vec!["listing_id", "status", "valid_until"],
+            ),
+            (
+                "audit_target",
+                "administrative_audit",
+                vec!["target_type", "target_id", "id"],
+            ),
+        ] {
+            let mut index = Index::create();
+            index.name(name).table(Alias::new(table));
+            for column in columns {
+                index.col(Alias::new(column));
+            }
+            manager.create_index(index.to_owned()).await?;
+        }
+        Ok(())
+    }
+
+    async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        for table in [
+            "administrative_audit",
+            "publication_entitlements",
+            "listing_revision_categories",
+            "listing_revisions",
+            "listings",
+            "listing_media",
+            "listing_categories",
+        ] {
+            manager
+                .drop_table(Table::drop().table(Alias::new(table)).to_owned())
+                .await?;
+        }
+        Ok(())
+    }
+}

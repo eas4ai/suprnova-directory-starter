@@ -16,3 +16,4 @@
 //! `TypedCommand` impl, and appends a `pub mod` line here.
 
 pub mod admin_access;
+pub mod directory_categories;

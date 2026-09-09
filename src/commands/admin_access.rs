@@ -64,8 +64,8 @@ pub async fn change_access(user_id: i64, action: AccessAction) -> Result<(), Fra
             "The account must verify its email before administrative access can change.",
         ));
     }
-    let mut permissions = Vec::with_capacity(2);
-    for name in [ADMIN_PERMISSION, BILLING_PERMISSION] {
+    let mut permissions = Vec::with_capacity(ADMIN_PERMISSIONS.len());
+    for name in ADMIN_PERMISSIONS {
         let now = chrono::Utc::now().to_rfc3339();
         PermissionEntity::insert(PermissionActiveModel {
             name: Set(name.to_owned()),
@@ -151,6 +151,12 @@ pub async fn change_access(user_id: i64, action: AccessAction) -> Result<(), Fra
     }
     transaction.commit().await.map_err(database_error)
 }
+
+pub const ADMIN_PERMISSIONS: [&str; 3] = [
+    ADMIN_PERMISSION,
+    BILLING_PERMISSION,
+    crate::listings::MODERATE_PERMISSION,
+];
 
 fn database_error(error: sea_orm::DbErr) -> FrameworkError {
     tracing::error!(error = %error, "Administrative access transaction failed");

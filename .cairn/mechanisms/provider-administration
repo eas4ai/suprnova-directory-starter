@@ -1,6 +1,7 @@
 command: node scripts/verify-provider-administration.mjs
 results: per-requirement
 inputs:
+  - .gitignore
   - Cargo.toml
   - Cargo.lock
   - lang/

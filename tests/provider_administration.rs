@@ -117,7 +117,7 @@ async fn provider_administration_contract() {
     change_access(admin.id, AccessAction::Grant).await.unwrap();
     assert_eq!(
         permission_count(&admin).await,
-        2,
+        3,
         "repeat grants must be idempotent"
     );
 

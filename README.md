@@ -93,7 +93,7 @@ From the application host, replace `42` below with that exact ID:
 cargo run --locked --bin console -- admin:access grant --user-id 42
 ```
 
-The command grants `admin.access` and `billing.configure` using Suprnova RBAC.
+The command grants `admin.access`, `billing.configure` and `listings.moderate` using Suprnova RBAC.
 It refuses unknown or unverified accounts. Repeating a grant is safe. Sign in and
 open **Administration → Payment providers**. An existing session sees the grant
 on its next request; registration itself never grants administrative access.
@@ -104,10 +104,31 @@ To revoke access, including access in an existing session:
 cargo run --locked --bin console -- admin:access revoke --user-id 42
 ```
 
-Revocation removes the two direct permissions and any role memberships granting
-either permission. Other role memberships remain. Roles and their permissions
+Revocation removes these three direct permissions and any role memberships granting
+any of them. Other role memberships remain. Roles and their permissions
 are not deleted. The same host command can recover access if no administrators
 remain; no public bootstrap endpoint is exposed.
+
+## Listings and moderation
+
+After migrating, create the initial categories:
+
+```sh
+cargo run --locked --bin console -- directory:categories
+```
+
+Repeated runs preserve existing terms. Verified owners use **Your listings** to
+save drafts, upload an optional image, and submit for review. Administrators use
+**Listing reviews** to approve or reject the exact submitted revision. Rejected
+owners see the reason and can save a revised draft before resubmitting. Existing
+approved content stays public during editing when publication eligibility remains
+valid. Approval alone does not grant publication; checkout integration is in progress.
+
+Images are decoded and re-encoded as PNG, with a 5 MiB input limit and maximum
+dimensions of 4096 × 4096. Set `DIRECTORY_MEDIA_ROOT` to a private local directory
+outside `public/`; the default is `storage/private/directory`. The process needs
+write access. Back up that directory with the database. Draft images require owner
+or moderator access, and public image routes check current listing eligibility.
 
 ## Payment provider configuration
 

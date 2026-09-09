@@ -33,6 +33,8 @@ pub struct Response {
     pub status: u16,
     pub location: Option<String>,
     pub body: String,
+    #[allow(dead_code)]
+    pub body_bytes: Vec<u8>,
 }
 
 impl Client {
@@ -79,6 +81,40 @@ impl Client {
         csrf: bool,
         inertia: bool,
     ) -> Response {
+        self.exchange_bytes(
+            method,
+            path,
+            body.map(|value| value.to_string().into_bytes())
+                .unwrap_or_default(),
+            "application/json",
+            csrf,
+            inertia,
+        )
+        .await
+    }
+
+    #[allow(dead_code)]
+    pub async fn raw_request(
+        &mut self,
+        method: &str,
+        path: &str,
+        body: Vec<u8>,
+        content_type: &str,
+        csrf: bool,
+    ) -> Response {
+        self.exchange_bytes(method, path, body, content_type, csrf, false)
+            .await
+    }
+
+    async fn exchange_bytes(
+        &mut self,
+        method: &str,
+        path: &str,
+        payload: Vec<u8>,
+        content_type: &str,
+        csrf: bool,
+        inertia: bool,
+    ) -> Response {
         // One real Hyper connection per exchange; both tasks are aborted on
         // timeout or panic as well as normal completion.
         let (client, server) = tokio::io::duplex(64 * 1024);
@@ -104,14 +140,13 @@ impl Client {
             tasks.spawn(async move {
                 connection.await.expect("client connection");
             });
-            let payload = body.map(|value| value.to_string()).unwrap_or_default();
             let mut request = hyper::Request::builder()
                 .method(method)
                 .uri(path)
                 .header("Host", "directory.test")
                 .header("Accept", "text/html");
             if !payload.is_empty() {
-                request = request.header("Content-Type", "application/json");
+                request = request.header("Content-Type", content_type);
             }
             if inertia {
                 request = request
@@ -155,20 +190,20 @@ impl Client {
                     self.cookies.insert(name.to_owned(), value.to_owned());
                 }
             }
+            let body_bytes = body
+                .collect()
+                .await
+                .expect("response body")
+                .to_bytes()
+                .to_vec();
             Response {
                 status: parts.status.as_u16(),
                 location: parts
                     .headers
                     .get("location")
                     .map(|value| value.to_str().unwrap().to_owned()),
-                body: String::from_utf8(
-                    body.collect()
-                        .await
-                        .expect("response body")
-                        .to_bytes()
-                        .to_vec(),
-                )
-                .expect("UTF-8 body"),
+                body: String::from_utf8_lossy(&body_bytes).into_owned(),
+                body_bytes,
             }
         })
         .await

@@ -1,6 +1,7 @@
 command: node scripts/verify-foundation.mjs build
 results: per-requirement
 inputs:
+  - .gitignore
   - Cargo.toml
   - Cargo.lock
   - lang/

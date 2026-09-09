@@ -1,6 +1,7 @@
 command: node scripts/verify-paid-directory.mjs payments
 results: per-requirement
 inputs:
+  - .gitignore
   - Cargo.toml
   - Cargo.lock
   - lang/
@@ -13,6 +14,7 @@ inputs:
   - tests/
   - .env.example
 requirements:
+  - DIR-008
   - PAY-002
   - PAY-003
   - PAY-009

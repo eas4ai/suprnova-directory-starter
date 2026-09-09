@@ -4,6 +4,7 @@ export type Account = {
   verified: boolean
   can_admin: boolean
   can_billing: boolean
+  can_moderate: boolean
 }
 
 export type SharedProps = { auth: { user: Account | null } }

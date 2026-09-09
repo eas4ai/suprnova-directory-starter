@@ -10,6 +10,16 @@ both payment adapters and all locked Suprnova workspace packages. This is a
 mechanism mismatch requiring a separate implementation action. No runtime code
 was changed during this review. Preserve disposable builds and unchanged lock checks.
 
+The separate repair now checks the framework, Stripe and Paddle dependency sources,
+and every locked Suprnova package, against the agreed immutable revision. The safe
+violating case ran the revised build check against the previous tag manifest and
+failed at the exact-source assertion before compilation. After updating the three
+dependencies and resolving Cargo.lock, the same check passed: both Rust binaries,
+frozen Bun installation, Vue type checking, client and SSR builds, generated
+artifacts and unchanged dependency locks. The disposable source copy was removed.
+Ripwire edit-check found no verifyPin signature change or incompatible known caller.
+This establishes the amended build contract; paid behavior remains to be built.
+
 ## Reference findings
 
 Larafast Directories is the selected working example. Its category sidebar/search,

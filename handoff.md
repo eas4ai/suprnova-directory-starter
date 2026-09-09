@@ -7,20 +7,23 @@ Origin: https://github.com/eas4ai/suprnova-directory-starter.git
 ## Current contract
 
 This repository uses Cairn. Read `AGENTS.md`, run `cairn wake`, and follow the
-named action. `docs/spec/roadmap.md` names `provider-administration` as Current.
-The developer confirmed PAY-001 and PAY-004 through PAY-008, their falsifiers and
-operating rules. The foundation commitment is complete. PAY-002 and PAY-003 and
-unresolved payment policies remain Draft.
+named action. `docs/spec/roadmap.md` names `paid-directory` as Current.
+The developer confirmed both remaining commitments, their requirements, falsifiers
+and policies. Foundation and provider administration are complete; the repaired
+framework integration and paid directory implementation are now in progress.
+Larafast Directories is the selected working reference, not Pulsar.
 
 Do not restart discovery or ask the developer to repeat settled choices.
 Read `docs/spec/glossary.md`, `docs/spec/payments.md`, the roadmap,
-`docs/commitments/provider-administration.md`, and its decision records first.
+`docs/commitments/paid-directory.md`, and its decision records first.
 Cairn receipts and their output are tracked under `.cairn/evidence`; freshness
 and the final review determine completion, not this handoff's prose.
 
 ## Implemented foundation
 
-- Rust binaries pin Suprnova v1.3.7; Cargo and Bun dependency locks are committed.
+- Rust binaries and payment adapters select Suprnova revision
+  `107e6e7a122d5145160ea1547ca90ddc37459c27`; integration verification is in progress.
+  Cargo and Bun dependency locks are committed with their implementation.
 - The example SQLite database migrates through the application command. Repeated
   migration preserves schema, history and existing account data. RBAC tables
   use Suprnova's migration.
@@ -111,7 +114,9 @@ Self-hosted Keygen and future AI features remain brainstorming only.
 - `docs/architecture-proposal.md`: proposed module and billing responsibilities.
 - `docs/pulsar-assessment.md`: Pulsar reuse evidence and selected UI.
 - `docs/recon.md`: initial inspection, with historical verification limits.
-- `../suprnova`: development source; inspect the exact v1.3.7 tag for released APIs.
+- `../suprnova`: inspect the selected immutable revision for framework APIs.
+- `../larafast-directories-master`: selected directory behavior and UI reference;
+  independently implement its useful flows without redistributing purchased code/assets.
 - `../Pulsar`: MIT application reference on an older framework/Vuetify version.
 - `../suprnova.app`: reference for Vue/Inertia/Vuetify 0 composition.
 - `../larafast-directories-master`: purchased legacy reference, not a contract

@@ -12,3 +12,5 @@ inputs:
   - .env.example
 requirements:
   - FND-001
+reviewed:
+  - FND-001 sha256:cab1d772d0a6216adaec8e1b1fa93bc3e8c9d2199843736579fda8969d488ab2

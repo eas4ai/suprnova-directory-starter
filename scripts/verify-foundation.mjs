@@ -35,11 +35,18 @@ function verifyPin(root) {
     encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'],
   });
   const app = JSON.parse(metadata).packages.find(pkg => pkg.name === 'directory');
-  const framework = app?.dependencies.find(dependency => dependency.name === 'suprnova');
-  assert.equal(framework?.source, 'git+https://github.com/eas4ai/suprnova.git?tag=v1.3.7', 'The foundation must use Suprnova v1.3.7');
+  const revision = '107e6e7a122d5145160ea1547ca90ddc37459c27';
+  const selectedSource = `git+https://github.com/eas4ai/suprnova.git?rev=${revision}`;
+  for (const name of ['suprnova', 'suprnova-payments-stripe', 'suprnova-payments-paddle']) {
+    assert.equal(app?.dependencies.find(dependency => dependency.name === name)?.source,
+      selectedSource, `${name} must use the agreed repaired framework revision`);
+  }
   assert.deepEqual(app.targets.filter(target => target.kind.includes('bin')).map(target => target.name).sort(), ['console', 'directory']);
   const lock = readFileSync(join(root, 'Cargo.lock'), 'utf8');
-  assert.match(lock, /name = "suprnova"\nversion = "[^"\n]+"\nsource = "git\+https:\/\/github\.com\/eas4ai\/suprnova\.git\?tag=v1\.3\.7#[a-f0-9]+"/, 'The lockfile must resolve the selected framework tag');
+  const frameworkSources = [...lock.matchAll(/^source = "(git\+https:\/\/github\.com\/eas4ai\/suprnova\.git[^"\n]+)"$/gm)].map(match => match[1]);
+  assert.ok(frameworkSources.length >= 3, 'The lockfile must include the framework and payment adapters');
+  assert.ok(frameworkSources.every(value => value === `${selectedSource}#${revision}`),
+    'Every locked Suprnova package must resolve the exact agreed revision');
 }
 
 function build(root) {

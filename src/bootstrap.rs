@@ -27,13 +27,13 @@ use std::sync::Arc;
 
 #[allow(unused_imports)]
 use suprnova::{
-    App, Auth, AuthConfig, AuthManager, CsrfMiddleware, DB, EloquentUserProvider, Frontend,
-    IncludeMiddleware, Inertia, InertiaConfig, LocaleMiddleware, LocaleShare, SessionConfig,
-    SessionMiddleware, bind, global_middleware, singleton,
+    App, Auth, AuthConfig, AuthManager, CsrfMiddleware, DB, Frontend, IncludeMiddleware, Inertia,
+    InertiaConfig, LocaleMiddleware, LocaleShare, SessionConfig, SessionMiddleware, bind,
+    global_middleware, singleton,
 };
 
+use crate::accounts::provider::AccountUserProvider;
 use crate::middleware;
-use crate::models::user::User;
 
 /// Register process-wide services.
 ///
@@ -55,10 +55,10 @@ pub async fn register() {
 
     // Authentication: register the AuthManager (the config/auth.php analogue)
     // and a user provider so `Auth::attempt` and `Auth::user_as::<User>()`
-    // resolve users. `EloquentUserProvider<User>` queries the typed model; the
-    // SessionMiddleware above persists the authenticated id across requests.
+    // resolve active accounts through the framework's model-backed provider.
+    // SessionMiddleware persists the authenticated id across requests.
     App::singleton(AuthManager::new(AuthConfig::from_env()));
-    Auth::register_provider("users", Arc::new(EloquentUserProvider::<User>::new()))
+    Auth::register_provider("users", Arc::new(AccountUserProvider::new()))
         .expect("register users provider");
 
     // Example: Register a trait binding with runtime config

@@ -1,9 +1,6 @@
 use async_trait::async_trait;
-use sea_orm::{
-    ColumnTrait, EntityTrait, QueryFilter, QuerySelect, Set, TransactionTrait,
-    sea_query::OnConflict,
-};
-use suprnova::{Command, DB, FrameworkError, TypedCommand, rbac::entity::*};
+use sea_orm::{EntityTrait, TransactionTrait};
+use suprnova::{Command, DB, FrameworkError, TypedCommand};
 
 use crate::{
     billing::{ADMIN_PERMISSION, BILLING_PERMISSION},
@@ -50,6 +47,7 @@ impl TypedCommand for AdminAccess {
 pub async fn change_access(user_id: i64, action: AccessAction) -> Result<(), FrameworkError> {
     let db = DB::connection()?;
     let transaction = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::lock(&transaction).await?;
     let account = user::Entity::find_by_id(user_id)
         .one(&transaction)
         .await
@@ -64,100 +62,49 @@ pub async fn change_access(user_id: i64, action: AccessAction) -> Result<(), Fra
             "The account must verify its email before administrative access can change.",
         ));
     }
-    let mut permissions = Vec::with_capacity(ADMIN_PERMISSIONS.len());
-    for name in ADMIN_PERMISSIONS {
-        let now = chrono::Utc::now().to_rfc3339();
-        PermissionEntity::insert(PermissionActiveModel {
-            name: Set(name.to_owned()),
-            display_name: Set(Some(name.to_owned())),
-            guard_name: Set("web".to_owned()),
-            created_at: Set(now.clone()),
-            updated_at: Set(now),
-            ..Default::default()
-        })
-        .on_conflict(
-            OnConflict::columns([PermissionColumn::Name, PermissionColumn::GuardName])
-                .do_nothing()
-                .to_owned(),
-        )
-        .try_insert()
-        .exec(&transaction)
+    let permissions = crate::accounts::roles::seed(&transaction)
         .await
         .map_err(database_error)?;
-        let permission = PermissionEntity::find()
-            .filter(PermissionColumn::Name.eq(name))
-            .filter(PermissionColumn::GuardName.eq("web"))
-            .one(&transaction)
-            .await
-            .map_err(database_error)?
-            .ok_or_else(|| {
-                FrameworkError::internal("The administrative permission could not be created.")
-            })?;
-        permissions.push(permission.id);
-    }
-    let model_id = user_id.to_string();
+    crate::accounts::roles::clear(&transaction, user_id, &permissions)
+        .await
+        .map_err(database_error)?;
     match action {
         AccessAction::Grant => {
-            for permission_id in permissions {
-                ModelPermissionEntity::insert(ModelPermissionActiveModel {
-                    model_type: Set("directory.user".to_owned()),
-                    model_id: Set(model_id.clone()),
-                    permission_id: Set(permission_id),
-                    ..Default::default()
-                })
-                .on_conflict(
-                    OnConflict::columns([
-                        ModelPermissionColumn::ModelType,
-                        ModelPermissionColumn::ModelId,
-                        ModelPermissionColumn::PermissionId,
-                    ])
-                    .do_nothing()
-                    .to_owned(),
-                )
-                .try_insert()
-                .exec(&transaction)
+            crate::accounts::roles::assign(&transaction, user_id, &["administrator".into()])
                 .await
                 .map_err(database_error)?;
-            }
+            crate::accounts::write_state(&transaction, user_id, false).await?;
         }
         AccessAction::Revoke => {
-            ModelPermissionEntity::delete_many()
-                .filter(ModelPermissionColumn::ModelType.eq("directory.user"))
-                .filter(ModelPermissionColumn::ModelId.eq(&model_id))
-                .filter(ModelPermissionColumn::PermissionId.is_in(permissions.clone()))
-                .exec(&transaction)
-                .await
-                .map_err(database_error)?;
-            // A direct revocation must not leave the same permission inherited from
-            // a role. Remove only memberships that confer this administrative bundle.
-            let roles: Vec<i64> = RolePermissionEntity::find()
-                .select_only()
-                .column(RolePermissionColumn::RoleId)
-                .filter(RolePermissionColumn::PermissionId.is_in(permissions))
-                .into_tuple()
-                .all(&transaction)
-                .await
-                .map_err(database_error)?;
-            if !roles.is_empty() {
-                ModelRoleEntity::delete_many()
-                    .filter(ModelRoleColumn::ModelType.eq("directory.user"))
-                    .filter(ModelRoleColumn::ModelId.eq(&model_id))
-                    .filter(ModelRoleColumn::RoleId.is_in(roles))
-                    .exec(&transaction)
-                    .await
-                    .map_err(database_error)?;
-            }
+            let suspended = !crate::accounts::active_on(&transaction, user_id).await?;
+            crate::accounts::write_state(&transaction, user_id, suspended).await?;
         }
     }
+    crate::accounts::record_access(
+        &transaction,
+        None,
+        user_id,
+        match action {
+            AccessAction::Grant => "operator_granted",
+            AccessAction::Revoke => "operator_revoked",
+        },
+        match action {
+            AccessAction::Grant => "Suspended: false; predefined roles: administrator; verification unchanged.",
+            AccessAction::Revoke => "Starter administrative permissions and role memberships removed; suspension and verification unchanged.",
+        },
+    )
+    .await?;
     transaction.commit().await.map_err(database_error)
 }
 
-pub const ADMIN_PERMISSIONS: [&str; 5] = [
+pub const ADMIN_PERMISSIONS: [&str; 7] = [
     ADMIN_PERMISSION,
     BILLING_PERMISSION,
     crate::listings::MODERATE_PERMISSION,
     crate::articles::EDIT_PERMISSION,
     crate::articles::TAXONOMY_PERMISSION,
+    crate::accounts::MANAGE_PERMISSION,
+    crate::accounts::AUDIT_PERMISSION,
 ];
 
 fn database_error(error: sea_orm::DbErr) -> FrameworkError {

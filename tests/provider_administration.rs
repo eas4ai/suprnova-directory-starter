@@ -90,7 +90,20 @@ async fn set_payload(mode: Mode, value: &str) {
 }
 
 async fn permission_count(user: &User) -> i64 {
-    DB::scalar("SELECT COUNT(*) FROM model_permissions WHERE model_type = 'directory.user' AND model_id = ?", vec![user.id.to_string().into()]).await.unwrap()
+    let mut count = 0;
+    for permission in directory::commands::admin_access::ADMIN_PERMISSIONS {
+        if suprnova::rbac::has_permission_for_model(
+            "directory.user",
+            &user.id.to_string(),
+            permission,
+        )
+        .await
+        .unwrap()
+        {
+            count += 1;
+        }
+    }
+    count
 }
 
 #[tokio::test(flavor = "current_thread")]
@@ -117,7 +130,7 @@ async fn provider_administration_contract() {
     change_access(admin.id, AccessAction::Grant).await.unwrap();
     assert_eq!(
         permission_count(&admin).await,
-        5,
+        7,
         "repeat grants must be idempotent"
     );
     for capability in [
@@ -126,6 +139,8 @@ async fn provider_administration_contract() {
         "listings.moderate",
         "articles.manage",
         "taxonomy.manage",
+        "accounts.manage",
+        "audit.view",
     ] {
         assert!(
             suprnova::rbac::has_permission_for_model(

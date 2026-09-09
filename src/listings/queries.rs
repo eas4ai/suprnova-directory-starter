@@ -67,7 +67,8 @@ impl Page {
 pub fn eligible(now: i64) -> Condition {
     Condition::all().add(listing::Column::ApprovedRevisionId.is_not_null())
         .add(listing::Column::Archived.eq(false)).add(listing::Column::Suspended.eq(false))
-        .add(Expr::cust("EXISTS (SELECT 1 FROM listing_revisions approved WHERE approved.id = listings.approved_revision_id AND approved.listing_id = listings.id AND approved.status = 'approved')"))
+        .add(Expr::cust("NOT EXISTS (SELECT 1 FROM account_access a WHERE a.user_id = listings.owner_id AND a.suspended = TRUE)"))
+          .add(Expr::cust("EXISTS (SELECT 1 FROM listing_revisions approved WHERE approved.id = listings.approved_revision_id AND approved.listing_id = listings.id AND approved.status = 'approved')"))
         .add(Expr::cust_with_values("EXISTS (SELECT 1 FROM publication_entitlements e WHERE e.listing_id = listings.id AND e.mode IN ('free', 'live') AND e.status = 'active' AND e.valid_from <= ? AND (e.valid_until IS NULL OR e.valid_until > ?))", [now, now]))
 }
 

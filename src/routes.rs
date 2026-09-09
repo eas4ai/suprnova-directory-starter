@@ -58,6 +58,10 @@ routes! {
 
     group!("/admin", {
         get!("/", controllers::admin::index),
+        get!("/accounts", controllers::accounts::index),
+        get!("/accounts/{id}", controllers::accounts::show),
+        post!("/accounts/{id}", controllers::accounts::update),
+        get!("/audit", controllers::accounts::audit),
         get!("/articles", controllers::articles::admin_index),
         get!("/articles/create", controllers::articles::create),
         post!("/articles", controllers::articles::store),

@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use suprnova::{DB, FrameworkError};
 
 use super::{ADMIN_PERMISSION, BILLING_PERMISSION, invalid, lifecycle_entities::plan};
-use crate::listings::{database_error, entities::audit, workflow::require_verified};
+use crate::listings::{database_error, workflow::require_verified};
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -147,6 +147,7 @@ pub async fn save(actor_id: i64, key: Option<&str>, input: SavePlan) -> Result<(
     }
     let db = DB::connection()?;
     let transaction = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_permission(&transaction, actor_id, BILLING_PERMISSION).await?;
     let now = chrono::Utc::now().timestamp();
     if let Some(key) = key {
         let changed = plan::Entity::update_many()
@@ -219,11 +220,8 @@ pub async fn save(actor_id: i64, key: Option<&str>, input: SavePlan) -> Result<(
             return Err(database_error(error));
         }
     }
-    audit::ActiveModel {
-        actor_id: Set(actor_id), target_type: Set("publishing_plan".to_owned()), target_id: Set(input.key),
-        action: Set(if key.is_some() { "updated" } else { "created" }.to_owned()),
-        summary: Set("Plan name, description, enablement, billing type, amount and currency saved; existing purchase terms preserved.".to_owned()),
-        created_at: Set(now), ..Default::default()
-    }.insert(&transaction).await.map_err(database_error)?;
+    crate::audit::record(&transaction, actor_id, "publishing_plan", input.key,
+        if key.is_some() { "updated" } else { "created" },
+        "Plan name, description, enablement, billing type, amount and currency saved; existing purchase terms preserved.").await?;
     transaction.commit().await.map_err(database_error)
 }

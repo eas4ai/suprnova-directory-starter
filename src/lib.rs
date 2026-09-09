@@ -12,3 +12,5 @@ pub mod migrations;
 pub mod models;
 pub mod public_pages;
 pub mod routes;
+
+pub mod accounts;

@@ -32,9 +32,17 @@ impl InertiaSharedData for AuthShare {
                     && user
                         .has_permission_to(crate::articles::TAXONOMY_PERMISSION)
                         .await?;
+                let can_accounts = can_admin
+                    && user
+                        .has_permission_to(crate::accounts::MANAGE_PERMISSION)
+                        .await?;
+                let can_audit = can_admin
+                    && user
+                        .has_permission_to(crate::accounts::AUDIT_PERMISSION)
+                        .await?;
                 json!({"name": user.name, "email": user.email,
                     "verified": user.email_verified_at.is_some(), "can_admin": can_admin, "can_billing": can_billing, "can_moderate": can_moderate,
-                    "can_edit": can_edit, "can_taxonomy": can_taxonomy})
+                    "can_edit": can_edit, "can_taxonomy": can_taxonomy, "can_accounts": can_accounts, "can_audit": can_audit})
             }
             None => suprnova::serde_json::Value::Null,
         };

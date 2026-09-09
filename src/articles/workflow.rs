@@ -72,6 +72,7 @@ pub async fn save(actor: i64, id: Option<i64>, input: SaveArticle) -> Result<i64
     let input = input.validate()?;
     let db = DB::connection()?;
     let tx = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_permission(&tx, actor, EDIT_PERMISSION).await?;
     let now = chrono::Utc::now().timestamp();
     let row = if let Some(id) = id {
         lock(&tx, id, input.version).await?
@@ -188,6 +189,7 @@ pub async fn publish(
     require_permission(actor, EDIT_PERMISSION).await?;
     let db = DB::connection()?;
     let tx = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_permission(&tx, actor, EDIT_PERMISSION).await?;
     let row = lock(&tx, id, version).await?;
     let current = revision::Entity::find_by_id(row.current_revision_id.ok_or_else(missing)?)
         .filter(revision::Column::ArticleId.eq(id))

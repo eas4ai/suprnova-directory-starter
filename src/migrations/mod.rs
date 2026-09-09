@@ -9,6 +9,8 @@ mod m20260909_000006_create_directory;
 mod m20260909_000007_create_publishing;
 mod m20260909_000008_create_articles;
 
+mod m20260909_000009_create_account_access;
+
 pub struct Migrator;
 
 #[async_trait::async_trait]
@@ -24,6 +26,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260909_000006_create_directory::Migration),
             Box::new(m20260909_000007_create_publishing::Migration),
             Box::new(m20260909_000008_create_articles::Migration),
+            Box::new(m20260909_000009_create_account_access::Migration),
         ]
     }
 }

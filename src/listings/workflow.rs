@@ -8,12 +8,13 @@ use suprnova::{DB, FrameworkError};
 
 use super::{
     MODERATE_PERMISSION, SaveListing, conflict, database_error,
-    entities::{audit, category, listing, media, revision, revision_category},
+    entities::{category, listing, media, revision, revision_category},
     invalid, missing,
 };
 use crate::models::user;
 
 pub async fn require_verified(actor_id: i64) -> Result<(), FrameworkError> {
+    crate::accounts::require_active(actor_id).await?;
     let db = DB::connection()?;
     let actor = user::Entity::find_by_id(actor_id)
         .one(db.inner())
@@ -57,6 +58,7 @@ pub async fn save(
     let input = input.validate()?;
     let db = DB::connection()?;
     let transaction = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_mutation(&transaction, actor_id).await?;
     let now = chrono::Utc::now().timestamp();
     let row = if let Some(id) = id {
         // Take the write lock through a conditional write before any transaction
@@ -231,6 +233,7 @@ pub async fn submit(actor_id: i64, id: i64, version: i64) -> Result<(), Framewor
     require_verified(actor_id).await?;
     let db = DB::connection()?;
     let transaction = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_mutation(&transaction, actor_id).await?;
     let row = lock_owned(&transaction, actor_id, id, version).await?;
     let revision_id = row.current_revision_id.ok_or_else(missing)?;
     let changed = revision::Entity::update_many()
@@ -254,6 +257,7 @@ pub async fn archive(actor_id: i64, id: i64, version: i64) -> Result<(), Framewo
     require_verified(actor_id).await?;
     let db = DB::connection()?;
     let transaction = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_mutation(&transaction, actor_id).await?;
     lock_owned(&transaction, actor_id, id, version).await?;
     listing::Entity::update_many()
         .col_expr(listing::Column::Archived, Expr::value(true))
@@ -287,6 +291,7 @@ pub async fn decide(actor_id: i64, id: i64, input: Decision) -> Result<(), Frame
     }
     let db = DB::connection()?;
     let transaction = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_permission(&transaction, actor_id, MODERATE_PERMISSION).await?;
     let changed = listing::Entity::update_many()
         .col_expr(
             listing::Column::Version,
@@ -366,6 +371,7 @@ pub async fn suspend(actor_id: i64, id: i64, input: Suspension) -> Result<(), Fr
     }
     let db = DB::connection()?;
     let transaction = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_permission(&transaction, actor_id, MODERATE_PERMISSION).await?;
     let changed = listing::Entity::update_many()
         .col_expr(
             listing::Column::Version,
@@ -400,21 +406,17 @@ async fn record_audit(
     actor_id: i64,
     id: i64,
     action: &str,
-    summary: &str,
+    _summary: &str,
 ) -> Result<(), FrameworkError> {
-    audit::ActiveModel {
-        actor_id: Set(actor_id),
-        target_type: Set("listing".to_owned()),
-        target_id: Set(id.to_string()),
-        action: Set(action.to_owned()),
-        summary: Set(summary.to_owned()),
-        created_at: Set(chrono::Utc::now().timestamp()),
-        ..Default::default()
-    }
-    .insert(transaction)
+    crate::audit::record(
+        transaction,
+        actor_id,
+        "listing",
+        id.to_string(),
+        action,
+        "Listing moderation state and owner-facing reason saved.",
+    )
     .await
-    .map_err(database_error)?;
-    Ok(())
 }
 
 /// Idempotent operator setup; existing terms and operator edits are preserved.

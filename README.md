@@ -111,7 +111,8 @@ cargo run --locked --bin console -- admin:access grant --user-id 42
 ```
 
 The command grants `admin.access`, `billing.configure`, `listings.moderate`,
-`articles.manage` and `taxonomy.manage` using Suprnova RBAC.
+`articles.manage`, `taxonomy.manage`, `accounts.manage` and `audit.view` through
+the explicit Suprnova administrator role. It also reinstates a suspended account.
 It refuses unknown or unverified accounts. Repeating a grant is safe. Sign in and
 open **Administration → Payment providers**. An existing session sees the grant
 on its next request; registration itself never grants administrative access.
@@ -126,6 +127,24 @@ Revocation removes these direct permissions and any role memberships granting
 any of them. Other role memberships remain. Roles and their permissions
 are not deleted. The same host command can recover access if no administrators
 remain; no public bootstrap endpoint is exposed.
+
+**Administration → Accounts** provides bounded search, read-only verification status,
+predefined roles, suspension and reinstatement. Moderators get listing moderation;
+editors get article editing and publication. Taxonomy, billing, accounts and audit each
+require their own permission. Role names alone carry no authority. Saving account access replaces starter direct
+grants and memberships that confer starter permissions; unrelated roles remain.
+
+Role grants require verified email. The UI prevents removal or suspension of the last
+active verified full administrator and rejects stale forms. The host command can
+recover access without overriding email verification. Suspension blocks new sign-in,
+existing sessions and protected actions and hides the owner's public listings.
+Reinstatement preserves listing moderation and payment eligibility.
+
+**Administration → Audit history** is paginated and requires `audit.view`. Decisions
+record the acting account, target, time and changed fields in the same transaction.
+Host commands are attributed to **Host operator**, not to the target account; this
+records use of the command, not the operator's individual OS identity. Passwords,
+provider credentials and owner-facing moderation reasons are excluded from summaries.
 
 ## Articles, taxonomy and public metadata
 

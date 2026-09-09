@@ -124,6 +124,7 @@ pub mod audit {
         #[sea_orm(primary_key)]
         pub id: i64,
         pub actor_id: i64,
+        pub actor_type: String,
         pub target_type: String,
         pub target_id: String,
         pub action: String,

@@ -225,6 +225,7 @@ pub async fn start(
     let return_origin = origin()?;
     let db = DB::connection()?;
     let tx = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_mutation(&tx, actor).await?;
     let locked = listing::Entity::update_many()
         .col_expr(
             listing::Column::Version,

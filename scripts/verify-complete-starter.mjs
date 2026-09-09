@@ -27,13 +27,13 @@ function run(command, args, env) {
 }
 try {
   assert.ok(requirements, 'Choose editorial, administration or adoption verification.');
-  assert.equal(task, 'editorial', `${task} verification is not implemented yet.`);
+  assert.ok(['editorial', 'administration'].includes(task), `${task} verification is not implemented yet.`);
   working = snapshot(source, 'directory-complete-');
   const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
     APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'https://catalog.example.test', APP_NAME: 'Directory',
     APP_KEY: randomBytes(32).toString('base64url'), MAIL_FROM: 'test@example.test',
-    DATABASE_URL: `sqlite://${join(working, 'editorial.db')}`, DB_LOGGING: 'false', SESSION_SECURE: 'false',
+    DATABASE_URL: `sqlite://${join(working, `${task}.db`)}`, DB_LOGGING: 'false', SESSION_SECURE: 'false',
     DIRECTORY_MEDIA_ROOT: join(working, 'storage/private/directory'), TMPDIR: working,
     CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',
     CARGO_INCREMENTAL: '0', CARGO_TARGET_DIR: join(source, 'target'),
@@ -43,8 +43,8 @@ try {
   run('bun', ['install', '--frozen-lockfile', '--cwd', 'frontend'], env);
   run('bun', ['run', '--cwd', 'frontend', 'build'], env);
   run('bun', ['run', '--cwd', 'frontend', 'build:ssr'], env);
-  run('node', ['scripts/with-ssr.mjs', 'cargo', 'test', '--locked', '--test', 'editorial_workflows', '--', '--nocapture'], env);
-  run('node', ['scripts/with-ssr.mjs', 'node', 'frontend/tests/editorial-workflows.mjs'], { ...env, EDITORIAL_ARTIFACT_DIR: join(source, 'target/editorial-ui') });
+  run('node', ['scripts/with-ssr.mjs', 'cargo', 'test', '--locked', '--test', `${task}_workflows`, '--', '--nocapture'], env);
+  run('node', ['scripts/with-ssr.mjs', 'node', `frontend/tests/${task}-workflows.mjs`], { ...env, [`${task.toUpperCase()}_ARTIFACT_DIR`]: join(source, `target/${task}-ui`) });
   for (const requirement of requirements) console.log(`cairn: ${requirement}: pass`);
 } catch (error) {
   console.error(error.stack ?? error.message);

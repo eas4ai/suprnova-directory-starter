@@ -114,6 +114,7 @@ pub async fn save(
     }
     let db = DB::connection()?;
     let tx = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_permission(&tx, actor, TAXONOMY_PERMISSION).await?;
     tx.execute_unprepared("UPDATE taxonomy_write_lock SET version = version + 1 WHERE id = 1")
         .await
         .map_err(database_error)?;
@@ -264,6 +265,7 @@ pub async fn remove(actor: i64, kind: &str, id: i64, version: i64) -> Result<(),
     validate_kind(kind)?;
     let db = DB::connection()?;
     let tx = db.inner().begin().await.map_err(database_error)?;
+    crate::accounts::guard_permission(&tx, actor, TAXONOMY_PERMISSION).await?;
     tx.execute_unprepared("UPDATE taxonomy_write_lock SET version = version + 1 WHERE id = 1")
         .await
         .map_err(database_error)?;

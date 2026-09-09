@@ -11,4 +11,6 @@ Keep the existing paid-directory then complete-starter order. Draft directory an
 
 ## Realized by
 
-(none yet: recorded, not built)
+- 1614c536e2b210d92abfbbb700b5dd6d0859926f Specify remaining directory starter delivery and payment policies
+
+This commit realizes the reviewed draft specification only. Runtime requirements remain Draft until the developer confirms their text and falsifiers.

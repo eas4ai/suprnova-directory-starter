@@ -1,0 +1,5 @@
+   Compiling directory v0.1.0 (/tmp/directory-foundation-TNWLAB)
+    Finished `dev` profile [unoptimized] target(s) in 4.76s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`
+    Finished `dev` profile [unoptimized] target(s) in 0.22s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`

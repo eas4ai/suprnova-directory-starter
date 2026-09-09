@@ -12,3 +12,5 @@ The administration regression exposed a real loss of suspension reasons when aud
 ## Realized by
 
 (none yet: recorded, not built)
+
+- 3fe2e9a59ee2a1531c5b7992f4183521a54f3288 Retain private moderation reasons alongside safe audit summaries

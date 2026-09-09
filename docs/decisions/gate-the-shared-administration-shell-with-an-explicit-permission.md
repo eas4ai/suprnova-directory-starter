@@ -11,4 +11,4 @@ Use Suprnova RBAC tables and PermissionMiddleware with admin.access for the firs
 
 ## Realized by
 
-(none yet: recorded, not built)
+- fdb282a5ac2276a22996941b5ac6828e53b32ae0 Build shared public and permission-gated administration shells

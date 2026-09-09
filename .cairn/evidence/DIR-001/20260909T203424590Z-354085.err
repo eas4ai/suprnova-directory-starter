@@ -1,0 +1,232 @@
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-T5NbgS)
+    Finished `dev` profile [unoptimized] target(s) in 12.44s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-T5NbgS/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-T5NbgS)
+    Finished `test` profile [unoptimized] target(s) in 10.39s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-3c24bf58db703432)
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-T5NbgS)
+    Finished `test` profile [unoptimized] target(s) in 2.00s
+     Running tests/directory_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory_workflows-8c9fedbac16a1e1e)
+{"timestamp":"2026-09-09T20:35:00.815625Z","level":"WARN","fields":{"message":"booting production with a mail driver that discards messages - outgoing mail, including password resets, will NOT be delivered","driver":"log","override_env":"MAIL_ALLOW_NON_DELIVERING_IN_PRODUCTION"},"target":"suprnova::mail::boot"}
+{"timestamp":"2026-09-09T20:35:00.815766Z","level":"INFO","fields":{"message":"suprnova server listening","addr":"127.0.0.1:38857"},"target":"suprnova::server"}
+--> GET /login
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /dashboard/listings
+<-- Request complete
+--> GET /dashboard/listings/create
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /dashboard/listings/media/c91b141e-b2d2-4763-94d5-fe66fcf68d0d
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+{"timestamp":"2026-09-09T20:35:02.242803Z","level":"INFO","fields":{"message":"shutdown signal received","signal":"SIGTERM"},"target":"suprnova::signals"}
+{"timestamp":"2026-09-09T20:35:02.242936Z","level":"INFO","fields":{"message":"draining in-flight connections (max 10s)","in_flight":3},"target":"suprnova::server"}
+{"timestamp":"2026-09-09T20:35:08.260280Z","level":"WARN","fields":{"message":"booting production with a mail driver that discards messages - outgoing mail, including password resets, will NOT be delivered","driver":"log","override_env":"MAIL_ALLOW_NON_DELIVERING_IN_PRODUCTION"},"target":"suprnova::mail::boot"}
+{"timestamp":"2026-09-09T20:35:08.260387Z","level":"INFO","fields":{"message":"suprnova server listening","addr":"127.0.0.1:38857"},"target":"suprnova::server"}
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/c91b141e-b2d2-4763-94d5-fe66fcf68d0d
+<-- Request complete
+--> POST /dashboard/listings/4/submit
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> GET /admin/listings/4
+<-- Request complete
+--> GET /dashboard/listings/media/c91b141e-b2d2-4763-94d5-fe66fcf68d0d
+<-- Request complete
+--> POST /admin/listings/4/decision
+<-- Request complete
+--> GET /admin/listings/4
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/c91b141e-b2d2-4763-94d5-fe66fcf68d0d
+<-- Request complete
+--> POST /dashboard/listings/4
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> POST /dashboard/listings/4/submit
+--> GET /admin/listings/4
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/c91b141e-b2d2-4763-94d5-fe66fcf68d0d
+<-- Request complete
+--> POST /admin/listings/4/decision
+<-- Request complete
+--> GET /admin/listings/4
+<-- Request complete
+--> GET /dashboard/listings
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /assets/assets/main-CXYhcMJv.js
+--> GET /assets/assets/main--veh0MIi.css
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/c91b141e-b2d2-4763-94d5-fe66fcf68d0d
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/c91b141e-b2d2-4763-94d5-fe66fcf68d0d
+<-- Request complete
+--> POST /dashboard/listings/4
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> POST /dashboard/listings/4
+{"timestamp":"2026-09-09T20:35:10.322022Z","level":"WARN","fields":{"message":"client error","status":422,"error":"Validation failed","request_id":"Some(\"9df28dd1-19a0-4ae4-ba8f-5f3159b1068f\")"},"target":"suprnova::http::response","span":{"method":"POST","path":"/dashboard/listings/4","request_id":"9df28dd1-19a0-4ae4-ba8f-5f3159b1068f","name":"request"},"spans":[{"method":"POST","path":"/dashboard/listings/4","request_id":"9df28dd1-19a0-4ae4-ba8f-5f3159b1068f","name":"request"}]}
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+--> GET /listings/pagination-alpha-4abf636019bf475cb70c2c0353cc0672
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /assets/assets/main--veh0MIi.css
+--> GET /assets/assets/main-CXYhcMJv.js
+<-- Request complete
+<-- Request complete
+{"timestamp":"2026-09-09T20:35:39.806081Z","level":"ERROR","fields":{"message":"error serving connection","err":"hyper::Error(HeaderTimeout)"},"target":"suprnova::server"}
+{"timestamp":"2026-09-09T20:35:39.889693Z","level":"ERROR","fields":{"message":"error serving connection","err":"hyper::Error(HeaderTimeout)"},"target":"suprnova::server"}
+{"timestamp":"2026-09-09T20:35:40.126097Z","level":"ERROR","fields":{"message":"error serving connection","err":"hyper::Error(HeaderTimeout)"},"target":"suprnova::server"}
+{"timestamp":"2026-09-09T20:35:40.341251Z","level":"ERROR","fields":{"message":"error serving connection","err":"hyper::Error(HeaderTimeout)"},"target":"suprnova::server"}
+{"timestamp":"2026-09-09T20:35:40.653758Z","level":"ERROR","fields":{"message":"error serving connection","err":"hyper::Error(HeaderTimeout)"},"target":"suprnova::server"}
+{"timestamp":"2026-09-09T20:35:40.656986Z","level":"ERROR","fields":{"message":"error serving connection","err":"hyper::Error(HeaderTimeout)"},"target":"suprnova::server"}
+
+node:internal/modules/run_main:105
+    triggerUncaughtException(
+    ^
+
+locator.selectOption: Timeout 30000ms exceeded.
+Call log:
+  - waiting for getByLabel('Category', { exact: true })
+    - locator resolved to <select name="category" class="form-input" id="directory-category">…</select>
+  - attempting select option action
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+    - waiting 20ms
+    2 × waiting for element to be visible and enabled
+      - did not find some options
+    - retrying select option action
+      - waiting 100ms
+    60 × waiting for element to be visible and enabled
+       - did not find some options
+     - retrying select option action
+       - waiting 500ms
+
+    at /home/shawn/workspace2/scratchpads/directory-paid-T5NbgS/frontend/tests/directory-workflows.mjs:141:57 {
+  log: [
+    "  - waiting for getByLabel('Category', { exact: true })",
+    '    - locator resolved to <select name="category" class="form-input" id="directory-category">…</select>',
+    '  - attempting select option action',
+    '    2 × waiting for element to be visible and enabled',
+    '      - did not find some options',
+    '    - retrying select option action',
+    '    - waiting 20ms',
+    '    2 × waiting for element to be visible and enabled',
+    '      - did not find some options',
+    '    - retrying select option action',
+    '      - waiting 100ms',
+    '    60 × waiting for element to be visible and enabled',
+    '       - did not find some options',
+    '     - retrying select option action',
+    '       - waiting 500ms'
+  ],
+  name: 'TimeoutError'
+}
+
+Node.js v24.1.0
+AssertionError [ERR_ASSERTION]: Verification command exited 1
+
+1 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/directory-paid-T5NbgS/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 34539...
+Inertia SSR server started.
+
+AssertionError [ERR_ASSERTION]: node exited 1 (signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:27:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:61:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)

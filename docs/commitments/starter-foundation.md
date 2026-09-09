@@ -9,7 +9,7 @@ A fresh checkout builds and runs on Suprnova v1.3.7, initializes disposable acco
 
 ## Records and formats
 
-Requirements: docs/spec/foundation.md. Mechanisms: .cairn/mechanisms/foundation-*. Review: .cairn/reviews/starter-foundation.md. Check receipts and logs: .cairn/evidence/. Commands report each established requirement as `cairn: FND-001: pass` or `cairn: FND-001: fail`, substituting the actual identifier. Missing results remain unverified.
+Specification: docs/spec/foundation.md. Mechanisms: .cairn/mechanisms/foundation-*. Review: .cairn/reviews/starter-foundation.md. Check receipts and logs: .cairn/evidence/. Commands report each established requirement as `cairn: FND-001: pass` or `cairn: FND-001: fail`, substituting the actual identifier. Missing results remain unverified.
 
 Implementation may affect Cargo manifests/locks, src, cmd, frontend, tests, public assets, configuration examples, README and verification scripts. Select the account schema and disposable test engine from framework/scaffold evidence before implementation and record any meaningful choice.
 

@@ -19,3 +19,5 @@ requirements:
   - PAY-006
   - PAY-007
   - PAY-008
+reviewed:
+  - PAY-001 sha256:88cb0a671a89e6443adcb96e5edf94ec2351a9cdf32a2536dec94a3925e302c3

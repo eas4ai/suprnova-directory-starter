@@ -20,6 +20,23 @@ artifacts and unchanged dependency locks. The disposable source copy was removed
 Ripwire edit-check found no verifyPin signature change or incompatible known caller.
 This establishes the amended build contract; paid behavior remains to be built.
 
+## Mechanism review: PAY-001 repaired adapter integration
+
+Compared the provider declaration, full verifier, HTTP/persistence contract and
+Chromium administration journeys with revised PAY-001. Only the immutable dependency
+changed in this requirement. The inherited FND-001 check establishes that exact
+revision; the provider mechanism constructs both actual adapters and exercises
+authorized saves, reads after restart, direct-request denial and both provider forms.
+No mechanism mismatch was found. No application code changed during this review.
+
+The full verifier passed against the repaired revision, including controlled
+constructor failure and its corrected case, invalid keys, failed writes, competing
+saves, deployment-key restart probes and desktop/mobile browser interactions.
+The earlier disposable permission-removal mutation and its failing 200-versus-403
+assertion are recorded in docs/provider-administration-mechanism-review.md; the
+unchanged denial assertions passed in this run. These are local synthetic checks,
+not external provider authentication or a payment-processing claim.
+
 ## Reference findings
 
 Larafast Directories is the selected working example. Its category sidebar/search,

@@ -1,4 +1,5 @@
 commitment: starter-foundation
+commit: 6b33a432f33aeb18ce9db73bb14cf67520c51a8e
 examined:
   - Draft requirements were checked against the selected version, UI and provider decisions.
   - Build-only proof was rejected for account, database and UI behavior; separate mechanisms cover those failures.

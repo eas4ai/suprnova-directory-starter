@@ -1,0 +1,152 @@
+    Blocking waiting for file lock on package cache
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-94mjnq)
+    Finished `dev` profile [unoptimized] target(s) in 17.43s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-94mjnq/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-94mjnq)
+    Finished `test` profile [unoptimized] target(s) in 17.07s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-3c24bf58db703432)
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-94mjnq)
+    Finished `test` profile [unoptimized] target(s) in 2.24s
+     Running tests/directory_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory_workflows-8c9fedbac16a1e1e)
+{"timestamp":"2026-09-09T22:12:25.406064Z","level":"WARN","fields":{"message":"booting production with a mail driver that discards messages - outgoing mail, including password resets, will NOT be delivered","driver":"log","override_env":"MAIL_ALLOW_NON_DELIVERING_IN_PRODUCTION"},"target":"suprnova::mail::boot"}
+{"timestamp":"2026-09-09T22:12:25.406157Z","level":"INFO","fields":{"message":"suprnova server listening","addr":"127.0.0.1:37011"},"target":"suprnova::server"}
+--> GET /login
+<-- Request complete
+--> GET /assets/assets/main-MY-BDmpD.css
+--> GET /assets/assets/main-B2ALwM8w.js
+<-- Request complete
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /dashboard/listings
+<-- Request complete
+--> GET /dashboard/listings/create
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /dashboard/listings/media/d8ec58a5-2687-4a97-b6a6-252d8e188f3b
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+{"timestamp":"2026-09-09T22:12:26.895475Z","level":"INFO","fields":{"message":"shutdown signal received","signal":"SIGTERM"},"target":"suprnova::signals"}
+{"timestamp":"2026-09-09T22:12:26.895635Z","level":"INFO","fields":{"message":"draining in-flight connections (max 10s)","in_flight":3},"target":"suprnova::server"}
+{"timestamp":"2026-09-09T22:12:32.915396Z","level":"WARN","fields":{"message":"booting production with a mail driver that discards messages - outgoing mail, including password resets, will NOT be delivered","driver":"log","override_env":"MAIL_ALLOW_NON_DELIVERING_IN_PRODUCTION"},"target":"suprnova::mail::boot"}
+{"timestamp":"2026-09-09T22:12:32.915490Z","level":"INFO","fields":{"message":"suprnova server listening","addr":"127.0.0.1:37011"},"target":"suprnova::server"}
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main-MY-BDmpD.css
+--> GET /assets/assets/main-B2ALwM8w.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/d8ec58a5-2687-4a97-b6a6-252d8e188f3b
+<-- Request complete
+--> POST /dashboard/listings/4/submit
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> GET /assets/assets/main-MY-BDmpD.css
+--> GET /assets/assets/main-B2ALwM8w.js
+<-- Request complete
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /assets/assets/main-MY-BDmpD.css
+--> GET /assets/assets/main-B2ALwM8w.js
+<-- Request complete
+<-- Request complete
+--> GET /admin/listings/4
+<-- Request complete
+--> GET /dashboard/listings/media/d8ec58a5-2687-4a97-b6a6-252d8e188f3b
+<-- Request complete
+--> POST /admin/listings/4/decision
+<-- Request complete
+--> GET /admin/listings/4
+<-- Request complete
+--> GET /dashboard/listings/4/edit
+<-- Request complete
+--> GET /assets/assets/main-MY-BDmpD.css
+--> GET /assets/assets/main-B2ALwM8w.js
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/listings/media/d8ec58a5-2687-4a97-b6a6-252d8e188f3b
+<-- Request complete
+
+node:internal/modules/run_main:105
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(locator).toBeVisible() failed
+
+Locator: getByText('Please clarify the resource title.')
+Expected: visible
+Error: strict mode violation: getByText('Please clarify the resource title.') resolved to 2 elements:
+    1) <p class="notice">…</p> aka getByText('Review feedback: Please')
+    2) <p data-v-bdff2434="">Your submitted revision needs changes before appr…</p> aka getByText('Your submitted revision needs')
+
+Call log:
+  - Expect "toBeVisible" getByText('Please clarify the resource title.') with timeout 5000ms
+  - waiting for getByText('Please clarify the resource title.')
+
+    at captureRawStack (/home/shawn/workspace2/scratchpads/directory-paid-94mjnq/frontend/node_modules/playwright-core/lib/coreBundle.js:8588:17)
+    at callMatcherAsStep (/home/shawn/workspace2/scratchpads/directory-paid-94mjnq/frontend/node_modules/playwright/lib/matchers/expect.js:13310:57)
+    at Object.toBeVisible (/home/shawn/workspace2/scratchpads/directory-paid-94mjnq/frontend/node_modules/playwright/lib/matchers/expect.js:13302:23)
+    at /home/shawn/workspace2/scratchpads/directory-paid-94mjnq/frontend/tests/directory-workflows.mjs:92:89 {
+  matcherResult: {
+    message: 'expect(locator).toBeVisible() failed\n' +
+      '\n' +
+      "Locator: getByText('Please clarify the resource title.')\n" +
+      'Expected: visible\n' +
+      "Error: strict mode violation: getByText('Please clarify the resource title.') resolved to 2 elements:\n" +
+      `    1) <p class="notice">…</p> aka getByText('Review feedback: Please')\n` +
+      `    2) <p data-v-bdff2434="">Your submitted revision needs changes before appr…</p> aka getByText('Your submitted revision needs')\n` +
+      '\n' +
+      'Call log:\n' +
+      `  - Expect "toBeVisible" getByText('Please clarify the resource title.') with timeout 5000ms\n` +
+      "  - waiting for getByText('Please clarify the resource title.')\n",
+    pass: false,
+    actual: undefined,
+    name: 'toBeVisible',
+    expected: 'visible',
+    log: [
+      `  - Expect "toBeVisible" getByText('Please clarify the resource title.') with timeout 5000ms`,
+      "  - waiting for getByText('Please clarify the resource title.')"
+    ],
+    timeout: undefined,
+    ariaSnapshot: undefined
+  }
+}
+
+Node.js v24.1.0
+AssertionError [ERR_ASSERTION]: Verification command exited 1
+
+1 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/directory-paid-94mjnq/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 44065...
+Inertia SSR server started.
+
+AssertionError [ERR_ASSERTION]: node exited 1 (signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:27:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:61:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)

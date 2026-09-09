@@ -35,4 +35,3 @@ export interface ResetPasswordProps {
 export interface VerificationProps {
   email: string;
 }
-

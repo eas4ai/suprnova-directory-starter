@@ -39,7 +39,9 @@ checkout and regenerated `frontend/src/types/inertia-props.ts`, returning exit 0
 it did not display help. Generation was relevant to the current changed props,
 and the result was inspected. Treat this subcommand's help behavior as a CLI
 follow-up, not a reason to assume all `--help` invocations are read-only.
-No upstream CLI change was made under this starter commitment.
+It also emitted extra blank lines at EOF, which the Git whitespace check rejected;
+the generated file was normalized. No upstream CLI change was made under this
+starter commitment.
 
 Graph line metadata was stale in some inspected files. Focused source reads were
 used where the returned snippet did not match the released tag or current file.

@@ -1,6 +1,7 @@
 # Discrepancy log
 
-Observed during the starter-foundation commitment, 2026-09-08 (America/New_York).
+Observed during starter-foundation and provider-administration, 2026-09-08–09
+(America/New_York).
 These findings describe this checkout and its installed tools. A starter integration
 mistake is not automatically an upstream framework defect. Cairn development notes
 are in `.cairn/reviews/starter-foundation.md`; committed check output is under
@@ -70,10 +71,10 @@ The review file initially omitted its required `commit:` header, so Cairn could 
 identify the reviewed specification state and requested review again. Adding the
 actual examined commit corrected the record without changing any test result.
 
-The repository still needs an MIT license file and a documented administrator
-provisioning flow before full starter distribution. These belong to later
-starter/adoption work; this commitment establishes the runtime foundation and
-permission boundary, not a distribution-ready product.
+At foundation review, the repository still needed an MIT license file and a
+documented administrator provisioning flow. Provider administration now supplies
+and verifies that flow. The MIT license file remains in later starter/adoption
+work; neither commitment establishes a distribution-ready product.
 
 ## Tool behavior to keep in mind
 
@@ -96,7 +97,8 @@ exact released tag rather than assuming unreleased APIs are available.
 - SQLite is verified; PostgreSQL has not been exercised.
 - Captured account mail proves generated flow behavior, not external SMTP delivery.
 - Client and SSR bundles build; runtime SSR and deployment are not verified.
-- Listing publication, payment administration and NOWPayments are later work.
+- Listing publication and NOWPayments remain later work. Payment administration
+  is now implemented and locally verified; real payment processing is still future work.
 - The public theme is a neutral light theme with teal accent. The selected UI
   stack is Vue/Inertia/Vuetify 0; matching suprnova.app's dark-only branding was
   not an agreed requirement.

@@ -7,7 +7,7 @@ const page = usePage<SharedProps>()
 </script>
 <template>
   <Head><meta head-key="robots" name="robots" content="noindex, nofollow" /></Head>
-  <div class="admin-shell" data-shell="admin" :style="{ '--brand-accent': page.props.site.accent }">
+  <div class="admin-shell" data-shell="admin">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <aside class="admin-sidebar"><SiteBrand /><p class="sidebar-label">Administration</p><ShellNavigation admin /></aside>
     <div class="admin-workspace">

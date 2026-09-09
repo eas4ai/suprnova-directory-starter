@@ -96,3 +96,17 @@ client and SSR builds, the HTTP contract, and the complete Chromium journey pass
 the runner emitted passes for CNT-001 through CNT-006. Inspected the resulting
 mobile article screenshot: the literal hostile title wraps inside the viewport.
 `git diff --check` also passed. Committed Cairn evidence remains a separate step.
+
+## Shared accent regression — 2026-09-09
+
+Fresh FND-001/002/003 evidence passed. FND-004 then rejected the editorial
+implementation's per-shell inline accent: setting the existing root
+`--brand-accent` left the admin mark green instead of red. Kept the original
+browser assertion. Moved the validated deployment hex value into a shared
+`--site-accent` root rule emitted by SiteBrand, and made `--brand-accent` use
+that value with its existing palette fallback. Removed the per-shell overrides.
+This preserves SSR configuration and the root token's effect on both shells.
+The unchanged foundation UI mechanism passed in a disposable installation,
+including builds, HTTP denial and Chromium keyboard/shared-token assertions.
+`git diff --check` passed. The repeated broad Ripwire scan still reports generated
+bundle findings; the source fix changes template bindings and the token fallback.

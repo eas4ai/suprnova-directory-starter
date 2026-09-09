@@ -10,7 +10,7 @@
   --teal-800: #105442;
   --teal-50: #eaf5ef;
   --red-700: #a42d35;
-  --brand-accent: var(--teal-700);
+  --brand-accent: var(--site-accent, var(--teal-700));
   --surface-canvas: var(--neutral-0);
   --surface-muted: var(--neutral-50);
   --surface-accent: color-mix(in srgb, var(--brand-accent) 8%, var(--neutral-0));

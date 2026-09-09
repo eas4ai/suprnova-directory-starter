@@ -1,0 +1,39 @@
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-3gHscA)
+    Finished `dev` profile [unoptimized] target(s) in 13.41s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-3gHscA/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-3gHscA)
+    Finished `test` profile [unoptimized] target(s) in 10.74s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-3c24bf58db703432)
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-3gHscA)
+    Finished `test` profile [unoptimized] target(s) in 2.12s
+     Running tests/directory_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory_workflows-8c9fedbac16a1e1e)
+
+thread 'directory_workflows_contract' (1013388) panicked at tests/directory_workflows.rs:706:5:
+assertion failed: audits.iter().any(|a|
+        a.actor_id == admin.id && a.action == "suspended" &&
+            a.summary == "Policy review")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test directory_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/directory-paid-3gHscA/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 42035...
+Inertia SSR server started.
+
+AssertionError [ERR_ASSERTION]: node exited 1 (signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:27:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:49:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)

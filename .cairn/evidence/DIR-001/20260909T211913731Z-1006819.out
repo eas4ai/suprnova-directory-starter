@@ -1,0 +1,289 @@
+[directory] cargo fmt --check
+[directory] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-3gHscA)
+    Finished `dev` profile [unoptimized] target(s) in 13.41s
+[directory] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [117.00ms]
+[directory] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 689 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-3gHscA/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main--veh0MIi.css   58.24 kB │ gzip:  10.01 kB
+../public/assets/assets/main-CH19Nr_2.js   380.96 kB │ gzip: 120.28 kB
+
+✓ built in 624ms
+[directory] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 76 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  195.10 kB │ gzip: 31.71 kB
+
+✓ built in 394ms
+[directory] cargo test --locked --lib listings::media::tests -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-3gHscA)
+    Finished `test` profile [unoptimized] target(s) in 10.74s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-3c24bf58db703432)
+
+running 4 tests
+test listings::media::tests::generated_keys_and_private_root_reject_traversal ... ok
+test listings::media::tests::reencoding_discards_jpeg_comment_metadata ... ok
+test listings::media::tests::accepts_only_decodable_raster_images_and_bounds_dimensions ... ok
+test listings::media::tests::persists_complete_bytes_with_generated_name ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 19 filtered out; finished in 0.01s
+
+[directory] node scripts/with-ssr.mjs cargo test --locked --test directory_workflows -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-3gHscA)
+    Finished `test` profile [unoptimized] target(s) in 2.12s
+     Running tests/directory_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory_workflows-8c9fedbac16a1e1e)
+
+running 1 test
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> GET /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /dashboard/listings/media/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /dashboard/listings/media/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /dashboard/listings/media/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard/listings/1/edit
+<-- Request complete
+--> GET /dashboard/listings/1/edit
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /dashboard/listings/1/archive
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/d4b68cbc-4547-4f55-9342-7954e7d82e77
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/2/submit
+<-- Request complete
+--> POST /admin/listings/2/decision
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/3/submit
+<-- Request complete
+--> POST /admin/listings/3/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+--> GET /listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa
+<-- Request complete
+--> GET /media/listings/original-100-tool-82b91db20e8848dfaa8169d722a06eaa/5b74e1a2-b810-428f-b0c2-03a4f1d14448
+<-- Request complete
+
+thread 'directory_workflows_contract' (1013388) panicked at tests/directory_workflows.rs:706:5:
+assertion failed: audits.iter().any(|a|
+        a.actor_id == admin.id && a.action == "suspended" &&
+            a.summary == "Policy review")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test directory_workflows_contract ... FAILED
+
+failures:
+
+failures:
+    directory_workflows_contract
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.26s
+
+error: test failed, to rerun pass `--test directory_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/directory-paid-3gHscA/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 42035...
+Inertia SSR server started.
+
+AssertionError [ERR_ASSERTION]: node exited 1 (signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:27:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:49:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+cairn: DIR-001: fail
+cairn: DIR-002: fail
+cairn: DIR-003: fail
+cairn: DIR-004: fail
+cairn: DIR-005: fail
+cairn: DIR-006: fail
+cairn: DIR-007: fail

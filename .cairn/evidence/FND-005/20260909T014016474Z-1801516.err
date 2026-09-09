@@ -1,0 +1,12 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-KLPkAT)
+    Finished `dev` profile [unoptimized] target(s) in 5.28s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-foundation-KLPkAT/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+    Finished `dev` profile [unoptimized] target(s) in 0.25s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`

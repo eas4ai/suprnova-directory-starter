@@ -13,8 +13,6 @@ inputs:
   - scripts/
   - tests/
   - .env.example
-  - LICENSE
-  - THIRD_PARTY_NOTICES.md
 requirements:
   - CNT-001
   - CNT-002

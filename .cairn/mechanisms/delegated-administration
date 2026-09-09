@@ -13,8 +13,6 @@ inputs:
   - scripts/
   - tests/
   - .env.example
-  - LICENSE
-  - THIRD_PARTY_NOTICES.md
 requirements:
   - ADM-001
   - ADM-002

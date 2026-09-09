@@ -89,7 +89,8 @@ try {
   await admin.getByRole('button', { name: 'Record decision', exact: true }).click();
   await expect(admin.getByRole('heading', { name: 'Current revision · rejected', exact: true })).toBeVisible();
   await owner.reload();
-  await expect(owner.getByText('Please clarify the resource title.', { exact: false })).toBeVisible();
+  await expect(owner.locator('.notice').filter({ hasText: 'Review feedback:' })).toContainText('Please clarify the resource title.');
+  await expect(owner.getByRole('region', { name: 'Updates for this listing', exact: true })).toContainText('Please clarify the resource title.');
   await owner.getByLabel('Title', { exact: true }).fill('Browser resource clarified');
   await save.click();
   await expect(owner.getByRole('status')).toContainText('Draft saved.');

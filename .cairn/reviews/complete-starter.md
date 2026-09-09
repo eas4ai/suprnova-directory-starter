@@ -265,3 +265,20 @@ and transaction rollback checks. /tmp/adoption-refund-dispute-positive.log recor
 one passed test, zero failed; the external driver asserted exit zero. Its reused
 console summary label says "violating copy" but this positive run replaced no
 source behavior and checked success, not an expected failure.
+
+## Directory selector integration repair — 2026-09-09
+
+Cairn DIR-001..007 at 20260909T221240250Z failed only in the browser: the
+rejection reason now appears in review feedback and retained notification history,
+so the old unrestricted substring locator matched twice. HTTP and media checks
+passed. Scoped the original assertion to the review-feedback notice and added an
+independent assertion against the named notification region. Both intended
+surfaces must retain the exact reason. No application source changed.
+
+An initial editing command missed the old locator's explicit exact:false option;
+its replacement assertion stopped without changing the file, and the already
+started manual verifier repeated the same known failure. After replacing the
+actual locator, the full verifier passed formatting/build, Vue type/client/SSR,
+media, HTTP and browser journeys (/tmp/directory-notification-selector-final.log).
+Node syntax and git whitespace checks passed. Ripwire test-gate exited zero;
+quality-delta exited two with 145 generated-only findings and no source findings.

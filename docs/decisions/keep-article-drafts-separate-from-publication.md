@@ -11,4 +11,4 @@ Store immutable article revisions behind separate current and published pointers
 
 ## Realized by
 
-(none yet: recorded, not built)
+- 61ee2c7f69a8ac95d5dcdb08a5b7de36d7779b5d — separate article revisions and publication, protected taxonomy/media, real public SSR/metadata/XML, and editorial HTTP/browser verification with failure demonstrations.

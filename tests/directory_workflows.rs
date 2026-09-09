@@ -705,13 +705,30 @@ async fn directory_workflows_contract() {
         .unwrap();
     assert!(audits.iter().any(|a| a.actor_id == admin.id
         && a.action == "suspended"
-        && a.summary == "Policy review"));
+        && a.private_reason.as_deref() == Some("Policy review")));
     assert!(audits.iter().any(|a| a.actor_id == admin.id
         && a.action == "reinstated"
-        && a.summary == "Review complete"));
-    assert!(audits.iter().any(|a| a.actor_id == admin.id
-        && a.action == "rejected"
-        && a.summary.contains("Please restore the accurate title")));
+        && a.private_reason.as_deref() == Some("Review complete")));
+    assert!(audits.iter().any(|a| {
+        a.actor_id == admin.id
+            && a.action == "rejected"
+            && a.private_reason
+                .as_deref()
+                .is_some_and(|reason| reason.contains("Please restore the accurate title"))
+    }));
+    let audit_page = admin_http.inertia_get("/admin/audit?per_page=100").await;
+    assert_eq!(audit_page.status, 200);
+    for private in [
+        "Policy review",
+        "Review complete",
+        "Please restore the accurate title",
+        "private_reason",
+    ] {
+        assert!(
+            !audit_page.body.contains(private),
+            "Private moderation detail leaked in broad audit output"
+        );
+    }
     let revision_count = counts().await.1;
     assert_eq!(
         owner_http

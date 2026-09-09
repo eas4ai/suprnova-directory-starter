@@ -143,6 +143,10 @@ try {
   await category.selectOption('software');
   await visitor.getByLabel('Search listings', { exact: true }).fill('Pagination');
   await visitor.getByRole('button', { name: 'Search', exact: true }).click();
+  // The unfiltered page already has two cards. Wait for the submitted query's
+  // document and locale hydration before editing the next form.
+  await expect(visitor).toHaveURL(origin + '/listings?q=Pagination&category=software');
+  await visitor.waitForLoadState('networkidle');
   await expect(visitor.locator('.directory-card')).toHaveCount(2);
   await visitor.getByLabel('Search listings', { exact: true }).fill('No public listing matches this fixture');
   await visitor.getByRole('button', { name: 'Search', exact: true }).click();

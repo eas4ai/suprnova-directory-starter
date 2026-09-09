@@ -406,17 +406,9 @@ async fn record_audit(
     actor_id: i64,
     id: i64,
     action: &str,
-    _summary: &str,
+    reason: &str,
 ) -> Result<(), FrameworkError> {
-    crate::audit::record(
-        transaction,
-        actor_id,
-        "listing",
-        id.to_string(),
-        action,
-        "Listing moderation state and owner-facing reason saved.",
-    )
-    .await
+    crate::audit::moderation(transaction, actor_id, id, action, reason).await
 }
 
 /// Idempotent operator setup; existing terms and operator edits are preserved.

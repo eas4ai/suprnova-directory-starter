@@ -11,6 +11,8 @@ mod m20260909_000008_create_articles;
 
 mod m20260909_000009_create_account_access;
 
+mod m20260909_000010_preserve_moderation_reason;
+
 pub struct Migrator;
 
 #[async_trait::async_trait]
@@ -27,6 +29,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260909_000007_create_publishing::Migration),
             Box::new(m20260909_000008_create_articles::Migration),
             Box::new(m20260909_000009_create_account_access::Migration),
+            Box::new(m20260909_000010_preserve_moderation_reason::Migration),
         ]
     }
 }

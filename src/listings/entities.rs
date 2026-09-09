@@ -129,6 +129,8 @@ pub mod audit {
         pub target_id: String,
         pub action: String,
         pub summary: String,
+        #[serde(skip_serializing)]
+        pub private_reason: Option<String>,
         pub created_at: i64,
     }
     #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

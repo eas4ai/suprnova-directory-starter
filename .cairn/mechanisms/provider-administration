@@ -1,0 +1,21 @@
+command: node scripts/verify-provider-administration.mjs
+results: per-requirement
+inputs:
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - PAY-001
+  - PAY-004
+  - PAY-005
+  - PAY-006
+  - PAY-007
+  - PAY-008

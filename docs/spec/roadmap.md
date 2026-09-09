@@ -1,7 +1,7 @@
 # Roadmap
 
 Status: Agreed 2026-09-08
-Current: starter-foundation
+Current: provider-administration
 
 ## First starter delivery
 
@@ -10,7 +10,7 @@ Current: starter-foundation
 3. paid-directory — owner listings, bounded discovery, review-before-payment, checkout, publication and payment recovery for both providers.
 4. complete-starter — editorial content, taxonomy, RSS, SEO, full administration, notifications, storage, demo data and adoption documentation.
 
-Only the first commitment is specified for implementation. Later entries record delivery order, not permission to infer their unresolved policies. Paid publishing remains in the first delivery.
+The foundation is complete. Provider administration is agreed for implementation. Later entries record delivery order, not permission to infer their unresolved policies. Paid publishing remains in the first delivery.
 
 ## Next framework iteration
 

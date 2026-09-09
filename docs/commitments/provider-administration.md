@@ -1,11 +1,11 @@
 # Provider administration
 
-Status: Draft
+Status: Agreed 2026-09-09
 Requirements: PAY-001, PAY-004, PAY-005, PAY-006, PAY-007, PAY-008
 
 ## Outcome
 
-An operator provisions an administrator, then configures Stripe and Paddle through the administration UI. Credentials remain protected, test and live profiles stay separate, and plan mappings persist. The current roadmap remains starter-foundation until the developer agrees to the requirement text and falsifiers in docs/spec/payments.md.
+An operator provisions an administrator, then configures Stripe and Paddle through the administration UI. Credentials remain protected, test and live profiles stay separate, and plan mappings persist. The developer agreed to the requirement text, falsifiers and operating rules in docs/spec/payments.md on 2026-09-09.
 
 ## Verification plan
 

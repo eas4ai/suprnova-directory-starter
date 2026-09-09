@@ -6,3 +6,4 @@ pub mod authenticate;
 mod logging;
 
 pub use logging::LoggingMiddleware;
+pub mod auth_share;

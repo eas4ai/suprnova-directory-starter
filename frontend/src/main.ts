@@ -1,27 +1,14 @@
 import './app.css'
-import { createInertiaApp, router } from '@inertiajs/vue3'
-import { createApp, createSSRApp, h, type DefineComponent } from 'vue'
+import { createInertiaApp } from '@inertiajs/vue3'
+import { createApp, createSSRApp, h } from 'vue'
 import { initLang } from './lib/lang'
+import { resolvePage } from './resolve'
 
-// Forward the per-session CSRF token (rendered into <meta name="csrf-token">
-// by the Suprnova CSRF middleware) on every Inertia visit. Inertia 3 uses
-// the native fetch API and sets X-Inertia automatically, so no axios.
-const csrfToken = document
-  .querySelector('meta[name="csrf-token"]')
-  ?.getAttribute('content')
-if (csrfToken) {
-  router.on('before', (event) => {
-    event.detail.visit.headers['X-CSRF-TOKEN'] = csrfToken
-  })
-}
+// Inertia's HTTP client reads the current XSRF-TOKEN cookie on each request.
+// Do not cache the page's meta token: authentication rotates the session.
 
 createInertiaApp({
-  resolve: (name) => {
-    const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', {
-      eager: true,
-    })
-    return pages[`./pages/${name}.vue`]
-  },
+  resolve: resolvePage,
   async setup({ el, App, props, plugin }) {
     // `el` is `null` when `setup` runs server-side - @inertiajs/vue3's
     // `createInertiaApp` reuses this same callback for both the browser

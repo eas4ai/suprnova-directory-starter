@@ -1,7 +1,8 @@
 import { createInertiaApp } from '@inertiajs/vue3'
 import createServer from '@inertiajs/vue3/server'
-import { createSSRApp, h, type DefineComponent } from 'vue'
+import { createSSRApp, h } from 'vue'
 import { renderToString } from 'vue/server-renderer'
+import { resolvePage } from './resolve'
 
 // `suprnova ssr:start` runs this bundle under Node - `npm run build:ssr`
 // (`vite build --ssr src/ssr.ts`) produces it. `createServer` (from
@@ -20,10 +21,7 @@ createServer((page) =>
   createInertiaApp({
     page,
     render: renderToString,
-    resolve: (name) => {
-      const pages = import.meta.glob<DefineComponent>('./pages/**/*.vue', { eager: true })
-      return pages[`./pages/${name}.vue`]
-    },
+    resolve: resolvePage,
     setup({ App, props, plugin }) {
       return createSSRApp({ render: () => h(App, props) }).use(plugin)
     },

@@ -1,0 +1,17 @@
+<script setup lang="ts">
+import { usePage } from '@inertiajs/vue3'
+import type { SharedProps } from '../types/shared'
+import SiteBrand from '../components/SiteBrand.vue'
+import ShellNavigation from '../components/ShellNavigation.vue'
+const page = usePage<SharedProps>()
+</script>
+<template>
+  <div class="admin-shell" data-shell="admin">
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <aside class="admin-sidebar"><SiteBrand /><p class="sidebar-label">Administration</p><ShellNavigation admin /></aside>
+    <div class="admin-workspace">
+      <header class="admin-header"><span>Your workspace</span><span>{{ page.props.auth.user?.name }}</span></header>
+      <main id="main-content" tabindex="-1" class="admin-content"><slot /></main>
+    </div>
+  </div>
+</template>

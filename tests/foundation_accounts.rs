@@ -1,8 +1,7 @@
 mod common;
 
 use common::Client;
-use sea_orm_migration::MigratorTrait;
-use suprnova::{DB, Mail, serde_json::json};
+use suprnova::serde_json::json;
 
 fn mail_token(mail: &suprnova::mail::MailFake, path: &str) -> String {
     mail.captured()
@@ -21,16 +20,7 @@ fn mail_token(mail: &suprnova::mail::MailFake, path: &str) -> String {
 async fn account_journey_uses_real_sessions_and_mail_links() {
     // The mechanism supplies a fresh database and environment before runtime
     // startup. Never load an operator's .env in this test binary.
-    assert_eq!(std::env::var("APP_ENV").as_deref(), Ok("test"));
-    directory::config::register_all();
-    suprnova::Crypt::init(suprnova::EncryptionKey::generate());
-    directory::bootstrap::register().await;
-    directory::migrations::Migrator::up(DB::connection().unwrap().inner(), None)
-        .await
-        .unwrap();
-    suprnova::rate_limit::bootstrap_default().await;
-    directory::bootstrap::register_http_stack();
-    let mail = Mail::fake();
+    let mail = common::setup().await;
     let mut client = Client::new();
 
     let denied = client.get("/dashboard").await;

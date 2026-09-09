@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const source = resolve(process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const task = process.argv[2];
-const requirements = { build: 'FND-001', database: 'FND-002', accounts: 'FND-003' };
+const requirements = { build: 'FND-001', database: 'FND-002', accounts: 'FND-003', ui: 'FND-004' };
 const requirement = requirements[task];
 
 function run(command, args, cwd, options = {}) {
@@ -104,7 +104,7 @@ function database(root) {
   assert.deepEqual(JSON.parse(inspect()), first, 'Repeated migrations changed the schema, migration history or existing account data');
 }
 
-function accounts(root) {
+function accounts(root, suite = 'foundation_accounts') {
   const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
     APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
@@ -113,7 +113,16 @@ function accounts(root) {
     CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',
     CARGO_TARGET_DIR: join(source, 'target'),
   });
-  run('cargo', ['test', '--locked', '--test', 'foundation_accounts', '--', '--nocapture'], root, { env });
+  run('cargo', ['test', '--locked', '--test', suite, '--', '--nocapture'], root, { env });
+  return env;
+}
+
+function ui(root) {
+  run('bun', ['install', '--frozen-lockfile'], join(root, 'frontend'));
+  run('bun', ['run', 'build'], join(root, 'frontend'));
+  const env = accounts(root, 'foundation_ui');
+  env.FOUNDATION_ARTIFACT_DIR = join(source, 'target/foundation-ui');
+  run('node', ['frontend/tests/foundation-ui.mjs'], root, { env });
 }
 
 if (!requirement) {
@@ -123,7 +132,7 @@ if (!requirement) {
   let working;
   try {
     working = snapshot(source);
-    ({ build, database, accounts })[task](working);
+    ({ build, database, accounts, ui })[task](working);
     console.log(`cairn: ${requirement}: pass`);
   } catch (error) {
     console.error(error.stack ?? error.message);

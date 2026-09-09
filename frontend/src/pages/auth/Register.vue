@@ -18,33 +18,34 @@ function submit() {
 
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+    class="auth-container"
   >
-    <div class="max-w-md w-full space-y-8">
+    <div class="auth-card">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h1 class="auth-title">
           Create your account
-        </h2>
+        </h1>
       </div>
       <form class="mt-8 space-y-6" @submit.prevent="submit">
         <div class="space-y-4">
           <div>
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+            <label for="name" class="form-label">Name</label>
             <input
               id="name"
+              autocomplete="name"
               v-model="form.name"
               name="name"
               type="text"
               required
-              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="form-input"
             />
-            <p v-if="props.errors?.name" class="mt-1 text-sm text-red-600">
+            <p v-if="props.errors?.name" class="form-error" role="alert">
               {{ props.errors.name }}
             </p>
           </div>
 
           <div>
-            <label for="email" class="block text-sm font-medium text-gray-700">Email address</label>
+            <label for="email" class="form-label">Email address</label>
             <input
               id="email"
               v-model="form.email"
@@ -52,30 +53,32 @@ function submit() {
               type="email"
               autocomplete="email"
               required
-              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="form-input"
             />
-            <p v-if="props.errors?.email" class="mt-1 text-sm text-red-600">
+            <p v-if="props.errors?.email" class="form-error" role="alert">
               {{ props.errors.email }}
             </p>
           </div>
 
           <div>
-            <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+            <label for="password" class="form-label">Password</label>
             <input
               id="password"
               v-model="form.password"
               name="password"
               type="password"
+              autocomplete="new-password"
+              minlength="8"
               required
-              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="form-input"
             />
-            <p v-if="props.errors?.password" class="mt-1 text-sm text-red-600">
+            <p v-if="props.errors?.password" class="form-error" role="alert">
               {{ props.errors.password }}
             </p>
           </div>
 
           <div>
-            <label for="password_confirmation" class="block text-sm font-medium text-gray-700"
+            <label for="password_confirmation" class="form-label"
               >Confirm Password</label
             >
             <input
@@ -83,10 +86,12 @@ function submit() {
               v-model="form.password_confirmation"
               name="password_confirmation"
               type="password"
+              autocomplete="new-password"
+              minlength="8"
               required
-              class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              class="form-input"
             />
-            <p v-if="props.errors?.password_confirmation" class="mt-1 text-sm text-red-600">
+            <p v-if="props.errors?.password_confirmation" class="form-error" role="alert">
               {{ props.errors.password_confirmation }}
             </p>
           </div>
@@ -96,14 +101,14 @@ function submit() {
           <button
             type="submit"
             :disabled="form.processing"
-            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            class="button button-primary"
           >
             {{ form.processing ? 'Creating account...' : 'Register' }}
           </button>
         </div>
 
         <div class="text-center">
-          <a href="/login" class="text-indigo-600 hover:text-indigo-500">
+          <a href="/login" class="text-link">
             Already have an account? Sign in
           </a>
         </div>

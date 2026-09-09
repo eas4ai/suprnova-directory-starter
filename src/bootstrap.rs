@@ -27,9 +27,9 @@ use std::sync::Arc;
 
 #[allow(unused_imports)]
 use suprnova::{
-    bind, global_middleware, singleton, App, Auth, AuthConfig, AuthManager, CsrfMiddleware,
-    EloquentUserProvider, Frontend, IncludeMiddleware, Inertia, InertiaConfig, LocaleMiddleware,
-    LocaleShare, SessionConfig, SessionMiddleware, DB,
+    App, Auth, AuthConfig, AuthManager, CsrfMiddleware, DB, EloquentUserProvider, Frontend,
+    IncludeMiddleware, Inertia, InertiaConfig, LocaleMiddleware, LocaleShare, SessionConfig,
+    SessionMiddleware, bind, global_middleware, singleton,
 };
 
 use crate::middleware;
@@ -87,6 +87,7 @@ pub fn register_http_stack() {
 
     // Session middleware (required for authentication)
     let session_config = SessionConfig::from_env();
+    let csrf = CsrfMiddleware::new().with_session_config(&session_config);
     global_middleware!(SessionMiddleware::new(session_config));
 
     // Inertia protocol layer, four middlewares in one call: the headers
@@ -142,7 +143,7 @@ pub fn register_http_stack() {
     );
 
     // CSRF protection (validates tokens on POST/PUT/PATCH/DELETE)
-    global_middleware!(CsrfMiddleware::new());
+    global_middleware!(csrf);
 
     // Parse `?include=`/`?exclude=`/`?only=`/`?except=` and `?fields[...]=`
     // into the per-request task-local so `#[derive(Data)]` responses,
@@ -155,4 +156,5 @@ pub fn register_http_stack() {
     // where to fetch its Fluent catalog) on every Inertia response. The
     // frontend kit's `lib/lang.ts` wrapper reads this via `initLang(page)`.
     App::register_inertia_shared(Arc::new(LocaleShare));
+    App::register_inertia_shared(Arc::new(middleware::auth_share::AuthShare));
 }

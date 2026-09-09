@@ -12,7 +12,7 @@ use std::any::Any;
 
 use chrono::{DateTime, Utc};
 use suprnova::{
-    attrs, hashing, model, Authenticatable, CanResetPassword, FrameworkError, MustVerifyEmail,
+    Authenticatable, CanResetPassword, FrameworkError, MustVerifyEmail, attrs, hashing, model,
 };
 
 #[model(
@@ -39,6 +39,12 @@ pub struct User {
 // call sites referencing `crate::models::user::{Entity, Column, ActiveModel}`
 // keep resolving.
 pub use user::{ActiveModel, Column, Entity};
+
+impl suprnova::rbac::HasRoles for User {
+    fn rbac_model_type(&self) -> String {
+        "directory.user".to_owned()
+    }
+}
 
 impl User {
     /// Find a user by their email address.
@@ -76,10 +82,7 @@ impl User {
     /// is deliberately outside `fillable` (it is never set from request
     /// input), so this writes the whole row via `save` rather than a
     /// mass-assignment update.
-    pub async fn update_remember_token(
-        &self,
-        token: Option<String>,
-    ) -> Result<(), FrameworkError> {
+    pub async fn update_remember_token(&self, token: Option<String>) -> Result<(), FrameworkError> {
         let mut updated = self.clone();
         updated.remember_token = token;
         <Self as suprnova::eloquent::Model>::save(&updated).await
@@ -108,9 +111,7 @@ impl Authenticatable for User {
         self
     }
 
-    fn into_arc_any(
-        self: std::sync::Arc<Self>,
-    ) -> std::sync::Arc<dyn Any + Send + Sync> {
+    fn into_arc_any(self: std::sync::Arc<Self>) -> std::sync::Arc<dyn Any + Send + Sync> {
         self
     }
 }

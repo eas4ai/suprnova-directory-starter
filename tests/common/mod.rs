@@ -6,6 +6,20 @@ use hyper::{body::Incoming, service::service_fn};
 use hyper_util::rt::TokioIo;
 use suprnova::{MiddlewareRegistry, Router, handle_request, serde_json::Value};
 
+pub async fn setup() -> suprnova::mail::MailFake {
+    use sea_orm_migration::MigratorTrait;
+    assert_eq!(std::env::var("APP_ENV").as_deref(), Ok("test"));
+    directory::config::register_all();
+    suprnova::Crypt::init(suprnova::EncryptionKey::generate());
+    directory::bootstrap::register().await;
+    directory::migrations::Migrator::up(suprnova::DB::connection().unwrap().inner(), None)
+        .await
+        .unwrap();
+    suprnova::rate_limit::bootstrap_default().await;
+    directory::bootstrap::register_http_stack();
+    suprnova::Mail::fake()
+}
+
 #[derive(Clone)]
 pub struct Client {
     router: Arc<Router>,

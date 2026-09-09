@@ -1,4 +1,4 @@
-use suprnova::{get, group, post, routes};
+use suprnova::{StaticFiles, fallback, get, group, post, routes};
 
 use crate::controllers;
 use crate::middleware;
@@ -27,4 +27,10 @@ routes! {
         post!("/email/verification-notification", controllers::account_links::resend),
         get!("/verify-email/verify", controllers::account_links::verify),
     }).middleware(middleware::authenticate::auth()),
+
+    group!("/admin", {
+        get!("/", controllers::admin::index),
+    }).middleware(middleware::authenticate::auth())
+      .middleware(suprnova::rbac::PermissionMiddleware::<crate::models::user::User>::redirect_to("admin.access", "/dashboard")),
+    fallback!(StaticFiles::public().handler()),
 }

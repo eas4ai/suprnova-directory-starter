@@ -1,47 +1,15 @@
 <script setup lang="ts">
-import { router } from '@inertiajs/vue3'
-import type { DashboardProps } from '../types/inertia-props'
-
-defineProps<DashboardProps>()
-
-function handleLogout() {
-  router.post('/logout')
-}
+import { Head, Link, usePage } from '@inertiajs/vue3'
+import type { SharedProps } from '../types/shared'
+const page = usePage<SharedProps>()
 </script>
-
 <template>
-  <div class="min-h-screen bg-gray-100">
-    <nav class="bg-white shadow">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-          <div class="flex items-center">
-            <span class="text-xl font-semibold">Dashboard</span>
-          </div>
-          <div class="flex items-center space-x-4">
-            <span class="text-gray-700">{{ user.name }}</span>
-            <button
-              @click="handleLogout"
-              class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium"
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
-
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-      <div class="px-4 py-6 sm:px-0">
-        <div
-          class="border-4 border-dashed border-gray-200 rounded-lg h-96 flex items-center justify-center"
-        >
-          <div class="text-center">
-            <h2 class="text-2xl font-bold text-gray-900">Welcome, {{ user.name }}!</h2>
-            <p class="mt-2 text-gray-600">You are logged in.</p>
-            <p class="mt-4 text-sm text-gray-500">Email: {{ user.email }}</p>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
+  <Head title="Your account" />
+  <section class="account-page">
+    <h1>Your account</h1>
+    <p class="lead">Welcome back, {{ page.props.auth.user?.name }}.</p>
+    <dl class="account-details"><div><dt>Email address</dt><dd>{{ page.props.auth.user?.email }}</dd></div><div><dt>Email status</dt><dd>{{ page.props.auth.user?.verified ? 'Verified' : 'Awaiting verification' }}</dd></div></dl>
+    <div v-if="!page.props.auth.user?.verified" class="notice"><h2>Confirm your email address</h2><p>Use the link in your inbox to verify your account.</p><Link href="/verify-email" class="button button-primary">Verify your email</Link></div>
+    <Link href="/" class="text-link">Explore the directory <span aria-hidden="true">↗</span></Link>
+  </section>
 </template>

@@ -48,6 +48,7 @@ node scripts/spec-lint.mjs docs/spec
 node scripts/verify-foundation.mjs build
 node scripts/verify-foundation.mjs database
 node scripts/verify-foundation.mjs accounts
+node scripts/verify-foundation.mjs ui
 ```
 
 The verifier copies tracked source into a disposable directory. It never copies
@@ -65,3 +66,15 @@ The account check exercises the actual HTTP router and middleware with an isolat
 database and a captured mail transport. It checks registration, verification,
 login, logout, reset, CSRF rejection, token expiry/reuse/ownership, and session
 revocation. It does not establish delivery through an external SMTP service.
+
+The UI check needs Chromium installed once with `cd frontend && bunx playwright
+install chromium` (then return to the repository root). On Linux, install the
+browser's system dependencies with `bunx playwright install-deps chromium` if
+Playwright reports missing libraries. It runs the built frontend against a
+local disposable server, checks permission denial, keyboard navigation and dialogs,
+and changes a shared branding token across both shells. Screenshots are written
+to the ignored `target/foundation-ui` directory.
+
+Both shells use the semantic tokens in `frontend/src/styles/tokens.css`.
+Administration requires the explicit `admin.access` permission; an account or
+an `administrator` role name alone grants no access.

@@ -17,18 +17,18 @@ function submit() {
 
 <template>
   <div
-    class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
+    class="auth-container"
   >
-    <div class="max-w-md w-full space-y-8">
+    <div class="auth-card">
       <div>
-        <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        <h1 class="auth-title">
           Sign in to your account
-        </h2>
+        </h1>
       </div>
       <form class="mt-8 space-y-6" @submit.prevent="submit">
-        <div class="rounded-md shadow-sm -space-y-px">
+        <div class="space-y-4">
           <div>
-            <label for="email" class="sr-only">Email address</label>
+            <label for="email" class="form-label">Email address</label>
             <input
               id="email"
               v-model="form.email"
@@ -36,12 +36,12 @@ function submit() {
               type="email"
               autocomplete="email"
               required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              class="form-input"
               placeholder="Email address"
             />
           </div>
           <div>
-            <label for="password" class="sr-only">Password</label>
+            <label for="password" class="form-label">Password</label>
             <input
               id="password"
               v-model="form.password"
@@ -49,17 +49,17 @@ function submit() {
               type="password"
               autocomplete="current-password"
               required
-              class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              class="form-input"
               placeholder="Password"
             />
           </div>
         </div>
 
-        <div v-if="props.errors?.email" class="text-red-600 text-sm">
+        <div v-if="props.errors?.email" class="form-error" role="alert">
           {{ props.errors.email }}
         </div>
 
-        <div v-if="props.errors?.password" class="text-red-600 text-sm">
+        <div v-if="props.errors?.password" class="form-error" role="alert">
           {{ props.errors.password }}
         </div>
 
@@ -69,9 +69,9 @@ function submit() {
             v-model="form.remember"
             name="remember"
             type="checkbox"
-            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+            class="form-checkbox"
           />
-          <label for="remember" class="ml-2 block text-sm text-gray-900">
+          <label for="remember" class="ml-2">
             Remember me
           </label>
         </div>
@@ -80,15 +80,15 @@ function submit() {
           <button
             type="submit"
             :disabled="form.processing"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            class="button button-primary"
           >
             {{ form.processing ? 'Signing in...' : 'Sign in' }}
           </button>
         </div>
 
         <div class="text-center">
-          <a href="/forgot-password" class="block text-indigo-600 hover:text-indigo-500">Forgot your password?</a>
-          <a href="/register" class="text-indigo-600 hover:text-indigo-500">
+          <a href="/forgot-password" class="text-link">Forgot your password?</a>
+          <a href="/register" class="text-link">
             Don't have an account? Register
           </a>
         </div>

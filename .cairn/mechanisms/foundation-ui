@@ -9,6 +9,7 @@ inputs:
   - cmd/
   - frontend/
   - scripts/
+  - tests/
   - .env.example
 requirements:
   - FND-004

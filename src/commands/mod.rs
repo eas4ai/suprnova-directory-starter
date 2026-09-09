@@ -14,3 +14,5 @@
 //! That generates `src/commands/clean_cache.rs` with a
 //! `#[derive(clap::Parser, suprnova::Command)]` stub + a
 //! `TypedCommand` impl, and appends a `pub mod` line here.
+
+pub mod admin_access;

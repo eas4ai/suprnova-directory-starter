@@ -3,3 +3,4 @@
 @plugin "@tailwindcss/typography";
 @import "./styles/tokens.css";
 @import "./styles/shells.css";
+@import './styles/billing.css';

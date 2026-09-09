@@ -10,7 +10,9 @@ pub async fn setup() -> suprnova::mail::MailFake {
     use sea_orm_migration::MigratorTrait;
     assert_eq!(std::env::var("APP_ENV").as_deref(), Ok("test"));
     directory::config::register_all();
-    suprnova::Crypt::init(suprnova::EncryptionKey::generate());
+    suprnova::Crypt::init(
+        suprnova::EncryptionKey::from_env().unwrap_or_else(|_| suprnova::EncryptionKey::generate()),
+    );
     directory::bootstrap::register().await;
     directory::migrations::Migrator::up(suprnova::DB::connection().unwrap().inner(), None)
         .await
@@ -42,6 +44,7 @@ impl Client {
         }
     }
 
+    #[allow(dead_code)] // Used by account revocation tests; other suites share this client.
     pub fn forget_session_cookie(&mut self) {
         self.cookies.remove("suprnova_session");
     }

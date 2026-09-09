@@ -1,20 +1,20 @@
 # Suprnova directory starter handoff
 
-Updated: 2026-09-08 (America/New_York)
+Updated: 2026-09-09 (America/New_York)
 Working repository: `/home/shawn/workspace2/suprnova-directory-starter`
 Origin: https://github.com/eas4ai/suprnova-directory-starter.git
 
 ## Current contract
 
 This repository uses Cairn. Read `AGENTS.md`, run `cairn wake`, and follow the
-named action. `docs/spec/roadmap.md` names `starter-foundation` as Current.
-The developer confirmed FND-001 through FND-005 and their falsifiers.
-The glossary, foundation specification and current commitment are Agreed.
-The broader product overview and unresolved payment rules remain Draft.
+named action. `docs/spec/roadmap.md` names `provider-administration` as Current.
+The developer confirmed PAY-001 and PAY-004 through PAY-008, their falsifiers and
+operating rules. The foundation commitment is complete. PAY-002 and PAY-003 and
+unresolved payment policies remain Draft.
 
 Do not restart discovery or ask the developer to repeat settled choices.
-Read `docs/spec/glossary.md`, `docs/spec/foundation.md`, the roadmap,
-`docs/commitments/starter-foundation.md`, and its decision records first.
+Read `docs/spec/glossary.md`, `docs/spec/payments.md`, the roadmap,
+`docs/commitments/provider-administration.md`, and its decision records first.
 Cairn receipts and their output are tracked under `.cairn/evidence`; freshness
 and the final review determine completion, not this handoff's prose.
 
@@ -52,7 +52,22 @@ Checks copy tracked source into an isolated directory under the sibling
 Set `FOUNDATION_SCRATCH_DIR` to override it. Each check cleans up its own copy,
 processes and temporary browser data. The source checkout's ignored `target`
 is a compiled-artifact cache. Never copy or modify its operator `.env` or database.
-Stage new source files for editing-time checks; Cairn checks require commits.
+Editing-time snapshots include new unignored source files; Cairn checks require commits.
+
+## Provider administration work
+
+Provider administration is implemented; use Cairn evidence and the final review for
+verification status. `src/billing` owns versioned test/live settings, secret protection, local
+validation and adapter resolution. One conditional database update commits each
+mode's profile/default/mapping changes atomically. `src/commands/admin_access.rs`
+uses Suprnova RBAC entities to grant/revoke the starter permission bundle.
+`frontend/src/pages/admin/Billing.vue` edits configuration through protected Inertia
+requests. The README documents provisioning, configuration and recovery limits.
+
+Run `node scripts/verify-provider-administration.mjs` for the local contract and
+browser checks. The verifier creates disposable data and synthetic credentials.
+Never substitute real provider credentials. No external provider authentication,
+price lookup, checkout or webhook delivery is established by this commitment.
 
 SQLite is verified; PostgreSQL is not. Account tests capture mail inside the
 process. Setup renders forms without sending email. External SMTP delivery,
@@ -60,7 +75,10 @@ production deployment, runtime SSR, payments and listing features are not
 established by these passes. For local account mail, provide the SMTP capture
 server declared in README and `.env.example`.
 
-The foundation's final review is `.cairn/reviews/starter-foundation.md`. Earlier
+The foundation's final review is `.cairn/reviews/starter-foundation.md`; its notes
+about future administrator provisioning describe that earlier commitment. Provider
+failure demonstrations are in `docs/provider-administration-mechanism-review.md`.
+The provider final review belongs in `.cairn/reviews/provider-administration.md`. Earlier
 entries record failures and corrections as historical evidence. Use `cairn wake`
 for current requirement status and the next action. Stop when this commitment
 is Done; the developer chooses the next commitment.

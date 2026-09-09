@@ -16,8 +16,12 @@ impl InertiaSharedData for AuthShare {
         let user = match Auth::user_as::<User>().await? {
             Some(user) => {
                 let can_admin = user.has_permission_to("admin.access").await?;
+                let can_billing = can_admin
+                    && user
+                        .has_permission_to(crate::billing::BILLING_PERMISSION)
+                        .await?;
                 json!({"name": user.name, "email": user.email,
-                    "verified": user.email_verified_at.is_some(), "can_admin": can_admin})
+                    "verified": user.email_verified_at.is_some(), "can_admin": can_admin, "can_billing": can_billing})
             }
             None => suprnova::serde_json::Value::Null,
         };

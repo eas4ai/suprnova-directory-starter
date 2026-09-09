@@ -1,4 +1,5 @@
 pub mod actions;
+pub mod billing;
 pub mod bootstrap;
 pub mod commands;
 pub mod config;

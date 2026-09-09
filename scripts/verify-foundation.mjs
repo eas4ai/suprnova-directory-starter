@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, readFileSync, rmSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { snapshot } from './verification-workspace.mjs';
 
 const source = resolve(process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const task = process.argv[2];
@@ -27,32 +28,6 @@ function run(command, args, cwd, options = {}) {
   assert.equal(result.status, 0, `${command} failed (exit ${result.status}, signal ${result.signal ?? 'none'})`);
   console.log(`[${task}] command passed`);
   return result.stdout;
-}
-
-function snapshot(root) {
-  const result = spawnSync('git', ['ls-files', '-z', '--cached'], {
-    cwd: root, encoding: 'utf8', timeout: 10_000,
-  });
-  if (result.error) throw result.error;
-  assert.equal(result.status, 0, `Cannot inventory the checkout: ${result.stderr}`);
-  const scratchRoot = process.env.FOUNDATION_SCRATCH_DIR ?? resolve(source, '../scratchpads');
-  mkdirSync(scratchRoot, { recursive: true });
-  const destination = mkdtempSync(join(scratchRoot, 'directory-foundation-'));
-  const roots = ['Cargo.toml', 'Cargo.lock', 'src/', 'cmd/', 'frontend/', 'lang/', 'scripts/', 'tests/', 'README.md', 'handoff.md', '.env.example'];
-  try {
-    for (const file of new Set(result.stdout.split('\0').filter(Boolean))) {
-      if (!roots.some(root => root.endsWith('/') ? file.startsWith(root) : file === root)) continue;
-      // A local environment or generated asset never belongs in a clean install.
-      if (file.split('/').some(part => part === '.env' || part === 'node_modules' || part === 'target')) continue;
-      const target = join(destination, file);
-      mkdirSync(dirname(target), { recursive: true });
-      cpSync(join(root, file), target);
-    }
-    return destination;
-  } catch (error) {
-    rmSync(destination, { recursive: true, force: true });
-    throw error;
-  }
 }
 
 function verifyPin(root) {
@@ -136,7 +111,7 @@ if (!requirement) {
 } else {
   let working;
   try {
-    working = snapshot(source);
+    working = snapshot(source, 'directory-foundation-');
     ({ build, database, accounts, ui, setup })[task](working);
     console.log(`cairn: ${requirement}: pass`);
   } catch (error) {

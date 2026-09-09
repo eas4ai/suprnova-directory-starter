@@ -13,6 +13,18 @@ are in `.cairn/reviews/starter-foundation.md`; committed check output is under
 - The pinned Stripe adapter's explicit constructor documents a panic for invalid HTTP header values; it is not a complete configuration validator. The proposed PAY-008 checks validate before construction. This is an integration constraint, not an observed production failure.
 - The pinned provider registry is process-global and keyed only by provider name, with replacement but no removal operation. Using it alone would not establish durable test/live configuration or disablement. The draft requires explicit provider/mode resolution from committed settings. Source observations and scope review: docs/provider-administration-draft-review.md.
 
+## Provider administration implementation — 2026-09-09
+
+- Suprnova v1.3.7 exports RBAC grant/check helpers but no revoke helper. The application uses the exported RBAC entities for an atomic grant/revoke bundle, including removal of role memberships that would otherwise preserve administrative access.
+- Generated framework RBAC ActiveModel timestamps use string storage even though the public model exposes DateTime. The first compile caught the mismatch; inserts now use RFC 3339 values. Other first-compile integration corrections used literal redirect macro targets and SeaORM 2 statement builders/ExprTrait.
+- The first dependency build overlapped creation of the new frontend page and addition of an explicit Rustls dependency, so that compile saw an incomplete source snapshot. The subsequent complete binary check passed. Formal evidence checks run only on committed, stable inputs.
+- The two payment SDKs bring multiple Rustls crypto backends into the dependency graph. Adapter construction now selects ring only when the host has not already selected a backend; tests must exercise real construction, not mocks alone.
+- The first formatter pass normalized existing scaffold formatting in several small Rust modules so the repository-wide format check can run. These edits do not change behavior.
+- The graph's Request::json snippet had stale line metadata and returned unrelated source. Exact released source and compiler diagnostics remain authoritative.
+- Current Paddle API and webhook key prefixes were checked against official documentation: [API authentication](https://developer.paddle.com/api-reference/about/authentication/) and [notification settings](https://developer.paddle.com/api-reference/notification-settings/list-notification-settings/). Local checks bound fields and reject mode mismatches; they do not claim account authentication or exact provider-side validity. Legacy keys without mode prefixes are not supported by this starter.
+- The first browser secret-response check tried reading a redirect body, which Playwright does not expose. Its unhandled promise could bypass the browser harness cleanup. The harness now skips bodyless redirects, catches response-inspection errors immediately, and the parent verifier kills surviving processes in each command's isolated process group. A post-failure check found no processes remaining in that disposable working directory.
+- The stale-editor browser check initially used Playwright's single-page convenience context, which refuses a second page. It now creates an explicit browser context so both editors share the authenticated session. The first browser save and local-validation journeys had passed before this harness failure.
+
 ## Foundation findings
 
 | Finding | Evidence and effect | Correction / status |

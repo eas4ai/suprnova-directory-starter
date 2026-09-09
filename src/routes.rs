@@ -30,6 +30,8 @@ routes! {
 
     group!("/admin", {
         get!("/", controllers::admin::index),
+        get!("/billing", controllers::billing::index),
+        post!("/billing", controllers::billing::update),
     }).middleware(middleware::authenticate::auth())
       .middleware(suprnova::rbac::PermissionMiddleware::<crate::models::user::User>::redirect_to("admin.access", "/dashboard")),
     fallback!(StaticFiles::public().handler()),

@@ -39,6 +39,7 @@
   --shadow-dialog: 0 24px 60px #1b302726, 0 6px 16px #1b302717;
   --duration-hover: 120ms;
   --z-focus: 10;
+  --z-sticky: 2;
   --button-bg: var(--brand-accent);
   --button-hover: color-mix(in srgb, var(--brand-accent) 80%, var(--neutral-900));
   --button-text: var(--neutral-0);

@@ -11,7 +11,7 @@ const user = computed(() => page.props.auth.user)
 const open = ref(false)
 const logout = useForm({})
 const links = computed(() => props.admin
-  ? [{ href: '/admin', label: 'Overview' }, { href: '/dashboard', label: 'Your account' }, { href: '/', label: 'View directory' }]
+  ? [{ href: '/admin', label: 'Overview' }, ...(user.value?.can_billing ? [{ href: '/admin/billing', label: 'Payment providers' }] : []), { href: '/dashboard', label: 'Your account' }, { href: '/', label: 'View directory' }]
   : [
       { href: '/', label: 'Explore' },
       ...(user.value ? [{ href: '/dashboard', label: 'Your account' }] : [{ href: '/login', label: 'Sign in' }]),

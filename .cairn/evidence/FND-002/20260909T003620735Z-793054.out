@@ -1,0 +1,24 @@
+[database] first migration run
+
+[database] cargo run --locked --bin directory -- migrate
+   Compiling directory v0.1.0 (/tmp/directory-foundation-UdaQMX)
+    Finished `dev` profile [unoptimized] target(s) in 4.13s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`
+Running migrations...
+Migrations completed successfully!
+[database] command passed
+
+[database] bun scripts/check-schema.mjs /tmp/directory-foundation-UdaQMX/database.db --seed-probe
+[database] command passed
+[database] repeat migration run
+
+[database] cargo run --locked --bin directory -- migrate
+    Finished `dev` profile [unoptimized] target(s) in 0.23s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`
+Running migrations...
+Migrations completed successfully!
+[database] command passed
+
+[database] bun scripts/check-schema.mjs /tmp/directory-foundation-UdaQMX/database.db
+[database] command passed
+cairn: FND-002: pass

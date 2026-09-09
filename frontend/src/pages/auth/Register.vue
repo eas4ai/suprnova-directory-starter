@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3'
-import type { RegisterProps } from '../../types/inertia-props'
 
-const props = defineProps<RegisterProps>()
 
 const form = useForm({
   name: '',
@@ -39,8 +37,8 @@ function submit() {
               required
               class="form-input"
             />
-            <p v-if="props.errors?.name" class="form-error" role="alert">
-              {{ props.errors.name }}
+            <p v-if="form.errors.name" class="form-error" role="alert">
+              {{ form.errors.name }}
             </p>
           </div>
 
@@ -55,8 +53,8 @@ function submit() {
               required
               class="form-input"
             />
-            <p v-if="props.errors?.email" class="form-error" role="alert">
-              {{ props.errors.email }}
+            <p v-if="form.errors.email" class="form-error" role="alert">
+              {{ form.errors.email }}
             </p>
           </div>
 
@@ -72,8 +70,8 @@ function submit() {
               required
               class="form-input"
             />
-            <p v-if="props.errors?.password" class="form-error" role="alert">
-              {{ props.errors.password }}
+            <p v-if="form.errors.password" class="form-error" role="alert">
+              {{ form.errors.password }}
             </p>
           </div>
 
@@ -91,8 +89,8 @@ function submit() {
               required
               class="form-input"
             />
-            <p v-if="props.errors?.password_confirmation" class="form-error" role="alert">
-              {{ props.errors.password_confirmation }}
+            <p v-if="form.errors.password_confirmation" class="form-error" role="alert">
+              {{ form.errors.password_confirmation }}
             </p>
           </div>
         </div>

@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useForm } from '@inertiajs/vue3'
-import type { LoginProps } from '../../types/inertia-props'
 
-const props = defineProps<LoginProps>()
 
 const form = useForm({
   email: '',
@@ -55,12 +53,12 @@ function submit() {
           </div>
         </div>
 
-        <div v-if="props.errors?.email" class="form-error" role="alert">
-          {{ props.errors.email }}
+        <div v-if="form.errors.email" class="form-error" role="alert">
+          {{ form.errors.email }}
         </div>
 
-        <div v-if="props.errors?.password" class="form-error" role="alert">
-          {{ props.errors.password }}
+        <div v-if="form.errors.password" class="form-error" role="alert">
+          {{ form.errors.password }}
         </div>
 
         <div class="flex items-center">

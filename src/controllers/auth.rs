@@ -11,8 +11,8 @@ use std::sync::Arc;
 
 use serde::Deserialize;
 use suprnova::{
-    handler, inertia_response, redirect, serde_json, Auth, Credentials, FormRequest, InertiaProps,
-    Request, Response, Validate, ValidationErrors,
+    Auth, Credentials, FormRequest, InertiaProps, Request, Response, Validate, ValidationErrors,
+    handler, inertia_response, redirect,
 };
 
 use crate::models::user::User;
@@ -22,17 +22,11 @@ use crate::models::user::User;
 // ============================================================================
 
 #[derive(InertiaProps)]
-pub struct LoginProps {
-    /// Errors carried over from the redirect-back flow. The Inertia
-    /// client merges any session-flashed errors into `errors` on its
-    /// own; this prop exists so the page can render before any
-    /// submission too.
-    pub errors: Option<serde_json::Value>,
-}
+pub struct LoginProps {}
 
 #[handler]
 pub async fn show_login(req: Request) -> Response {
-    inertia_response!(&req, "auth/Login", LoginProps { errors: None })
+    inertia_response!(&req, "auth/Login", LoginProps {})
 }
 
 #[derive(Deserialize, Validate)]
@@ -77,13 +71,11 @@ pub async fn login(form: LoginRequest) -> Response {
 // ============================================================================
 
 #[derive(InertiaProps)]
-pub struct RegisterProps {
-    pub errors: Option<serde_json::Value>,
-}
+pub struct RegisterProps {}
 
 #[handler]
 pub async fn show_register(req: Request) -> Response {
-    inertia_response!(&req, "auth/Register", RegisterProps { errors: None })
+    inertia_response!(&req, "auth/Register", RegisterProps {})
 }
 
 #[derive(Deserialize, Validate)]
@@ -123,7 +115,8 @@ pub async fn register(form: RegisterRequest) -> Response {
     suprnova::auth_flows::EmailVerification::send_link(
         &user,
         &super::account_links::mail_url("/verify-email/verify")?,
-    ).await?;
+    )
+    .await?;
     // Log the freshly-created user into the session (fires the Login event).
     Auth::login(Arc::new(user), false).await?;
 

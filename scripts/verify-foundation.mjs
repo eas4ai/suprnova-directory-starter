@@ -1,13 +1,12 @@
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
-import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const source = resolve(process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const task = process.argv[2];
-const requirements = { build: 'FND-001', database: 'FND-002', accounts: 'FND-003', ui: 'FND-004' };
+const requirements = { build: 'FND-001', database: 'FND-002', accounts: 'FND-003', ui: 'FND-004', setup: 'FND-005' };
 const requirement = requirements[task];
 
 function run(command, args, cwd, options = {}) {
@@ -36,8 +35,10 @@ function snapshot(root) {
   });
   if (result.error) throw result.error;
   assert.equal(result.status, 0, `Cannot inventory the checkout: ${result.stderr}`);
-  const destination = mkdtempSync(join(tmpdir(), 'directory-foundation-'));
-  const roots = ['Cargo.toml', 'Cargo.lock', 'src/', 'cmd/', 'frontend/', 'lang/', 'scripts/', 'tests/', 'README.md', '.env.example'];
+  const scratchRoot = process.env.FOUNDATION_SCRATCH_DIR ?? resolve(source, '../scratchpads');
+  mkdirSync(scratchRoot, { recursive: true });
+  const destination = mkdtempSync(join(scratchRoot, 'directory-foundation-'));
+  const roots = ['Cargo.toml', 'Cargo.lock', 'src/', 'cmd/', 'frontend/', 'lang/', 'scripts/', 'tests/', 'README.md', 'handoff.md', '.env.example'];
   try {
     for (const file of new Set(result.stdout.split('\0').filter(Boolean))) {
       if (!roots.some(root => root.endsWith('/') ? file.startsWith(root) : file === root)) continue;
@@ -107,7 +108,7 @@ function database(root) {
 function accounts(root, suite = 'foundation_accounts') {
   const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
-    APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
+    TMPDIR: root, APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
     MAIL_FROM: 'test@example.test', DATABASE_URL: `sqlite://${join(root, 'accounts.db')}`,
     DB_LOGGING: 'false', SESSION_SECURE: 'false',
     CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',
@@ -115,6 +116,10 @@ function accounts(root, suite = 'foundation_accounts') {
   });
   run('cargo', ['test', '--locked', '--test', suite, '--', '--nocapture'], root, { env });
   return env;
+}
+
+function setup(root) {
+  run('node', ['frontend/tests/foundation-setup.mjs'], root);
 }
 
 function ui(root) {
@@ -132,7 +137,7 @@ if (!requirement) {
   let working;
   try {
     working = snapshot(source);
-    ({ build, database, accounts, ui })[task](working);
+    ({ build, database, accounts, ui, setup })[task](working);
     console.log(`cairn: ${requirement}: pass`);
   } catch (error) {
     console.error(error.stack ?? error.message);

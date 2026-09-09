@@ -1,0 +1,21 @@
+requirement: FND-004
+requirement_digest: sha256:8ca663dd9735cfa2888b3f38effd27e6612ad4dcda91570ce9dbfcbe430a514e
+sequence: 14
+history_digest: sha256:c6e5fe6c67e454c6ca08699bee2561f0ccf29b01829240d4175c5303bfaf3a91
+mechanism: foundation-ui
+commit: 2c9456a
+inputs_digest: sha256:d445ef8e35650a0f3509b1667a836ae242628474b59bd97a8eb42d5f0d100256
+mechanism_digest: sha256:cbf96e9a58991d35440b86ea90486ff553ccd8770a79a9e83e91550823f366b7
+inputs_detail: .cairn/evidence/FND-004/20260909T212816697Z-1128686.inputs.json
+command: node scripts/verify-foundation.mjs ui
+cwd: .
+exit: 0
+output_digest: sha256:e971fbdc4fc9dce92e68b62f96347b70d48654282d398c3033a8d124e82b6015
+output: .cairn/evidence/FND-004/20260909T212816697Z-1128686.out
+stderr_output: .cairn/evidence/FND-004/20260909T212816697Z-1128686.err
+stderr_digest: sha256:15776d306cb92c3ee8d972722333667e3041c4082dc269377d324f1ff98b3fc8
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-09T21:28:52.750Z

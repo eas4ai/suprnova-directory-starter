@@ -110,3 +110,18 @@ The unchanged foundation UI mechanism passed in a disposable installation,
 including builds, HTTP denial and Chromium keyboard/shared-token assertions.
 `git diff --check` passed. The repeated broad Ripwire scan still reports generated
 bundle findings; the source fix changes template bindings and the token fallback.
+
+## Directory navigation regression check — 2026-09-09
+
+The directory HTTP and unit contracts passed, but the browser still selected
+the unused `design` category from public navigation. CNT's public taxonomy now
+lists only terms attached to eligible public content, so that option correctly
+disappeared. Updated the browser to assert its absence, choose populated
+`software`, verify the two matching Pagination fixtures, then submit an unmatched
+query and verify the mobile empty state. The HTTP assertions still independently
+check that direct `design` filtering returns no records. No publication predicate
+or permission denial was relaxed.
+The corrected complete directory mechanism exited 0: locked builds, listing
+unit/HTTP assertions and owner/moderator/public browser journeys all passed.
+The broad Ripwire output again contained only generated-bundle rows after
+filtering to the changed source paths; it was not treated as a clean scan.

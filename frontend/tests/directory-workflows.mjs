@@ -138,7 +138,13 @@ try {
   }
   await visitor.setViewportSize({ width: 390, height: 844 });
   await visitor.goto(`${origin}/listings`);
-  await visitor.getByLabel('Category', { exact: true }).selectOption('design');
+  const category = visitor.getByLabel('Category', { exact: true });
+  await expect(category.locator('option[value="design"]')).toHaveCount(0);
+  await category.selectOption('software');
+  await visitor.getByLabel('Search listings', { exact: true }).fill('Pagination');
+  await visitor.getByRole('button', { name: 'Search', exact: true }).click();
+  await expect(visitor.locator('.directory-card')).toHaveCount(2);
+  await visitor.getByLabel('Search listings', { exact: true }).fill('No public listing matches this fixture');
   await visitor.getByRole('button', { name: 'Search', exact: true }).click();
   await expect(visitor.getByRole('heading', { name: 'No matching listings', exact: true })).toBeVisible();
   assert.ok(await visitor.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), 'Directory results overflow on mobile');

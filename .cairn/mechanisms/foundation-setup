@@ -1,6 +1,7 @@
 command: node scripts/verify-foundation.mjs setup
 results: per-requirement
 inputs:
+  - handoff.md
   - Cargo.toml
   - Cargo.lock
   - lang/

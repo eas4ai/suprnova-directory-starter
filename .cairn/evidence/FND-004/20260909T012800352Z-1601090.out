@@ -1,0 +1,74 @@
+
+[ui] bun install --frozen-lockfile
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [122.00ms]
+[ui] command passed
+
+[ui] bun run build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 640 modules transformed.
+
+(!) outDir /tmp/directory-foundation-g62PTp/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:  0.14 kB
+../public/assets/assets/main-BlTE07Q2.css   25.52 kB │ gzip:  5.44 kB
+../public/assets/assets/main-CiynREi0.js   273.24 kB │ gzip: 92.96 kB
+
+✓ built in 478ms
+[ui] command passed
+
+[ui] cargo test --locked --test foundation_ui -- --nocapture
+   Compiling directory v0.1.0 (/tmp/directory-foundation-g62PTp)
+    Finished `test` profile [unoptimized] target(s) in 6.47s
+     Running tests/foundation_ui.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/foundation_ui-cb2a0562c3548bb6)
+
+running 1 test
+--> GET /admin
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> POST /logout
+<-- Request complete
+test administration_requires_an_explicit_permission ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.42s
+
+[ui] command passed
+
+[ui] node frontend/tests/foundation-ui.mjs
+Public/admin rendering, permission denial, keyboard dialogs and shared branding passed.
+[ui] command passed
+cairn: FND-004: pass

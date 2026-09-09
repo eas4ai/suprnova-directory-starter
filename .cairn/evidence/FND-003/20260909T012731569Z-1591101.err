@@ -1,0 +1,3 @@
+   Compiling directory v0.1.0 (/tmp/directory-foundation-xOTSSX)
+    Finished `test` profile [unoptimized] target(s) in 6.64s
+     Running tests/foundation_accounts.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/foundation_accounts-82489dbe0ffbece9)

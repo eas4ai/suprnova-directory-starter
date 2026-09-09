@@ -1,0 +1,183 @@
+
+[ui] bun install --frozen-lockfile
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [124.00ms]
+[ui] command passed
+
+[ui] bun run build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 683 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-foundation-wPegMT/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-BIrNEndw.css   58.22 kB │ gzip:  10.00 kB
+../public/assets/assets/main-1V7GhaMV.js   371.23 kB │ gzip: 118.34 kB
+
+✓ built in 698ms
+[ui] command passed
+
+[ui] bun run build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 70 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  178.64 kB │ gzip: 29.77 kB
+
+✓ built in 283ms
+[ui] command passed
+
+[ui] cargo test --locked --test foundation_ui -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-wPegMT)
+warning: methods `inertia_get` and `signed_request` are never used
+   --> tests/common/mod.rs:78:18
+    |
+ 42 | impl Client {
+    | ----------- methods in this implementation
+...
+ 78 |     pub async fn inertia_get(&mut self, path: &str) -> Response {
+    |                  ^^^^^^^^^^^
+...
+116 |     pub async fn signed_request(
+    |                  ^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `directory` (test "foundation_ui") generated 1 warning
+    Finished `test` profile [unoptimized] target(s) in 15.17s
+     Running tests/foundation_ui.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/foundation_ui-7ede3543fe9eab09)
+
+running 1 test
+--> GET /admin
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> POST /logout
+<-- Request complete
+test administration_requires_an_explicit_permission ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.83s
+
+[ui] command passed
+
+[ui] node scripts/with-ssr.mjs node frontend/tests/foundation-ui.mjs
+{"timestamp":"2026-09-09T20:29:43.098839Z","level":"WARN","fields":{"message":"booting production with a mail driver that discards messages - outgoing mail, including password resets, will NOT be delivered","driver":"log","override_env":"MAIL_ALLOW_NON_DELIVERING_IN_PRODUCTION"},"target":"suprnova::mail::boot"}
+{"timestamp":"2026-09-09T20:29:43.098940Z","level":"INFO","fields":{"message":"suprnova server listening","addr":"127.0.0.1:33389"},"target":"suprnova::server"}
+--> GET /
+<-- Request complete
+--> GET /assets/assets/main-BIrNEndw.css
+--> GET /assets/assets/main-1V7GhaMV.js
+<-- Request complete
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> GET /assets/assets/main-BIrNEndw.css
+--> GET /assets/assets/main-1V7GhaMV.js
+<-- Request complete
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /assets/assets/main-BIrNEndw.css
+--> GET /assets/assets/main-1V7GhaMV.js
+<-- Request complete
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> GET /assets/assets/main-BIrNEndw.css
+--> GET /assets/assets/main-1V7GhaMV.js
+<-- Request complete
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /admin
+<-- Request complete
+
+No error iframe
+node:internal/modules/run_main:105
+    triggerUncaughtException(
+    ^
+
+ExpectError: expect(received).toBe(expected) // Object.is equality
+
+Expected: "rgb(155, 44, 44)"
+Received: "rgb(20, 107, 86)"
+    at captureRawStack (/home/shawn/workspace2/scratchpads/directory-foundation-wPegMT/frontend/node_modules/playwright-core/lib/coreBundle.js:8588:17)
+    at callMatcherAsStep (/home/shawn/workspace2/scratchpads/directory-foundation-wPegMT/frontend/node_modules/playwright/lib/matchers/expect.js:13310:57)
+    at Object.toBe (/home/shawn/workspace2/scratchpads/directory-foundation-wPegMT/frontend/node_modules/playwright/lib/matchers/expect.js:13302:23)
+    at /home/shawn/workspace2/scratchpads/directory-foundation-wPegMT/frontend/tests/foundation-ui.mjs:98:76 {
+  matcherResult: {
+    actual: 'rgb(20, 107, 86)',
+    expected: 'rgb(155, 44, 44)',
+    message: 'expect(received).toBe(expected) // Object.is equality\n' +
+      '\n' +
+      'Expected: "rgb(155, 44, 44)"\n' +
+      'Received: "rgb(20, 107, 86)"',
+    name: 'toBe',
+    pass: false
+  }
+}
+
+Node.js v24.1.0
+AssertionError [ERR_ASSERTION]: Verification command exited 1
+
+1 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/directory-foundation-wPegMT/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 33067...
+Inertia SSR server started.
+
+AssertionError [ERR_ASSERTION]: node failed (exit 1, signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:28:10)
+    at Object.ui (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:113:3)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:123:53
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+cairn: FND-004: fail

@@ -8,6 +8,7 @@ export interface OwnerListing {
   id: number; slug: string; version: number; archived: boolean; suspended: boolean;
   current: Revision; approved: Revision | null; moderation_status: string;
   payment_status: string; publication_status: string; next_action: string;
+  purchase_id: string | null;
 }
 export interface Paged { page: number; per_page: number; total: number }
 export interface PublicCard {

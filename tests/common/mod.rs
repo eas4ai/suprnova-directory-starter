@@ -73,6 +73,10 @@ impl Client {
         self.exchange("POST", path, Some(body), true, true).await
     }
 
+    pub async fn inertia_get(&mut self, path: &str) -> Response {
+        self.exchange("GET", path, None, true, true).await
+    }
+
     async fn exchange(
         &mut self,
         method: &str,
@@ -89,6 +93,7 @@ impl Client {
             "application/json",
             csrf,
             inertia,
+            &[],
         )
         .await
     }
@@ -102,8 +107,27 @@ impl Client {
         content_type: &str,
         csrf: bool,
     ) -> Response {
-        self.exchange_bytes(method, path, body, content_type, csrf, false)
+        self.exchange_bytes(method, path, body, content_type, csrf, false, &[])
             .await
+    }
+
+    pub async fn signed_request(
+        &mut self,
+        path: &str,
+        bytes: Vec<u8>,
+        header: &str,
+        signature: &str,
+    ) -> Response {
+        self.exchange_bytes(
+            "POST",
+            path,
+            bytes,
+            "application/json",
+            false,
+            false,
+            &[(header, signature)],
+        )
+        .await
     }
 
     async fn exchange_bytes(
@@ -114,6 +138,7 @@ impl Client {
         content_type: &str,
         csrf: bool,
         inertia: bool,
+        headers: &[(&str, &str)],
     ) -> Response {
         // One real Hyper connection per exchange; both tasks are aborted on
         // timeout or panic as well as normal completion.
@@ -145,6 +170,9 @@ impl Client {
                 .uri(path)
                 .header("Host", "directory.test")
                 .header("Accept", "text/html");
+            for (name, value) in headers {
+                request = request.header(*name, *value);
+            }
             if !payload.is_empty() {
                 request = request.header("Content-Type", content_type);
             }

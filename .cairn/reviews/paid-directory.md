@@ -96,3 +96,61 @@ probe error was changed to preserve the last error as the timeout cause. The tes
 map names account, foundation UI and provider regressions; committed Cairn runs
 must establish them after this implementation. Existing generated bundles are
 excluded from the distribution inventory and are not source changes.
+
+## Paid lifecycle mechanism and failure demonstrations
+
+The paid verifier passed its full editing-time run: formatting and both binaries,
+19 billing unit tests, six application SDK wire tests, live and test HTTP/database
+lifecycle contracts, 24 tests from the exact pinned adapter source, frozen Bun
+installation, Vue type checking, client/SSR builds and Chromium paid journeys.
+The pinned-source test uses the framework commit's dependency lock; the separate
+application SDK wire suite uses the starter's lock. Neither claims an external
+provider account was charged.
+
+The lifecycle contract covers draft/submitted/rejected checkout denial, owner and
+CSRF boundaries, disabled/unmapped plans, plan audit rollback and concurrent
+100-plan capacity, immutable terms, competing checkout requests, forged returns,
+actual wrong customer/currency/price evidence, authentic duplicate bodies,
+conflicting event IDs, malformed/stale signatures, Paddle reversal schema gaps,
+unknown purchases, exhausted attempts and expired worker leases. It interrupts
+receipt insertion to prove atomic rollback, replays settled payments, and orders
+overlapping authoritative reads. Both providers exercise paid/unpaid renewal,
+scheduled/immediate cancellation, refunds, disputes, retained credentials and
+read-only operator recovery. Test payments remain absent from public queries.
+
+Browser checks cover plan validation and editing, owner submission and exact
+moderator approval, free publication, Stripe redirect checkout and Paddle client
+initialization/completion, forged-return status, cancellation confirmation,
+keyboard focus and mobile width. The synthetic checkout produces signatures
+through actual HTTP ingress before reconciliation. Desktop plan and mobile
+purchase screenshots were inspected. The ignored fixture server and its control
+routes exist only in the integration test binary.
+
+`scripts/demonstrate-paid-failures.mjs` ran seven independent disposable source
+mutations against unchanged integration assertions. Each compiled and failed at
+runtime with exit 101; compilation failures and timeouts are rejected as proof.
+
+| Contract | Safe mutation | Observed failure |
+| --- | --- | --- |
+| PAY-003/PAY-011 | Bypass the purchase signature check. | Bad-signature HTTP request returned 202 instead of 400. |
+| PAY-010 | Generate another Stripe idempotency key on retry. | Retried checkout request differed from the retained original. |
+| PAY-012 | Do not persist the settled subscription reference. | Reloaded recurring purchase had no subscription reference. |
+| PAY-013 | Ignore the full-refund observation. | Public search still exposed the refunded listing. |
+| PAY-014 | Permit recovery batches up to 1000. | The 101-item request was accepted. |
+| PAY-015 | Ignore the retained purchase signing key. | Existing-purchase delivery after clearing current settings returned 400 instead of 202. |
+| PAY-016 | Request customer expansion instead of checkout line items. | The actual SDK HTTP request lacked the required line-item expansion. |
+
+The unmodified full verifier passed before these attacks. All mutations were
+confined to disposable copies and removed. Committed Cairn checks must now
+establish the corrected candidate and rerun affected foundation/provider/directory
+requirements. This is a mechanism development record, not the final commitment
+review or a substitute for fresh receipts.
+
+Ripwire edit-check found the new fulfillment function's known caller compatible.
+Quality-delta exited 2 and test-gate exited 4, not passes. The scan again included
+ignored generated bundles and name-collapsed framework/test functions. Reviewed
+source findings include explicit owner-status branching, bounded provider
+parsers, transactional fulfillment, schema declarations and sequential integration
+tests required by the shared runtime. Those functions retain their domain checks;
+splitting them solely to lower the metric would hide policy without improving it.
+The named account, UI, provider and directory regression suites remain mandatory.

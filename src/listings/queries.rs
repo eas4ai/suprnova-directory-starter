@@ -233,6 +233,7 @@ pub struct OwnerListing {
     pub payment_status: String,
     pub publication_status: String,
     pub next_action: String,
+    pub purchase_id: Option<String>,
 }
 
 pub async fn owner_listing(actor_id: i64, id: i64) -> Result<OwnerListing, FrameworkError> {
@@ -444,6 +445,14 @@ async fn owner_views(
     )
     .await?;
     let db = DB::connection()?;
+    let slots = crate::billing::lifecycle_entities::slot::Entity::find()
+        .filter(
+            crate::billing::lifecycle_entities::slot::Column::ListingId
+                .is_in(rows.iter().map(|row| row.id).collect::<Vec<_>>()),
+        )
+        .all(db.inner())
+        .await
+        .map_err(database_error)?;
     let payments = entitlement::Entity::find()
         .filter(
             entitlement::Column::ListingId.is_in(rows.iter().map(|row| row.id).collect::<Vec<_>>()),
@@ -456,6 +465,10 @@ async fn owner_views(
         .map_err(database_error)?;
     rows.into_iter()
         .map(|row| {
+            let purchase_id = slots
+                .iter()
+                .find(|slot| slot.listing_id == row.id)
+                .map(|slot| slot.purchase_id.clone());
             let current = bundle.private_revision(row.current_revision_id.ok_or_else(missing)?)?;
             let approved = row
                 .approved_revision_id
@@ -472,7 +485,7 @@ async fn owner_views(
                 .or_else(|| for_listing.first().copied());
             let payment_status = payment
                 .map(|payment| {
-                    if matches!(payment.status.as_str(), "disputed" | "revoked") {
+                    if matches!(payment.status.as_str(), "disputed" | "revoked" | "refunded") {
                         payment.status.as_str()
                     } else if !active(payment, now) {
                         "expired"
@@ -484,7 +497,11 @@ async fn owner_views(
                         "paid"
                     }
                 })
-                .unwrap_or("none");
+                .unwrap_or(if purchase_id.is_some() {
+                    "pending"
+                } else {
+                    "none"
+                });
             let entitled = matches!(payment_status, "free" | "paid");
             let publication_status = if row.archived {
                 "archived"
@@ -500,11 +517,14 @@ async fn owner_views(
                     "expired" => "expired",
                     "disputed" => "disputed",
                     "revoked" => "revoked",
+                    "refunded" => "refunded",
                     _ => "awaiting_payment",
                 }
             };
             let next_action = if row.archived {
                 "none"
+            } else if purchase_id.is_some() && current.status == "approved" {
+                "manage_payment"
             } else if approved.is_some() && matches!(payment_status, "none" | "expired" | "revoked")
             {
                 "checkout"
@@ -534,6 +554,7 @@ async fn owner_views(
                 payment_status: payment_status.to_owned(),
                 publication_status: publication_status.to_owned(),
                 next_action: next_action.to_owned(),
+                purchase_id,
             })
         })
         .collect()

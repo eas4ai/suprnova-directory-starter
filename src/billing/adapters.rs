@@ -12,7 +12,7 @@ pub struct ConfiguredProvider {
     pub price_id: String,
 }
 
-fn construct(
+pub(super) fn construct(
     mode: Mode,
     provider: Provider,
     public_key: &str,

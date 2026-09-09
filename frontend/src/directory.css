@@ -77,6 +77,58 @@
   .directory-categories { display: none; }
   .directory-mobile-category { display: block; }
 }
+
+/* Publishing plans and the owner's saved payment status share directory tokens. */
+.publishing-note { max-width: 72ch; color: var(--text-secondary); font-size: var(--text-small); margin-bottom: var(--space-6); }
+.publishing-admin-layout { display: grid; grid-template-columns: minmax(14rem, .8fr) minmax(0, 1.4fr); gap: var(--space-12); margin-block: var(--space-8) var(--space-12); align-items: start; }
+.publishing-section-heading { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+.publishing-section-heading h2, .publishing-plan-editor > h2 { font-size: var(--text-lead); }
+.publishing-section-heading > span, .publishing-plan-detail { color: var(--text-secondary); font-size: var(--text-small); }
+.publishing-section-heading > span, .publishing-plan-price, .publishing-offer-price, .publishing-purchase-details { font-variant-numeric: tabular-nums; }
+.publishing-plan-index, .publishing-plan-editor { min-width: 0; }
+.publishing-plan-list, .publishing-offers { list-style: none; margin: 0; padding: 0; }
+.publishing-plan-list { margin-bottom: var(--space-6); border-top: 1px solid var(--border-default); }
+.publishing-plan-select { width: 100%; display: grid; gap: var(--space-1); padding: var(--space-4); border: 0; border-bottom: 1px solid var(--border-default); background: var(--surface-canvas); color: var(--text-primary); text-align: left; overflow-wrap: anywhere; transition: background-color var(--duration-hover); }
+.publishing-plan-select[aria-pressed="true"] { background: var(--surface-accent); }
+.publishing-plan-select[aria-pressed="true"] .publishing-plan-name { color: var(--brand-accent); }
+.publishing-plan-name { font-weight: 600; }
+.publishing-plan-price { font-size: var(--text-small); }
+.publishing-empty { color: var(--text-secondary); margin-block: var(--space-6); }
+.publishing-plan-editor { max-width: 38rem; }
+.publishing-plan-editor > .field-help { margin-top: var(--space-3); }
+.publishing-plan-editor .billing-errors .button { margin-top: var(--space-4); }
+.publishing-money-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(6rem, .5fr); gap: var(--space-4); }
+.publishing-plan-editor input[readonly] { background: var(--surface-muted); }
+.publishing-owner, .publishing-purchase { padding-bottom: var(--space-12); }
+.publishing-owner .directory-heading > .text-link, .publishing-purchase .directory-heading > .text-link { margin-bottom: var(--space-4); }
+.publishing-offer { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(15rem, 1fr); gap: var(--space-8); padding-block: var(--space-8); border-top: 1px solid var(--border-default); }
+.publishing-offer-copy h2 { font-size: 1.4rem; margin-bottom: var(--space-3); }
+.publishing-offer-copy p { color: var(--text-secondary); max-width: 55ch; }
+.publishing-offer-copy .field-help { margin-top: var(--space-4); }
+.publishing-offer-copy, .publishing-offer-action { min-width: 0; overflow-wrap: anywhere; }
+.publishing-offer-price { font-size: 1.4rem; font-weight: 600; letter-spacing: -.025em; margin-bottom: var(--space-4); }
+.publishing-offer-action form { display: grid; gap: var(--space-4); justify-items: start; }
+.publishing-offer-action .directory-field { width: 100%; }
+.publishing-purchase { max-width: 54rem; }
+.publishing-payment-status { padding-block: var(--space-6); border-block: 1px solid var(--border-default); }
+.publishing-payment-status h2 { margin-block: var(--space-2) var(--space-3); }
+.publishing-payment-status > p:not(.field-help) { max-width: 65ch; color: var(--text-secondary); }
+.publishing-cancel-note { margin-top: var(--space-4); font-weight: 500; }
+.publishing-purchase-details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-6); margin-block: var(--space-8); }
+.publishing-checkout-actions { margin-top: var(--space-6); }
+.publishing-refresh-notice { margin-top: var(--space-3); color: var(--text-secondary); font-size: var(--text-small); }
+.publishing-cancel-confirmation { background: var(--surface-muted); padding: var(--space-6); border-radius: var(--radius-panel); }
+.publishing-cancel-confirmation h3 { font-size: var(--text-lead); margin-bottom: var(--space-3); }
+.publishing-cancel-confirmation:focus { outline: 3px solid var(--brand-accent); outline-offset: 4px; }
+.publishing-purchase .billing-errors > p, .publishing-purchase .billing-errors > .button { margin-top: var(--space-3); }
+@media (hover: hover) and (pointer: fine) { .publishing-plan-select:hover { background: var(--surface-muted); } }
+@media (max-width: 1000px) { .publishing-admin-layout { grid-template-columns: minmax(0, 1fr); gap: var(--space-8); } }
+@media (max-width: 600px) {
+  .publishing-offer, .publishing-purchase-details, .publishing-money-fields { grid-template-columns: minmax(0, 1fr); }
+  .publishing-offer { gap: var(--space-6); }
+  .publishing-offer-action form { justify-items: stretch; }
+  .publishing-offer-action .button { width: 100%; }
+}
 @media (max-width: 600px) {
   .directory-search { align-items: stretch; }
   .directory-search > div { width: 100%; }

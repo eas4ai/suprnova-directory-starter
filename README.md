@@ -1,8 +1,8 @@
 # Suprnova directory starter
 
-A free directory starter built on Suprnova, with account flows and Stripe/Paddle
-administration. Listing publication follows in
-[the roadmap](docs/spec/roadmap.md).
+A free directory starter built on Suprnova, with owner submissions, moderation,
+directory search and free or paid publication through Stripe and Paddle.
+See [the roadmap](docs/spec/roadmap.md) for the remaining starter work.
 
 The framework and both payment adapters are pinned to Suprnova commit
 `107e6e7a122d5145160ea1547ca90ddc37459c27` for the reviewed checkout repairs.
@@ -122,7 +122,9 @@ save drafts, upload an optional image, and submit for review. Administrators use
 **Listing reviews** to approve or reject the exact submitted revision. Rejected
 owners see the reason and can save a revised draft before resubmitting. Existing
 approved content stays public during editing when publication eligibility remains
-valid. Approval alone does not grant publication; checkout integration is in progress.
+valid. After approval, owners choose a publishing plan. Approval alone does not
+grant publication. Free plans grant eligibility immediately; paid plans wait for
+verified provider evidence.
 
 Images are decoded and re-encoded as PNG, with a 5 MiB input limit and maximum
 dimensions of 4096 × 4096. Set `DIRECTORY_MEDIA_ROOT` to a private local directory
@@ -163,9 +165,92 @@ reload the saved settings before applying your changes again.
 
 Saving validates local format and adapter construction. It does **not** contact
 Stripe or Paddle, verify authentication or price availability, or create a checkout.
-Webhook endpoints and payment processing arrive with the paid-directory commitment;
-these settings alone cannot accept payments. Provider-side currency, recurrence
-and publication entitlement policy remain future work.
+Create the corresponding local plan under **Publishing plans**. Choose free,
+one-time, monthly or annual billing, enter the advertised amount in minor units
+and currency, and enable it. Existing purchases retain their original terms when
+plans, mappings or provider configuration change.
+
+## Paid publication and recovery
+
+Set `BILLING_CHECKOUT_MODE=test` or `live` explicitly. Only the selected profile
+is offered to owners; test payments never appear in the public directory.
+Configure the matching provider webhook destination:
+
+| Provider | Test path | Live path |
+| --- | --- | --- |
+| Stripe | `/billing/webhooks/stripe/test` | `/billing/webhooks/stripe/live` |
+| Paddle | `/billing/webhooks/paddle/test` | `/billing/webhooks/paddle/live` |
+
+Use your HTTPS application origin before each path. Supply each destination's
+signing secret in its matching profile. Subscribe to checkout/transaction,
+invoice, subscription, refund and dispute/adjustment events relevant to your
+provider. The endpoints authenticate and retain evidence, then return 202;
+acceptance does not mean fulfillment succeeded.
+
+Run the following from a scheduler every minute, with the same database and
+`APP_KEY` as the web process. It processes at most 25 due events, with a 120-second
+batch deadline and a 90-second per-event deadline. Expired worker leases are
+recoverable. Automatic retries stop after eight failed attempts.
+
+```sh
+cargo run --locked --bin console -- billing:reconcile --limit 25
+cargo run --locked --bin console -- billing:reconcile --status --limit 100
+```
+
+Monitor command failures and unresolved event IDs. Correct a price, currency,
+customer, settlement or credential problem at its source, then retry the retained
+event. The `--event` value is the local event ID printed by the status command:
+
+```sh
+cargo run --locked --bin console -- billing:reconcile --event EVENT_ID
+cargo run --locked --bin console -- billing:reconcile --purchase PURCHASE_ID
+```
+
+A missing webhook can be recovered from the purchase's saved session or
+subscription. If the create response was lost, look up its `purchase_id`
+metadata/custom data in the provider dashboard and supply the existing resource:
+
+```sh
+cargo run --locked --bin console -- billing:reconcile --purchase PURCHASE_ID --resource PROVIDER_RESOURCE_ID
+```
+
+Recovery only reads existing provider state; it never creates charges. Stripe
+checkout retries retain the original idempotency key within the supported window.
+An ambiguous Paddle create remains pending: do not create another transaction to
+work around a lost response. Recover the original transaction by correlation.
+Browser return parameters cannot grant publication.
+
+One-time payment has no expiry. Recurring access ends at the last verified paid
+period, without a grace period for failed renewal. Owner cancellation requests
+stop future renewals only after provider confirmation; scheduled cancellation
+retains the paid period. Full refunds remove the affected payment's eligibility,
+partial refunds preserve it, open disputes suspend it, and confirmed wins restore
+it subject to moderation. Initiate refunds in the provider dashboard.
+
+Disabling a provider stops new checkout while existing purchases remain
+recoverable. Purchases retain encrypted credentials and immutable price terms;
+clearing a disabled profile is permitted only when retained recovery material is
+readable. Old purchase signing keys and the currently configured key can overlap
+during replacement. Authenticated retained events replay without rejecting their
+now-old signature timestamps. If the old API key is revoked, install the new key
+in the same account/mode and explicitly select it for read-only recovery:
+
+```sh
+cargo run --locked --bin console -- billing:reconcile --purchase PURCHASE_ID --use-current-credentials
+```
+
+Do not change provider accounts to recover an existing purchase. Keep the
+database and matching `APP_KEY` together in backups; clearing current settings
+does not erase the encrypted material retained with purchases. Raw authenticated
+events remain private database records and may contain provider customer data.
+
+Local verification uses synthetic provider responses and the actual pinned
+adapters' signature checks. Before accepting real money, use operator-owned
+sandbox accounts and matching prices to exercise an approved test listing,
+checkout, actual webhook delivery, reconciliation, renewal/cancellation and
+refund/dispute outcomes. Confirm test listings stay private. This external smoke
+test is separate from the local suite and has not been performed by the starter's
+local verifier.
 
 ## Verification
 
@@ -177,6 +262,8 @@ node scripts/verify-foundation.mjs accounts
 node scripts/verify-foundation.mjs ui
 node scripts/verify-foundation.mjs setup
 node scripts/verify-provider-administration.mjs
+node scripts/verify-paid-directory.mjs directory
+node scripts/verify-paid-directory.mjs payments
 ```
 
 The verifiers copy application source into a disposable directory under the sibling
@@ -228,3 +315,9 @@ wrong/missing/default keys, corrupted ciphertext, concurrent and failed writes,
 mapping changes, and browser administration journeys. It captures output to check
 for secret markers. These tests use synthetic credentials and establish local
 integration only; actual provider authentication and delivery remain unverified.
+
+The paid-directory verifier exercises signed ingress, rejected evidence,
+transaction interruption, replay, renewals, refunds, disputes and recovery in both
+modes. It runs local HTTP contracts for the pinned SDKs and checkout adapters, then
+browser journeys for plans and purchases. Payment screenshots go to
+`target/payments-ui`; directory screenshots go to `target/directory-ui`.

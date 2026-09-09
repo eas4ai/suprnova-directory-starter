@@ -491,9 +491,9 @@ dependencies = [
 
 [[package]]
 name = "async-stripe"
-version = "1.0.0-rc.8"
+version = "1.0.0-rc.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab149862d2d33453ce54e9c73af81d48c47b52888a2925fe94751694e0fe07ef"
+checksum = "03ec8493f89fb9d9ac1848988955ec192df8e0ebf4d4bbd85fd93df9f681e890"
 dependencies = [
  "async-stripe-client-core",
  "async-stripe-shared",
@@ -510,9 +510,9 @@ dependencies = [
 
 [[package]]
 name = "async-stripe-client-core"
-version = "1.0.0-rc.8"
+version = "1.0.0-rc.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "012387ff812fa51c118a2b324cdde3684d676c6e351f687abc933d47f429fad7"
+checksum = "10f095837711eb1c3ee02604b4e1d44b117014fb74da99ad4f2d70e907dbdc41"
 dependencies = [
  "async-stripe-shared",
  "async-stripe-types",
@@ -528,9 +528,9 @@ dependencies = [
 
 [[package]]
 name = "async-stripe-shared"
-version = "1.0.0-rc.8"
+version = "1.0.0-rc.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "315ef4797e2af87e5764e28ca513449ba3fa9e960b6ee081d406224536de3c37"
+checksum = "a352c5e36a92aa8bdd4326c8211b9a26e822e6cb4b7516a47282396a4938a231"
 dependencies = [
  "async-stripe-types",
  "miniserde",
@@ -1811,18 +1811,26 @@ dependencies = [
 name = "directory"
 version = "0.1.0"
 dependencies = [
+ "async-stripe",
+ "async-stripe-client-core",
+ "async-stripe-shared",
+ "async-stripe-types",
  "async-trait",
  "bytes",
  "chrono",
  "clap",
+ "hmac 0.12.1",
+ "http 1.4.1",
  "http-body-util",
  "hyper",
  "hyper-util",
  "image",
+ "paddle-rust-sdk",
  "rustls",
  "sea-orm",
  "sea-orm-migration",
  "serde",
+ "sha2 0.10.9",
  "suprnova",
  "suprnova-payments-paddle",
  "suprnova-payments-stripe",

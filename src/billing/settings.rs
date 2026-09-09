@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter, sea_query::Expr};
+use sea_orm::{ColumnTrait, ConnectionTrait, EntityTrait, QueryFilter, sea_query::Expr};
 use serde::{Deserialize, Serialize};
 use suprnova::DB;
 
@@ -62,8 +62,15 @@ impl StoredSettings {
 pub(super) async fn read(mode: Mode) -> Result<(i64, StoredSettings), BillingError> {
     let db = DB::connection()
         .map_err(|_| BillingError::Unavailable("The billing database is unavailable."))?;
+    read_from(db.inner(), mode).await
+}
+
+pub(super) async fn read_from(
+    connection: &impl ConnectionTrait,
+    mode: Mode,
+) -> Result<(i64, StoredSettings), BillingError> {
     let row = entity::Entity::find_by_id(mode.as_str())
-        .one(db.inner())
+        .one(connection)
         .await?
         .ok_or(BillingError::Unavailable(
             "Billing settings are missing. Run the application migrations.",

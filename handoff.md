@@ -10,7 +10,8 @@ This repository uses Cairn. Read `AGENTS.md`, run `cairn wake`, and follow the
 named action. `docs/spec/roadmap.md` names `paid-directory` as Current.
 The developer confirmed both remaining commitments, their requirements, falsifiers
 and policies. Foundation and provider administration are complete; the repaired
-framework integration and paid directory implementation are now in progress.
+framework integration is verified. Paid-directory implementation and its evidence
+are in progress.
 Larafast Directories is the selected working reference, not Pulsar.
 
 Do not restart discovery or ask the developer to repeat settled choices.
@@ -22,7 +23,7 @@ and the final review determine completion, not this handoff's prose.
 ## Implemented foundation
 
 - Rust binaries and payment adapters select Suprnova revision
-  `107e6e7a122d5145160ea1547ca90ddc37459c27`; integration verification is in progress.
+  `107e6e7a122d5145160ea1547ca90ddc37459c27`; integration checks passed.
   Cargo and Bun dependency locks are committed with their implementation.
 - The example SQLite database migrates through the application command. Repeated
   migration preserves schema, history and existing account data. RBAC tables
@@ -33,7 +34,7 @@ and the final review determine completion, not this handoff's prose.
 - Vue/Inertia public and administration shells share semantic CSS tokens and
   components. Vuetify 0 is pinned to 1.0.1. Administration requires `admin.access`
   for the `directory.user` model type; neither registration nor a role name
-  grants it. Directory/listing content is an honest empty state.
+  grants it. Directory content uses moderated owner revisions and publication eligibility.
 - The local setup guide supplies a generated local key, install/migration commands,
   and separate Vite/application terminal commands. The setup verifier executes
   those README blocks and checks rendering plus a visible invalid-login error.
@@ -83,8 +84,27 @@ about future administrator provisioning describe that earlier commitment. Provid
 failure demonstrations are in `docs/provider-administration-mechanism-review.md`.
 The provider final review belongs in `.cairn/reviews/provider-administration.md`. Earlier
 entries record failures and corrections as historical evidence. Use `cairn wake`
-for current requirement status and the next action. Stop when this commitment
-is Done; the developer chooses the next commitment.
+for current requirement status and the next action. The developer already
+authorized complete-starter after paid-directory's evidence and final review.
+
+## Paid-directory implementation
+
+`src/listings` owns revisions, moderation, private images and the common public
+eligibility predicate. `src/billing` owns local plans, immutable purchases,
+exclusive listing purchase slots, authenticated event acceptance, payment-specific
+entitlements and separate fulfillment receipts. Checkout uses the pinned adapters;
+rich evidence reads use their pinned SDKs. Both modes have fixed signed webhook
+paths. The `billing:reconcile` command processes retained work and recovers existing
+resources without creating charges. README documents scheduling and key recovery.
+
+`node scripts/verify-paid-directory.mjs payments` passed the full editing-time
+contract, including both modes, actual SDK wire tests, 24 pinned adapter checkout
+tests, frontend builds and paid browser journeys. The standalone pinned adapter
+tests use the framework revision's committed dependency lock; application wire
+tests use this starter's lock. Local signatures and provider responses are synthetic.
+The seven-case mutation driver also passed: every violating copy compiled and
+failed at its runtime assertion. Committed Cairn evidence and final review remain
+the next steps. Do not infer completion from this paragraph.
 
 ## Settled product direction
 
@@ -97,7 +117,7 @@ commitment does not authorize implementing those later modules.
 Use Suprnova's authentication, RBAC and payment adapters rather than parallel
 engines. Stripe and Paddle are both selected for provider administration.
 The selected lifecycle is submit, review/approve, then checkout. Detailed plan,
-renewal, refund, dispute and entitlement policies need agreed requirements.
+renewal, refund, dispute and entitlement policies are agreed in payments.md.
 Lemon Squeezy is not a shipped Suprnova adapter.
 
 NOWPayments is a separate planned framework workstream for the next framework

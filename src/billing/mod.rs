@@ -1,10 +1,25 @@
 //! Durable provider administration. Provider protocols remain in Suprnova.
 
 mod adapters;
+pub mod cancellation;
+pub mod checkout;
+mod collect;
 mod entity;
+pub mod events;
+pub mod evidence;
+pub mod fulfillment;
+pub mod gateway;
+pub mod lifecycle_entities;
+pub mod paddle_evidence;
+pub mod plans;
+pub mod reconcile;
 mod secrets;
 mod settings;
+pub mod stripe_evidence;
 mod validation;
+
+#[cfg(test)]
+mod stripe_evidence_tests;
 
 pub use adapters::{ConfiguredProvider, resolve};
 pub use settings::{load, save};

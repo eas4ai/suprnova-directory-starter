@@ -49,6 +49,9 @@ use crate::models::user::User;
 pub async fn register() {
     // Initialize database connection
     DB::init().await.expect("Failed to connect to database");
+    App::bind::<dyn crate::billing::gateway::Gateway>(Arc::new(
+        crate::billing::gateway::SdkGateway,
+    ));
 
     // Authentication: register the AuthManager (the config/auth.php analogue)
     // and a user provider so `Auth::attempt` and `Auth::user_as::<User>()`
@@ -87,7 +90,12 @@ pub fn register_http_stack() {
 
     // Session middleware (required for authentication)
     let session_config = SessionConfig::from_env();
-    let csrf = CsrfMiddleware::new().with_session_config(&session_config);
+    let csrf = CsrfMiddleware::new()
+        .with_session_config(&session_config)
+        .except_method("POST", "/billing/webhooks/stripe/test")
+        .except_method("POST", "/billing/webhooks/stripe/live")
+        .except_method("POST", "/billing/webhooks/paddle/test")
+        .except_method("POST", "/billing/webhooks/paddle/live");
     global_middleware!(SessionMiddleware::new(session_config));
 
     // Inertia protocol layer, four middlewares in one call: the headers

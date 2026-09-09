@@ -45,12 +45,24 @@ try {
     run('cargo', ['test', '--locked', '--lib', 'listings::media::tests', '--', '--nocapture'], env);
     run('cargo', ['test', '--locked', '--test', 'directory_workflows', '--', '--nocapture'], env);
   } else {
-    throw new Error('The paid lifecycle mechanism is not implemented yet.');
+    run('cargo', ['test', '--locked', '--lib', 'billing::', '--', '--nocapture'], env);
+    run('cargo', ['test', '--locked', '--test', 'payment_sdk_wire', '--', '--nocapture'], env);
+    for (const mode of ['live', 'test']) {
+      run('cargo', ['test', '--locked', '--test', 'paid_lifecycle', '--', '--nocapture'], {
+        ...env, BILLING_CHECKOUT_MODE: mode, DATABASE_URL: `sqlite://${join(working, `paid-${mode}.db`)}`,
+      });
+    }
+    run('node', ['scripts/verify-pinned-checkout.mjs'], env);
   }
   run('bun', ['install', '--frozen-lockfile', '--cwd', 'frontend'], env);
   run('bun', ['run', '--cwd', 'frontend', 'build'], env);
   run('bun', ['run', '--cwd', 'frontend', 'build:ssr'], env);
-  run('node', ['frontend/tests/directory-workflows.mjs'], { ...env, DIRECTORY_ARTIFACT_DIR: join(source, 'target/directory-ui') });
+  if (task === 'directory') {
+    run('node', ['frontend/tests/directory-workflows.mjs'], { ...env, DIRECTORY_ARTIFACT_DIR: join(source, 'target/directory-ui') });
+  } else {
+    run('node', ['frontend/tests/paid-workflows.mjs'], { ...env, BILLING_CHECKOUT_MODE: 'live',
+      DATABASE_URL: `sqlite://${join(working, 'paid-browser.db')}`, PAID_ARTIFACT_DIR: join(source, 'target/payments-ui') });
+  }
   for (const requirement of requirements) console.log(`cairn: ${requirement}: pass`);
 } catch (error) {
   console.error(error.stack ?? error.message);

@@ -5,3 +5,4 @@ pub mod billing;
 pub mod dashboard;
 pub mod home;
 pub mod listings;
+pub mod publishing;

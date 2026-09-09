@@ -87,6 +87,7 @@ function submit() {
         </div>
 
         <div class="text-center">
+          <a href="/forgot-password" class="block text-indigo-600 hover:text-indigo-500">Forgot your password?</a>
           <a href="/register" class="text-indigo-600 hover:text-indigo-500">
             Don't have an account? Register
           </a>

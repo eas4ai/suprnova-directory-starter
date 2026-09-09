@@ -120,6 +120,10 @@ pub async fn register(form: RegisterRequest) -> Response {
     }
 
     let user = User::create(&form.name, &form.email, &form.password).await?;
+    suprnova::auth_flows::EmailVerification::send_link(
+        &user,
+        &super::account_links::mail_url("/verify-email/verify")?,
+    ).await?;
     // Log the freshly-created user into the session (fires the Login event).
     Auth::login(Arc::new(user), false).await?;
 

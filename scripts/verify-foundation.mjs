@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 
 const source = resolve(process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const task = process.argv[2];
-const requirements = { build: 'FND-001', database: 'FND-002' };
+const requirements = { build: 'FND-001', database: 'FND-002', accounts: 'FND-003' };
 const requirement = requirements[task];
 
 function run(command, args, cwd, options = {}) {
@@ -104,6 +104,18 @@ function database(root) {
   assert.deepEqual(JSON.parse(inspect()), first, 'Repeated migrations changed the schema, migration history or existing account data');
 }
 
+function accounts(root) {
+  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+  Object.assign(env, {
+    APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
+    MAIL_FROM: 'test@example.test', DATABASE_URL: `sqlite://${join(root, 'accounts.db')}`,
+    DB_LOGGING: 'false', SESSION_SECURE: 'false',
+    CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',
+    CARGO_TARGET_DIR: join(source, 'target'),
+  });
+  run('cargo', ['test', '--locked', '--test', 'foundation_accounts', '--', '--nocapture'], root, { env });
+}
+
 if (!requirement) {
   console.error(`Foundation mechanism is not implemented for: ${task ?? '(missing task)'}`);
   process.exitCode = 1;
@@ -111,7 +123,7 @@ if (!requirement) {
   let working;
   try {
     working = snapshot(source);
-    ({ build, database })[task](working);
+    ({ build, database, accounts })[task](working);
     console.log(`cairn: ${requirement}: pass`);
   } catch (error) {
     console.error(error.stack ?? error.message);

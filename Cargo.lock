@@ -1643,8 +1643,12 @@ name = "directory"
 version = "0.1.0"
 dependencies = [
  "async-trait",
+ "bytes",
  "chrono",
  "clap",
+ "http-body-util",
+ "hyper",
+ "hyper-util",
  "sea-orm",
  "sea-orm-migration",
  "serde",

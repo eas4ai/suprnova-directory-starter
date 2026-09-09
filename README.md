@@ -33,9 +33,13 @@ migrations. Running the same command again applies only pending migrations.
 It is Suprnova's application migration entry point; the developer CLI's
 `suprnova migrate` delegates to it.
 
-The account email flows currently expect a local SMTP service on port 1025 from
-the example configuration. Their completed setup and verification follow in the
-account-flow portion of this commitment.
+Account email uses the SMTP service on port 1025 from the example configuration.
+Registration sends a verification link; sign in and open `/verify-email` to resend
+it. Open the link while signed in to the account it belongs to. Password reset
+at `/forgot-password` sends links only for verified accounts. Unknown and unverified
+addresses receive the same public response. Resetting a password revokes existing
+sessions and remember tokens. Mail links use `APP_URL`, so set it to the address
+where the application is reachable.
 
 ## Verification
 
@@ -43,6 +47,7 @@ account-flow portion of this commitment.
 node scripts/spec-lint.mjs docs/spec
 node scripts/verify-foundation.mjs build
 node scripts/verify-foundation.mjs database
+node scripts/verify-foundation.mjs accounts
 ```
 
 The verifier copies tracked source into a disposable directory. It never copies
@@ -55,3 +60,8 @@ an editing-time check; Cairn evidence requires committing all declared inputs fi
 The database check establishes SQLite behavior only. PostgreSQL behavior has not
 been verified. Use `cairn wake` for the next action; receipts and logs remain tracked
 under `.cairn/evidence`.
+
+The account check exercises the actual HTTP router and middleware with an isolated
+database and a captured mail transport. It checks registration, verification,
+login, logout, reset, CSRF rejection, token expiry/reuse/ownership, and session
+revocation. It does not establish delivery through an external SMTP service.

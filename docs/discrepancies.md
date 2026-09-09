@@ -1,4 +1,4 @@
-# Foundation discrepancy log
+# Discrepancy log
 
 Observed during the starter-foundation commitment, 2026-09-08 (America/New_York).
 These findings describe this checkout and its installed tools. A starter integration
@@ -7,6 +7,13 @@ are in `.cairn/reviews/starter-foundation.md`; committed check output is under
 `.cairn/evidence`. Failed editing-time checks are described here and in the review.
 
 ## Application and integration findings
+
+## Provider administration preparation — 2026-09-09
+
+- The pinned Stripe adapter's explicit constructor documents a panic for invalid HTTP header values; it is not a complete configuration validator. The proposed PAY-008 checks validate before construction. This is an integration constraint, not an observed production failure.
+- The pinned provider registry is process-global and keyed only by provider name, with replacement but no removal operation. Using it alone would not establish durable test/live configuration or disablement. The draft requires explicit provider/mode resolution from committed settings. Source observations and scope review: docs/provider-administration-draft-review.md.
+
+## Foundation findings
 
 | Finding | Evidence and effect | Correction / status |
 | --- | --- | --- |

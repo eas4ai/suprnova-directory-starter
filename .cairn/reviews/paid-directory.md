@@ -1,3 +1,44 @@
+commitment: paid-directory
+commit: 3c28383d1ab5b5b5eeaa81c3203d583f847eeb7d
+examined:
+  - All paid-directory requirements, operating policies, falsifiers and current passing foundation, provider, directory and paid receipts.
+  - Checkout ownership and retained terms; signature ingress, provider correlation, fulfillment transactions, leases and bounded recovery.
+  - Public eligibility, owner status projection, browser journeys, failure demonstrations and operator documentation.
+findings:
+  - resolved: Current test eligibility could be hidden by a later historical refund update. The recorded regression failed before the query correction and passed afterward in both lifecycle modes. All affected evidence was refreshed.
+
+## Final review
+
+No application code changed during this final review. All 29 requirements named
+by paid-directory have current passing receipts. The review rechecked event
+authentication before durable acceptance, duplicate-body conflicts, transactional
+receipt and entitlement writes, replaced-worker rejection, retained credentials,
+and bounded retries. The corrected owner projection prefers current eligibility;
+public queries continue to exclude test purchases. No open finding remains.
+
+Local verification uses synthetic provider state and the actual pinned adapters.
+It does not establish external provider account acceptance; the documented sandbox
+exercise remains an operator deployment step. No deployment or charge was made.
+Ripwire quality-delta and test-gate did not pass; their findings and tool limits
+were reviewed explicitly below, with the applicable project suites passing.
+
+## Production self-audit
+
+1. Outcome and runtime boundaries match the agreed paid-directory contract.
+2. Changes implement that scope; later content and administration remain separate.
+3. Domain modules keep checkout, evidence, fulfillment and recovery responsibilities explicit.
+4. Request validation, purchase snapshots, schema, response types and documentation agree.
+5. Secrets remain encrypted and absent from browser DTOs; recoverable errors retain status.
+6. Ownership, permissions, CSRF, signatures and provider/mode correlation have denial checks.
+7. Transactions, unique records, idempotency keys and leases cover retries and interruption.
+8. Lists, event bodies, attempts and reconciliation time have explicit bounds.
+9. The tracked todo remains in progress until this review is accepted.
+10. Current committed checks passed across build, migration, accounts, UI, install, provider, directory and payment behavior.
+11. Evidence limits and unsuccessful auxiliary scans are stated without claiming passes.
+12. Implementation follows the developer-confirmed policies and selected working reference.
+13. The recorded defect was fixed and reverified before this completion review. No further revision is required by this audit.
+14. User and operator instructions describe actions and recovery in direct language.
+
 # Paid directory review
 
 ## Mechanism review: FND-001 revised dependency contract

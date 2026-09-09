@@ -11,4 +11,4 @@ Use a first commitment for reproducible builds, disposable database initializati
 
 ## Realized by
 
-(none yet: recorded, not built)
+a4cadb95e469f8467953e71c32a36035c63806e6 Establish Cairn specifications and draft foundation commitment

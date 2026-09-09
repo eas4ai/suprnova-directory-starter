@@ -11,6 +11,8 @@ The pinned Paddle adapter verifies signatures through Paddle::unmarshal, which a
 
 ## Realized by
 
+- a45de12131a40da5cc1b3a373fc8e29b5cf37881 Implement verified paid publication and recovery for Stripe and Paddle
+
 `src/billing/events.rs` applies the fallback only to the two named actions.
 `tests/paid_lifecycle.rs::signature_contract` exercises both through HTTP, with
 valid, wrong-key, stale, future, odd-length and Unicode signatures. Those cases

@@ -1,0 +1,5 @@
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-yb3iKl)
+    Finished `dev` profile [unoptimized] target(s) in 13.55s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`
+    Finished `dev` profile [unoptimized] target(s) in 0.24s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`

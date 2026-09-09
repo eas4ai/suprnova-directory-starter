@@ -1,0 +1,13 @@
+AssertionError [ERR_ASSERTION]: administration verification is not implemented yet.
++ actual - expected
+
++ 'administration'
+- 'editorial'
+
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-complete-starter.mjs:30:10
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+cairn: ADM-001: fail
+cairn: ADM-002: fail
+cairn: ADM-003: fail

@@ -1,0 +1,15 @@
+command: node scripts/verify-foundation.mjs database
+results: per-requirement
+inputs:
+  - Cargo.toml
+  - Cargo.lock
+  - src/
+  - cmd/
+  - frontend/
+  - tests/
+  - scripts/
+  - public/
+  - README.md
+  - .env.example
+requirements:
+  - FND-002

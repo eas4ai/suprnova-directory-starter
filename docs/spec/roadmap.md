@@ -1,0 +1,17 @@
+# Roadmap
+
+Status: Draft
+Current: starter-foundation
+
+## First starter delivery
+
+1. starter-foundation — reproducible builds, account flows, migrations and the selected public/admin UI foundation.
+2. provider-administration — Stripe and Paddle administration/configuration, protected credentials and plan mappings.
+3. paid-directory — owner listings, bounded discovery, review-before-payment, checkout, publication and payment recovery for both providers.
+4. complete-starter — editorial content, taxonomy, RSS, SEO, full administration, notifications, storage, demo data and adoption documentation.
+
+Only the first commitment is specified for implementation. Later entries record delivery order, not permission to infer their unresolved policies. Paid publishing remains in the first delivery.
+
+## Next framework iteration
+
+NOWPayments adapter for the next Suprnova release: docs/commitments/nowpayments-framework-adapter.md. This is a separate framework workstream, not the next Current value in this repository.

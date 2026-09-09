@@ -188,3 +188,6 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Cairn keeps evidence in Git; only the active action is transient.
+.cairn/in-progress

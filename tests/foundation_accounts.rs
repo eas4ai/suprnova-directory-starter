@@ -168,7 +168,7 @@ async fn account_journey_uses_real_sessions_and_mail_links() {
             .request(
                 "POST",
                 "/login",
-                Some(json!({"email": "ada@example.test", "password": "first-password-123"})),
+                Some(json!({"email": "ada@example.test", "password": "first-password-123", "remember": true})),
                 false
             )
             .await
@@ -179,13 +179,21 @@ async fn account_journey_uses_real_sessions_and_mail_links() {
         client
             .post(
                 "/login",
-                json!({"email": "ada@example.test", "password": "first-password-123"})
+                json!({"email": "ada@example.test", "password": "first-password-123", "remember": true})
             )
             .await
             .status,
         302
     );
     assert_eq!(client.get("/dashboard").await.status, 200);
+
+    let mut remembered = client.clone();
+    remembered.forget_session_cookie();
+    assert_eq!(
+        remembered.get("/dashboard").await.status,
+        200,
+        "Remembered credentials must restore a session before testing revocation"
+    );
 
     let mut recovery = Client::new();
     assert_eq!(recovery.get("/forgot-password").await.status, 200);
@@ -253,11 +261,17 @@ async fn account_journey_uses_real_sessions_and_mail_links() {
         Some("/login"),
         "Password reset must revoke existing authenticated sessions"
     );
+    remembered.forget_session_cookie();
+    assert_eq!(
+        remembered.get("/dashboard").await.location.as_deref(),
+        Some("/login"),
+        "Password reset must revoke remembered credentials too"
+    );
     assert_eq!(
         recovery
             .post(
                 "/login",
-                json!({"email": "ada@example.test", "password": "first-password-123"})
+                json!({"email": "ada@example.test", "password": "first-password-123", "remember": true})
             )
             .await
             .status,
@@ -267,11 +281,25 @@ async fn account_journey_uses_real_sessions_and_mail_links() {
         recovery
             .post(
                 "/login",
-                json!({"email": "ada@example.test", "password": "next-password-456"})
+                json!({"email": "ada@example.test", "password": "next-password-456", "remember": true})
             )
             .await
             .status,
         302
     );
     assert_eq!(recovery.get("/dashboard").await.status, 200);
+    recovery.forget_session_cookie();
+    assert_eq!(recovery.get("/dashboard").await.status, 200);
+    let mut copied_remember_cookie = recovery.clone();
+    copied_remember_cookie.forget_session_cookie();
+    assert_eq!(recovery.post("/logout", json!({})).await.status, 302);
+    assert_eq!(
+        copied_remember_cookie
+            .get("/dashboard")
+            .await
+            .location
+            .as_deref(),
+        Some("/login"),
+        "Logout must revoke a copied remember cookie, not just its session"
+    );
 }

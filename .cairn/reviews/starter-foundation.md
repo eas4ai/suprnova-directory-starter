@@ -8,9 +8,9 @@ examined:
 findings:
   - resolved: The developer confirmed FND-001 through FND-005 and their falsifiers, with glossary and roadmap context, on 2026-09-08.
   - resolved: All five application mechanisms now have fresh passing receipts and demonstrated failure sensitivity.
-  - open: FND-003: The exposed remember-me login option is not exercised by logout/recovery tests; verify that remembered credentials cannot restore access after logout or reset.
+  - resolved: FND-003: The expanded HTTP journey proves remembered login works without a session cookie, then proves password reset and logout revoke remembered credentials; the editing-time account mechanism passed.
 
-This is a specification review, not the final implementation review. The final review needs a committed candidate and fresh mechanism evidence.
+The entries below retain the specification and mechanism-development history; the final implementation review and its correction appear at the end.
 
 Setup verification: spec lint passed over docs/spec. A disposable Agreed DEMO-001 fixture without a Falsifier line exited 1 with SPEC-002; adding the line exited 0. This proves the lint wrapper invokes the installed checker and detects that structural violation. It does not prove any application requirement.
 
@@ -35,3 +35,5 @@ The authorization boundary uses server-side auth plus admin.access; hidden links
 Ripwire quality review: the direct working-tree command exited 2 because it crawled ignored built bundles and reported generated-code complexity. A clean source-only disposable comparison against the initial scaffold excluded generated artifacts and returned 38 findings (4 gating, 33 new-symbol and 1 minor). The four gating rows are build/database functions invoked through the verifier task dispatch map, the two short password-confirmation checks, and structurally similar home/reset page wrappers. These are exercised entry points or deliberate short boundary code, not unreachable production code. A generic wrapper solely to silence clone detection would obscure the separate page contracts. New-symbol rows include macro/trait/router dispatch, a full HTTP exchange helper, and long sequential account journeys. Those journeys deliberately use one test process because framework singleton services share state; the exchange has a 15-second timeout and task cleanup. No broad quality acknowledgment was written and the raw command is not called a pass. Ripwire test-gate exited 4 with obligations tests/foundation_accounts.rs and tests/foundation_ui.rs, zero untested impacted symbols; both have current passing Cairn execution. Static graph coverage is not a replacement for the browser and setup mechanisms.
 
 The review found one remaining verification gap: remember-me can recreate a session, but the current tests only prove revocation of a copied session cookie. Add remembered-cookie logout and password-reset coverage before completing FND-003. Record the correction separately and refresh affected evidence.
+
+Remembered-credential correction: added a cookie-removal helper in the HTTP test client and positive controls showing remembered authentication restores a session. The account journey then verifies reset and logout deny the copied remembered credentials. The full editing-time account mechanism passed in workspace scratchpads (one journey, no failures); no application workaround was required. Cairn refresh follows the committed correction. The review's missing commit header was repaired to name the candidate actually examined, not a later unexamined tree.

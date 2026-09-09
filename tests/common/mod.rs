@@ -42,6 +42,10 @@ impl Client {
         }
     }
 
+    pub fn forget_session_cookie(&mut self) {
+        self.cookies.remove("suprnova_session");
+    }
+
     pub async fn get(&mut self, path: &str) -> Response {
         self.request("GET", path, None, true).await
     }

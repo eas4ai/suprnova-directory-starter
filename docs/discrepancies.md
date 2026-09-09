@@ -32,6 +32,30 @@ are in `.cairn/reviews/starter-foundation.md`; committed check output is under
 | The setup verifier imported Playwright before installing dependencies. | The disposable copy failed with ERR_MODULE_NOT_FOUND before README installation ran. | Import Playwright dynamically after executing the guide's install block. |
 | Earlier temporary copies used `/tmp`. | This was the original verifier default; the developer requested workspace scratchpads. | Default to the sibling `scratchpads` directory, allow FOUNDATION_SCRATCH_DIR, direct child temporary data there, and remove each run's copy. No task-owned `/tmp/directory-foundation-*` directories or processes remained at the cleanup check. |
 
+## Final-review findings
+
+The remember-me checkbox initially had no direct revocation coverage. The expanded
+HTTP journey now proves a remember cookie restores access after the session cookie
+is removed, then proves password reset and logout invalidate remembered credentials.
+The expanded check passed; no production change was needed for this finding.
+
+Ripwire's direct quality scan included ignored compiled JS/SSR bundles and exited 2.
+A clean source-only comparison against the initial scaffold also returned findings:
+macro/trait/task-dispatch entry points classified as dead code, short similar
+validation/page wrappers, and long sequential HTTP tests. The review documents why
+these are exercised contracts or deliberate small duplications; no blanket
+acknowledgment was used. The raw quality command is not reported as a passing gate.
+Its test-gate returned the two Rust HTTP suites as obligations; both were run.
+
+The review file initially omitted its required `commit:` header, so Cairn could not
+identify the reviewed specification state and requested review again. Adding the
+actual examined commit corrected the record without changing any test result.
+
+The repository still needs an MIT license file and a documented administrator
+provisioning flow before full starter distribution. These belong to later
+starter/adoption work; this commitment establishes the runtime foundation and
+permission boundary, not a distribution-ready product.
+
 ## Tool behavior to keep in mind
 
 The installed `suprnova generate-types --help` invocation actually scanned the

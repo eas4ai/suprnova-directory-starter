@@ -1,0 +1,21 @@
+requirement: KIT-005
+requirement_digest: sha256:55eac136c896d00f6a5ebb00b389b120cd5b9f22bac7a948e077a5dd9ebce2f7
+sequence: 3
+history_digest: sha256:b7964491cad3d56d6c39698aedbf2aaf4c8737219eb86fc4c33bee620cd70121
+mechanism: starter-adoption
+commit: 2faec6f
+inputs_digest: sha256:9d136137d956045776b63d4258fbe0e8d19fbabc359424e66ab1c0baeb0067be
+mechanism_digest: sha256:f7315f52d578f5784c99de230f08c285b828856575d30e0191773eb1ef5e97d8
+inputs_detail: .cairn/evidence/KIT-001/20260909T224149754Z-2344897.inputs.json
+command: node scripts/verify-complete-starter.mjs adoption
+cwd: .
+exit: 0
+output_digest: sha256:ab18ac0dc498f80ca1883bc027f85cedb60c674e8c5c653df65fb8bcd2852871
+output: .cairn/evidence/KIT-001/20260909T224149754Z-2344897.out
+stderr_output: .cairn/evidence/KIT-001/20260909T224149754Z-2344897.err
+stderr_digest: sha256:c02fc60031903193708fd445d84770243325682c215bde032d74fd9ed335cc8f
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-09T22:42:47.237Z

@@ -1,6 +1,8 @@
 commitment: starter-foundation
-commit: 6b33a432f33aeb18ce9db73bb14cf67520c51a8e
+commit: a3520b03c75c8ab66838cd42f0682fa49cf7041d
 examined:
+  - Final candidate a3520b03c75c8ab66838cd42f0682fa49cf7041d; all five fresh Cairn receipts, runtime boundaries, documented limits, and the remembered-credential correction.
+  - The correction diff changes only the HTTP test client and journey; no production source changed after the preceding implementation review.
   - Draft requirements were checked against the selected version, UI and provider decisions.
   - Build-only proof was rejected for account, database and UI behavior; separate mechanisms cover those failures.
   - Paid publishing remains in first delivery but is not required to complete this foundation.
@@ -37,3 +39,7 @@ Ripwire quality review: the direct working-tree command exited 2 because it craw
 The review found one remaining verification gap: remember-me can recreate a session, but the current tests only prove revocation of a copied session cookie. Add remembered-cookie logout and password-reset coverage before completing FND-003. Record the correction separately and refresh affected evidence.
 
 Remembered-credential correction: added a cookie-removal helper in the HTTP test client and positive controls showing remembered authentication restores a session. The account journey then verifies reset and logout deny the copied remembered credentials. The full editing-time account mechanism passed in workspace scratchpads (one journey, no failures); no application workaround was required. Cairn refresh follows the committed correction. The review's missing commit header was repaired to name the candidate actually examined, not a later unexamined tree.
+
+Final re-review at a3520b03c75c8ab66838cd42f0682fa49cf7041d: inspected the complete correction diff. The test removes only the default session cookie in the sanitized test environment, proves remembered login works before revocation, and then verifies both logout and password-reset denial. FND-003 and FND-004 have refreshed passing receipts; FND-001, FND-002 and FND-005 remain current because their inputs did not change. Spec lint and the complete baseline-to-current Git whitespace check passed. Focused Ripwire edit-check reports show_login unchanged with no incompatible call found; this is supplementary static evidence, not macro-call coverage. Cleanup inspection found zero task scratch directories and zero task scratch processes. No code changed during this re-review, and no open foundation finding remains.
+
+Production-standard self-audit: reviewed all fourteen imported rules against this bounded commitment. The implementation uses framework contracts, declares its inputs, preserves operator state, keeps permission checks on the server, propagates infrastructure errors, bounds test/runtime process cleanup, and records actual checks and limits. The deliberate test sequencing and short validation duplication are documented judgments. I am satisfied with this foundation scope; it is not a claim that later listing/payment/distribution work or external-service verification is complete.

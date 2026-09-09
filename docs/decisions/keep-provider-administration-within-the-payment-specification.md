@@ -11,4 +11,4 @@ The developer selected provider-administration as the next commitment on 2026-09
 
 ## Realized by
 
-03aab1bdb188eaeacfa1f764844cb55fd39ca273 Draft provider administration requirements and failure checks
+- 03aab1bdb188eaeacfa1f764844cb55fd39ca273 Draft provider administration requirements and failure checks

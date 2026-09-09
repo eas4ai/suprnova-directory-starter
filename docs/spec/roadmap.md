@@ -1,6 +1,6 @@
 # Roadmap
 
-Status: Draft
+Status: Agreed 2026-09-08
 Current: starter-foundation
 
 ## First starter delivery

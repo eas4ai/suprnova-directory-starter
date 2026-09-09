@@ -1,6 +1,6 @@
 # Glossary
 
-Status: Draft
+Status: Agreed 2026-09-08
 
 | Term | Meaning in this project |
 | --- | --- |

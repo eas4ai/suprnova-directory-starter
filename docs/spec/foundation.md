@@ -1,6 +1,6 @@
 # Starter foundation
 
-Status: Draft
+Status: Agreed 2026-09-08
 Prefix: FND
 
 These proposed requirements define the first independently verifiable commitment. They do not claim the existing scaffold already meets them. Mechanisms are declared now and implemented during this commitment.

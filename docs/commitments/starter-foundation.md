@@ -1,6 +1,6 @@
 # Starter foundation
 
-Status: Draft
+Status: Agreed 2026-09-08
 Requirements: FND-001, FND-002, FND-003, FND-004, FND-005
 
 ## Outcome

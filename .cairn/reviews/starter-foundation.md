@@ -5,7 +5,7 @@ examined:
   - Paid publishing remains in first delivery but is not required to complete this foundation.
   - Account and UI falsifiers include denied actors and failed token paths rather than success paths alone.
 findings:
-  - open: Requirement text, glossary and falsifiers await developer confirmation.
+  - resolved: The developer confirmed FND-001 through FND-005 and their falsifiers, with glossary and roadmap context, on 2026-09-08.
   - open: Application mechanisms are declared but not implemented or demonstrated; no runtime pass is claimed.
 
 This is a specification review, not the final implementation review. The final review needs a committed candidate and fresh mechanism evidence.

@@ -1,0 +1,49 @@
+
+[providers] format: cargo fmt --check
+
+[providers] format: passed
+
+[providers] build: cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-providers-UQBMA8)
+    Finished `dev` profile [unoptimized] target(s) in 21.06s
+
+[providers] build: passed
+
+[providers] HTTP and persistence contract: cargo test --locked --test provider_administration -- --nocapture
+
+running 1 test
+test provider_administration_contract ... FAILED
+
+failures:
+
+failures:
+    provider_administration_contract
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.44s
+
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-providers-UQBMA8)
+    Finished `test` profile [unoptimized] target(s) in 2.76s
+     Running tests/provider_administration.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/provider_administration-29818deeb434f950)
+
+thread 'provider_administration_contract' (857654) panicked at tests/provider_administration.rs:131:5:
+assertion `left == right` failed: repeat grants must be idempotent
+  left: 8
+ right: 7
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test provider_administration`
+
+AssertionError [ERR_ASSERTION]: HTTP and persistence contract exited 101 (signal none)
+
+101 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-provider-administration.mjs:27:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-provider-administration.mjs:44:20
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+cairn: PAY-001: fail
+cairn: PAY-004: fail
+cairn: PAY-005: fail
+cairn: PAY-006: fail
+cairn: PAY-007: fail
+cairn: PAY-008: fail

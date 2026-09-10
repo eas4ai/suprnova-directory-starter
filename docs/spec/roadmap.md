@@ -1,7 +1,7 @@
 # Roadmap
 
-Status: Agreed 2026-09-08
-Current: site-appearance
+Status: Agreed 2026-09-10
+Current: admin-overview
 
 ## First starter delivery
 
@@ -18,6 +18,23 @@ The foundation and provider administration are complete. The developer confirmed
    current theme, plus a remembered visitor light/dark switch. The developer
    confirmed this bounded update on 2026-09-09. See docs/spec/appearance.md.
 
-## Next framework iteration
+## Admin, SEO and traffic update
+
+The developer approved proceeding with the reviewed proposal on 2026-09-10.
+Deliver these linked commitments in order; each preserves the preceding contracts.
+
+6. admin-overview — actual publication counts and review work, permission-safe
+   overview actions and grouped navigation. See docs/spec/admin-overview.md.
+7. seo-controls — editable metadata, indexing, redirects, SEO findings and public
+   Markdown twins. See docs/spec/seo-controls.md.
+8. traffic-reporting — public page/link collection, Traffic source/page/link
+   reports and the traffic, revenue and engagement chart groups. See
+   docs/spec/traffic-reporting.md.
+
+The Markdown plugin compatibility prerequisite is complete and published at
+`dcc6de06a177d66cfc1a9897ded584e19040f40c`. Starter integration belongs to
+seo-controls. External analytics and Search Console data imports remain separate.
+
+## Framework workstream
 
 NOWPayments adapter for the next Suprnova release: docs/commitments/nowpayments-framework-adapter.md. This is a separate framework workstream, not the next Current value in this repository.

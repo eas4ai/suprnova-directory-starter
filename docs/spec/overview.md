@@ -21,5 +21,8 @@ Review occurs before payment. Payment eligibility and moderation approval are se
 | Delegated administration and audit | administration.md | ADM; complete-starter requirements |
 | Notifications, media and starter adoption | adoption.md | KIT; complete-starter requirements |
 | Optional color presets and visitor appearance | appearance.md | UI; site-appearance requirements |
+| Actual admin overview and navigation | admin-overview.md | OVR; admin-overview requirements |
+| Metadata controls and public Markdown | seo-controls.md | SEO; seo-controls requirements |
+| Traffic, revenue and engagement reports | traffic-reporting.md | TRF; traffic-reporting requirements |
 
-Read glossary.md, foundation.md, payments.md, directory.md, content.md, administration.md, adoption.md, appearance.md and roadmap.md after this overview. Paths in the map are repository-relative except sibling spec filenames, which are relative to docs/spec. Existing implementation evidence and unverified findings remain in docs/recon.md and docs/pulsar-assessment.md.
+Read glossary.md, foundation.md, payments.md, directory.md, content.md, administration.md, adoption.md, appearance.md, admin-overview.md, seo-controls.md, traffic-reporting.md and roadmap.md after this overview. Paths in the map are repository-relative except sibling spec filenames, which are relative to docs/spec. Existing implementation evidence and unverified findings remain in docs/recon.md and docs/pulsar-assessment.md.

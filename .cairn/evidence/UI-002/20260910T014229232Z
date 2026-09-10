@@ -1,0 +1,21 @@
+requirement: UI-002
+requirement_digest: sha256:5f12fb4769927539bd98885a80a8b942d91598afc7496c55b4a88ebe13599304
+sequence: 3
+history_digest: sha256:52491404f2ad62aa138f203f93adaaf6308d9ce5fe1cd53f25ee1338ac213b6e
+mechanism: site-appearance
+commit: 57d90e4
+inputs_digest: sha256:72a16f7b469b03bb3a859d27d059337e9ec95d31ef3c02e45c44d9e27bceff27
+mechanism_digest: sha256:3507dd9fa0b2bf861cfd80dbf3af00ba4fe4da87d6176911e14d367b6785088d
+inputs_detail: .cairn/evidence/UI-001/20260910T014028624Z-1199852.inputs.json
+command: node scripts/verify-appearance.mjs
+cwd: .
+exit: 0
+output_digest: sha256:dc9e755595d9d645e488f166420424f73798286bcffae7de1fb29bbecba94678
+output: .cairn/evidence/UI-001/20260910T014028624Z-1199852.out
+stderr_output: .cairn/evidence/UI-001/20260910T014028624Z-1199852.err
+stderr_digest: sha256:e987d6736c6153246fedfbb124339b0d7dc9cfc8e67296bd5ea9697e6e67e052
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-10T01:42:29.232Z

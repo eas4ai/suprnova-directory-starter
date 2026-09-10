@@ -1,6 +1,6 @@
 # Site appearance review
 
-commit: 9d8b8e4d3e61d0655d87a8edc2ed7a717ba5f576
+commit: aa8c19eef27945334a8dc42ca82ebcb67b8e158d
 findings:
   - resolved: UI-002 dark placeholders now use the shared muted text token; direct Chromium verification increased contrast from 4.11:1 to 7.76:1, and the browser mechanism now checks pseudo-elements.
 
@@ -34,7 +34,7 @@ provider or authorization behavior changed.
   Transition completion is awaited before contrast measurement; screenshots finish
   finite transitions rather than capturing misleading intermediate colors.
 
-## Open finding
+## Finding recorded in the first review
 
 The login screenshot exposed dim placeholder text. A direct Chromium check used
 the real built CSS and actual SSR-rendered Login component, with JavaScript
@@ -53,7 +53,7 @@ adapter interface methods; the compiler and real browser/request checks exercise
 them. The reported `read` verbosity is a name-collision attribution to unchanged
 billing code. Test-gate returned exit 4 with 18 routes unlinked to tests in its
 static graph. The full HTTP, SSR and browser mechanisms ran those domains; no
-static-tool pass is claimed. The final production audit awaits fresh evidence after the placeholder fix.
+static-tool pass is claimed. The final production audit is recorded below.
 
 The earlier general design audit and its unrelated administration empty-state
 copy issue remain separate from this bounded appearance update.
@@ -66,3 +66,27 @@ accepts a pseudo-element and checks login placeholders. The same direct Chromium
 check measured corrected sRGB (161,161,170) over (9,9,11), or
 7.762805693682826:1, and passed. The frontend type/build check passed. Fresh Cairn
 checks and a final review are required before completion.
+
+## Final review and production self-audit
+
+Re-reviewed the final placeholder diff and corrected login screenshot after all
+45 requirements received fresh passing evidence. The last appearance receipts
+are UI-001 and UI-002 at 20260910T010457289Z. No application code changed during
+this review. Spec lint and whitespace checks passed. No unresolved finding remains
+in this appearance commitment.
+
+Applied all 14 production rules: the agreed scope and affected request/render
+paths are documented; the change reuses installed dependencies and existing
+semantic tokens; validated configuration, typed props and documentation agree.
+The cookie contains only a bounded appearance choice and changes no permission,
+payment or account state. Invalid configuration retains actionable errors and
+introduces no secret exposure. Server renders use separate theme instances; the
+preference survives navigation/reload without adding database or migration work.
+Palette work is bounded and requires no network service. The todo list records
+verified work, and both the negative demonstrations and corrected outcomes are
+retained. The full build, database, auth, permissions, provider, directory,
+payment, editorial, administration, adoption and appearance checks passed.
+Static-tool limitations are disclosed above rather than reported as passes.
+The developer's blank-default and light/dark choices are preserved, the review
+finding was corrected before delivery, and the setup instructions use concrete
+configuration examples. The appearance change is ready to deliver.

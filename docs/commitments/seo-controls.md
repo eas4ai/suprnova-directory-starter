@@ -34,5 +34,5 @@ stops at Done; activating the following commitment remains the developer's choic
 ## Todo
 
 - Done: map existing SEO/publication paths and declare complete verification mechanisms; all six violating copies fail at their intended assertions.
-- In progress: implement and verify metadata, discovery, redirects, findings and Markdown publication.
-- Pending: refresh inherited checks, demonstrate failures and complete production review.
+- Done: implement and verify metadata, discovery, redirects, findings and Markdown publication; all six SEO requirements have fresh committed passes.
+- Done: refresh all 48 inherited requirements, reject all six deliberate violations and record the final production review and 14-rule self-audit.

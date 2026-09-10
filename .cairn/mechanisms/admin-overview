@@ -1,0 +1,19 @@
+command: node scripts/verify-complete-starter.mjs overview
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - OVR-001
+  - OVR-002
+  - OVR-003

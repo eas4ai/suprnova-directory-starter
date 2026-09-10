@@ -177,6 +177,18 @@ in `.env`, for example `SITE_ACCENT="#146b56"`; it must contrast with white text
 at least 4.5:1. Invalid settings return a diagnostic error. Restart the application
 after changing configuration.
 
+For a quick color preset, set `SITE_THEME` to `zinc`, `blue`, `indigo`, `violet`,
+`emerald`, `teal`, `rose` or `orange`. For example, `SITE_THEME=indigo` uses the
+Tailwind indigo palette. Leave `SITE_THEME=` blank (the default) to retain the
+current theme and your `SITE_ACCENT`. A selected preset takes precedence over the
+custom accent. Restart the application after changing it.
+
+The sun/moon button in navigation switches between light and dark. Light is the
+initial default; a first-party `site_appearance` cookie remembers the visitor's
+choice for one year. Server-rendered public pages honor the cookie before
+JavaScript runs. Dark mode uses lighter accent shades for readable links and
+buttons. No extra dependency or theme editor is needed.
+
 ## Listings and moderation
 
 After migrating, create the initial categories:

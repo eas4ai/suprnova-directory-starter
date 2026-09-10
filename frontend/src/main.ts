@@ -1,3 +1,5 @@
+import { siteTheme } from './lib/theme'
+import type { SharedProps } from './types/shared'
 import './app.css'
 import './directory.css'
 import './editorial.css'
@@ -39,11 +41,11 @@ createInertiaApp({
     // check, SSR markup gets destroyed and re-rendered on the client.
     if (el.hasAttribute('data-server-rendered')) {
       createSSRApp({ render: () => h(App, props) })
-        .use(plugin)
+        .use(plugin).use(siteTheme(props.initialPage.props as unknown as SharedProps))
         .mount(el)
     } else {
       createApp({ render: () => h(App, props) })
-        .use(plugin)
+        .use(plugin).use(siteTheme(props.initialPage.props as unknown as SharedProps))
         .mount(el)
     }
   },

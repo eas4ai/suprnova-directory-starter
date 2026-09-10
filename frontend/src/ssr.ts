@@ -1,3 +1,5 @@
+import { siteTheme } from './lib/theme'
+import type { SharedProps } from './types/shared'
 import { createInertiaApp } from '@inertiajs/vue3'
 import createServer from '@inertiajs/vue3/server'
 import { createSSRApp, h } from 'vue'
@@ -26,7 +28,7 @@ createServer((page) =>
     render: renderToString,
     resolve: resolvePage,
     setup({ App, props, plugin }) {
-      return createSSRApp({ render: () => h(App, props) }).use(plugin)
+      return createSSRApp({ render: () => h(App, props) }).use(plugin).use(siteTheme(props.initialPage.props as unknown as SharedProps))
     },
   }), { port, host: process.env.SSR_HOST ?? '127.0.0.1' },
 )

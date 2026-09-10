@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { Head, usePage } from '@inertiajs/vue3'
+import { useTheme } from '@vuetify/v0'
 import type { SharedProps } from '../types/shared'
 import SiteBrand from '../components/SiteBrand.vue'
 import ShellNavigation from '../components/ShellNavigation.vue'
 const page = usePage<SharedProps>()
+const theme = useTheme()
 </script>
 <template>
   <Head><meta head-key="robots" name="robots" content="noindex, nofollow" /></Head>
-  <div class="admin-shell" data-shell="admin">
+  <div class="admin-shell" data-shell="admin" :data-theme="theme.isDark.value ? 'dark' : 'light'">
     <a href="#main-content" class="skip-link">Skip to content</a>
     <aside class="admin-sidebar"><SiteBrand /><p class="sidebar-label">Administration</p><ShellNavigation admin /></aside>
     <div class="admin-workspace">

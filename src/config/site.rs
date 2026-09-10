@@ -8,6 +8,7 @@ pub struct Site {
     pub origin: String,
     pub logo_url: Option<String>,
     pub accent: String,
+    pub theme: String,
 }
 
 fn invalid(field: &str, instruction: &str) -> FrameworkError {
@@ -123,11 +124,77 @@ pub fn read() -> Result<Site, FrameworkError> {
             "must be dark enough for white button text (contrast ratio at least 4.5).",
         ));
     }
+    let theme = theme(&std::env::var("SITE_THEME").unwrap_or_default())?;
     Ok(Site {
         name,
         description,
         origin,
         logo_url,
         accent,
+        theme,
     })
+}
+
+fn theme(value: &str) -> Result<String, FrameworkError> {
+    let value = value.trim();
+    if matches!(
+        value,
+        "" | "zinc" | "blue" | "indigo" | "violet" | "emerald" | "teal" | "rose" | "orange"
+    ) {
+        Ok(value.to_owned())
+    } else {
+        Err(invalid(
+            "SITE_THEME",
+            "must be blank or zinc, blue, indigo, violet, emerald, teal, rose, orange.",
+        ))
+    }
+}
+
+pub fn appearance(cookie: Option<&str>) -> &'static str {
+    let value = cookie.and_then(|header| {
+        header.split(';').find_map(|part| {
+            let (name, value) = part.trim().split_once('=')?;
+            (name == "site_appearance").then_some(value)
+        })
+    });
+    if value == Some("dark") {
+        "dark"
+    } else {
+        "light"
+    }
+}
+
+#[cfg(test)]
+mod appearance_tests {
+    use super::*;
+
+    #[test]
+    fn presets_are_optional_and_validated() {
+        for preset in [
+            "", "zinc", "blue", "indigo", "violet", "emerald", "teal", "rose", "orange",
+        ] {
+            assert_eq!(theme(preset).unwrap(), preset);
+        }
+        assert_eq!(theme("  ").unwrap(), "");
+        assert!(theme("unknown").is_err());
+        assert!(theme("blue; color: red").is_err());
+    }
+
+    #[test]
+    fn appearance_cookie_is_bounded_and_exact() {
+        assert_eq!(appearance(None), "light");
+        assert_eq!(
+            appearance(Some("session=example; site_appearance=dark; other=1")),
+            "dark"
+        );
+        for value in [
+            "site_appearance=light",
+            "site_appearance=other",
+            "site_appearance=darkness",
+            "other_site_appearance=dark",
+            "site_appearance=dark=extra",
+        ] {
+            assert_eq!(appearance(Some(value)), "light");
+        }
+    }
 }

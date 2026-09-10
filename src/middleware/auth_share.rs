@@ -10,7 +10,7 @@ pub struct AuthShare;
 impl InertiaSharedData for AuthShare {
     async fn share(
         &self,
-        _req: &dyn InertiaRequestExt,
+        req: &dyn InertiaRequestExt,
         _component: &str,
     ) -> Result<IndexMap<String, Prop>, FrameworkError> {
         let user = match Auth::user_as::<User>().await? {
@@ -47,6 +47,10 @@ impl InertiaSharedData for AuthShare {
             None => suprnova::serde_json::Value::Null,
         };
         Ok(IndexMap::from([
+            (
+                "appearance".to_owned(),
+                Prop::eager(json!(crate::config::site::appearance(req.header("cookie")))),
+            ),
             ("auth".to_owned(), Prop::eager(json!({"user": user}))),
             (
                 "site".to_owned(),

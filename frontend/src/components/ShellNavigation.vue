@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { Link, useForm, usePage } from '@inertiajs/vue3'
 import { Dialog } from '@vuetify/v0'
 import type { SharedProps } from '../types/shared'
+import AppearanceToggle from './AppearanceToggle.vue'
 import SignOutDialog from './SignOutDialog.vue'
 
 const props = defineProps<{ admin?: boolean }>()
@@ -24,6 +25,7 @@ const active = (href: string) => page.url.split('?')[0] === href
 
 <template>
   <div class="shell-navigation" :class="{ 'admin-navigation': admin }">
+    <AppearanceToggle />
     <nav class="desktop-navigation" :aria-label="admin ? 'Administration' : 'Main navigation'">
       <Link v-for="link in links" :key="link.href" :href="link.href" class="nav-link" :aria-current="active(link.href) ? 'page' : undefined">{{ link.label }}</Link>
     </nav>

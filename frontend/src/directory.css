@@ -139,3 +139,23 @@
   .directory-statuses > div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: var(--space-3); }
   .directory-statuses dd { margin: 0; }
 }
+
+[data-theme="dark"] .directory-description {
+  --tw-prose-body: var(--text-primary);
+  --tw-prose-headings: var(--text-primary);
+  --tw-prose-lead: var(--text-secondary);
+  --tw-prose-links: var(--brand-accent);
+  --tw-prose-bold: var(--text-primary);
+  --tw-prose-counters: var(--text-secondary);
+  --tw-prose-bullets: var(--text-muted);
+  --tw-prose-hr: var(--border-default);
+  --tw-prose-quotes: var(--text-primary);
+  --tw-prose-quote-borders: var(--border-default);
+  --tw-prose-captions: var(--text-secondary);
+  --tw-prose-kbd: var(--text-primary);
+  --tw-prose-code: var(--text-primary);
+  --tw-prose-pre-code: var(--text-primary);
+  --tw-prose-pre-bg: var(--surface-muted);
+  --tw-prose-th-borders: var(--border-default);
+  --tw-prose-td-borders: var(--border-default);
+}

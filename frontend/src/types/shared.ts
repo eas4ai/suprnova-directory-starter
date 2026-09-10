@@ -11,5 +11,5 @@ export type Account = {
   can_audit: boolean
 }
 
-export type Site = { name: string; description: string; origin: string; logo_url: string | null; accent: string }
-export type SharedProps = { auth: { user: Account | null }; site: Site }
+export type Site = { name: string; description: string; origin: string; logo_url: string | null; accent: string; theme: string }
+export type SharedProps = { auth: { user: Account | null }; site: Site; appearance: 'light' | 'dark' }

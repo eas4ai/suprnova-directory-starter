@@ -10,11 +10,16 @@ switch in docs/spec/appearance.md. Preserve all completed starter contracts.
 
 ## Plan and todo
 
-- In progress: implement validated configuration, request-scoped Vuetify theme,
-  shared head styles and accessible switch; verify configuration and rendering.
-- Pending: verify browser journeys for presets, persistence, SSR isolation and
-  public/account/admin surfaces; document operator configuration.
-- Pending: commit, run all Cairn mechanisms, review and resolve findings.
+- Completed: implement and verify validated configuration, request-scoped Vuetify
+  themes, shared head styles and the accessible switch.
+- In progress: finish browser evidence for presets, persistence, SSR isolation and
+  public/account/admin surfaces; record all Cairn regression checks.
+- Pending: review the committed implementation and resolve findings.
+
+The isolated appearance suite passed on 2026-09-09: configuration units, both
+builds, eight presets in both shells/modes, cookie persistence, concurrent server
+renders, no-JavaScript output, dark Markdown and 320px navigation. Documentation
+and the example environment describe blank precedence and the visitor cookie.
 
 src/config/site.rs owns the preset allowlist. AuthShare passes the validated
 appearance cookie. frontend/src/lib/theme.ts constructs a theme for each app;

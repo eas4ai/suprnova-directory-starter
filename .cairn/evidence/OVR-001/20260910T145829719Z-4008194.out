@@ -1,0 +1,212 @@
+[overview] cargo fmt --check
+[overview] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-xhDgNl)
+    Finished `dev` profile [unoptimized] target(s) in 25.86s
+[overview] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [808.00ms]
+[overview] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 700 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-complete-xhDgNl/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-C0-3uP-e.css   61.83 kB │ gzip:  10.62 kB
+../public/assets/assets/main-DLRiDWOJ.js   396.04 kB │ gzip: 125.57 kB
+
+✓ built in 1.01s
+[overview] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 85 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  208.74 kB │ gzip: 34.18 kB
+
+✓ built in 646ms
+[overview] node scripts/with-ssr.mjs cargo test --locked --test overview_workflows -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-xhDgNl)
+    Finished `test` profile [unoptimized] target(s) in 2.49s
+     Running tests/overview_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/overview_workflows-0608f435d237b77c)
+
+running 1 test
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+test overview_workflows_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 6.97s
+
+[overview] node scripts/with-ssr.mjs node frontend/tests/overview-workflows.mjs
+Overview counts, queue links, delegated data/navigation, keyboard/mobile themes, text contrast and real empty states passed.
+cairn: OVR-001: pass
+cairn: OVR-002: pass
+cairn: OVR-003: pass

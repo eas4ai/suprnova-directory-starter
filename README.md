@@ -108,7 +108,8 @@ cargo run --locked --bin console -- admin:access grant --user-id 42
 ```
 
 The command grants `admin.access`, `billing.configure`, `listings.moderate`,
-`articles.manage`, `taxonomy.manage`, `accounts.manage` and `audit.view` through
+`articles.manage`, `taxonomy.manage`, `accounts.manage`, `audit.view` and
+`seo.manage` through
 the explicit Suprnova administrator role. It also reinstates a suspended account.
 It refuses unknown or unverified accounts. Repeating a grant is safe. Sign in and
 open **Administration → Payment providers**. An existing session sees the grant
@@ -127,7 +128,7 @@ remain; no public bootstrap endpoint is exposed.
 
 **Administration → Accounts** provides bounded search, read-only verification status,
 predefined roles, suspension and reinstatement. Moderators get listing moderation;
-editors get article editing and publication. Taxonomy, billing, accounts and audit each
+editors get article editing and publication. Taxonomy, billing, accounts, audit and SEO each
 require their own permission. Role names alone carry no authority. Saving account access replaces starter direct
 grants and memberships that confer starter permissions; unrelated roles remain.
 

@@ -2,7 +2,7 @@
 
 # Suprnova directory starter
 
-A free directory starter built on Suprnova, with owner submissions, moderation,
+A free directory starter built on [Suprnova](https://suprnova.app), with owner submissions, moderation,
 directory search and free or paid publication through Stripe and Paddle.
 Licensed under [MIT](LICENSE), with [third-party notices](THIRD_PARTY_NOTICES.md).
 See [the roadmap](docs/spec/roadmap.md) for the current verification status.

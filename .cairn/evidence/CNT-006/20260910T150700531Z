@@ -1,0 +1,21 @@
+requirement: CNT-006
+requirement_digest: sha256:f8636e84132668c82e654a75c285144bcb56a0a0546fa6eb7552aba4f58bfd3d
+sequence: 11
+history_digest: sha256:4711a27b891d9a7d3e22f6a473fcbda4d7bfc6037cace685d0d6d8d5c20d1668
+mechanism: editorial-publication
+commit: 6e6d44d
+inputs_digest: sha256:d55e7a75bc9b1dc25bc9958cae9eecbd0dcb02a745563740f5f50a7d31d31808
+mechanism_digest: sha256:8db8f63f51a68b3f563a31e5cd8f37b081637525398d81fc7bbc688df3975870
+inputs_detail: .cairn/evidence/CNT-001/20260910T150613898Z-4101006.inputs.json
+command: node scripts/verify-complete-starter.mjs editorial
+cwd: .
+exit: 0
+output_digest: sha256:6bc164b5140b0e68f8919ee639a460e3797db2192dbc95d0aa4e149b70370547
+output: .cairn/evidence/CNT-001/20260910T150613898Z-4101006.out
+stderr_output: .cairn/evidence/CNT-001/20260910T150613898Z-4101006.err
+stderr_digest: sha256:1be0ec9145ce16b4ed3700e89d2f95b243e362cfdb7a510935a1eb2069ca92a1
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-10T15:07:00.531Z

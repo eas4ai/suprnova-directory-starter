@@ -117,3 +117,5 @@ dd { margin: 0; overflow-wrap: anywhere; }
 .form-input { display: block; width: 100%; padding: .7rem .8rem; border: 1px solid var(--border-default); border-radius: var(--radius-control); background: var(--surface-canvas); color: var(--text-primary); }
 .form-error { color: var(--color-error); font-size: .875rem; margin-top: .4rem; }
 .form-checkbox { accent-color: var(--brand-accent); }
+
+[data-theme="dark"] ::placeholder { color: var(--text-muted); opacity: 1; }

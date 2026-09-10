@@ -56,7 +56,7 @@ async function appearance(page, mode, accent) {
   assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), mode === 'dark' ? 'rgb(9, 9, 11)' : 'rgb(255, 255, 255)');
   assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'Page overflows horizontally');
 }
-async function contrast(page, selector) {
+async function contrast(page, selector, pseudo = null) {
   // Read final colors, not a frame halfway through the button's hover transition.
   await page.locator(selector).evaluateAll(elements => Promise.all(elements.flatMap(element => {
     getComputedStyle(element).backgroundColor;
@@ -64,7 +64,7 @@ async function contrast(page, selector) {
   })));
   let results;
   await expect.poll(async () => {
-    results = await page.locator(selector).evaluateAll(elements => {
+    results = await page.locator(selector).evaluateAll((elements, pseudo) => {
       const canvas = document.createElement('canvas');
       canvas.width = canvas.height = 1;
       const context = canvas.getContext('2d', { willReadFrequently: true });
@@ -79,13 +79,13 @@ async function contrast(page, selector) {
         return .2126 * rgb[0] + .7152 * rgb[1] + .0722 * rgb[2];
       }
       return elements.filter(element => element.getClientRects().length).map(element => {
-        const style = getComputedStyle(element);
-        let background = style.backgroundColor;
+        const style = getComputedStyle(element, pseudo);
+        let background = getComputedStyle(element).backgroundColor;
         for (let parent = element.parentElement; background === 'rgba(0, 0, 0, 0)' && parent; parent = parent.parentElement) background = getComputedStyle(parent).backgroundColor;
         const [a, b] = [luminance(style.color), luminance(background)].sort((x, y) => y - x);
         return { text: element.textContent.trim().slice(0, 60), ratio: (a + .05) / (b + .05) };
       });
-    });
+    }, pseudo);
     return results.length > 0 && results.every(result => result.ratio >= 4.5);
   }, { message: `Settled colors must meet contrast for ${selector}` }).toBe(true);
   assert.ok(results.length, `No visible elements matched ${selector}`);
@@ -166,6 +166,7 @@ try {
   await page.goto(origin + '/login');
   await appearance(page, 'dark');
   await contrast(page, '.form-input, .button-primary');
+  await contrast(page, '.form-input', '::placeholder');
   await screenshot(page, 'sign-in-dark.png');
   await login(page);
   await page.goto(origin + '/admin');

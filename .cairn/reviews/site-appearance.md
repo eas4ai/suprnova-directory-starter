@@ -2,7 +2,7 @@
 
 commit: 9d8b8e4d3e61d0655d87a8edc2ed7a717ba5f576
 findings:
-  - open: UI-002 dark placeholder text uses the Tailwind forms gray instead of the shared muted text token; measured contrast is 4.11:1 and the browser check does not yet inspect pseudo-elements.
+  - resolved: UI-002 dark placeholders now use the shared muted text token; direct Chromium verification increased contrast from 4.11:1 to 7.76:1, and the browser mechanism now checks pseudo-elements.
 
 ## Review scope
 
@@ -53,8 +53,16 @@ adapter interface methods; the compiler and real browser/request checks exercise
 them. The reported `read` verbosity is a name-collision attribution to unchanged
 billing code. Test-gate returned exit 4 with 18 routes unlinked to tests in its
 static graph. The full HTTP, SSR and browser mechanisms ran those domains; no
-static-tool pass is claimed. The final production audit remains open for the
-placeholder finding.
+static-tool pass is claimed. The final production audit awaits fresh evidence after the placeholder fix.
 
 The earlier general design audit and its unrelated administration empty-state
 copy issue remain separate from this bounded appearance update.
+
+## Placeholder resolution
+
+A separate implementation action maps dark `::placeholder` to `--text-muted`
+with full opacity; light styles are untouched. The browser contrast helper now
+accepts a pseudo-element and checks login placeholders. The same direct Chromium
+check measured corrected sRGB (161,161,170) over (9,9,11), or
+7.762805693682826:1, and passed. The frontend type/build check passed. Fresh Cairn
+checks and a final review are required before completion.

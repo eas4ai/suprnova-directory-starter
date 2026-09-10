@@ -1,0 +1,21 @@
+requirement: PAY-002
+requirement_digest: sha256:0de19e7aeadec462e5a2f6a5f5d0ce5e646a9b0732e70b5cc43a92e0141e0913
+sequence: 9
+history_digest: sha256:ddefbfc4cf77589862e02a2bde35336a0e75d2298f3891baa9fdeb66c74faee4
+mechanism: paid-lifecycle
+commit: e4dc62c
+inputs_digest: sha256:20d92cbe2c174f34ef2ff9cdc7618d4796c312929f7705f0027a7d3b81425237
+mechanism_digest: sha256:3feffa2a72beef78f07e97ec1ea3d345248d299730af4f2236d3427639df37e3
+inputs_detail: .cairn/evidence/DIR-008/20260910T013610280Z-1096843.inputs.json
+command: node scripts/verify-paid-directory.mjs payments
+cwd: .
+exit: 0
+output_digest: sha256:d1e73859a503f059fd719ede4f83635bd94dd9c578520941d691508456d47d53
+output: .cairn/evidence/DIR-008/20260910T013610280Z-1096843.out
+stderr_output: .cairn/evidence/DIR-008/20260910T013610280Z-1096843.err
+stderr_digest: sha256:0109bb0425429a6ea05c2aafcda3a8aed88004a2b44e88b484273ea59c06f17d
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-10T01:37:29.455Z

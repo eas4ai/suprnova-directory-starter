@@ -1,0 +1,248 @@
+[editorial] cargo fmt --check
+[editorial] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-MrXPyo)
+    Finished `dev` profile [unoptimized] target(s) in 24.03s
+[editorial] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [818.00ms]
+[editorial] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 700 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-complete-MrXPyo/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-C0-3uP-e.css   61.83 kB │ gzip:  10.62 kB
+../public/assets/assets/main-DLRiDWOJ.js   396.04 kB │ gzip: 125.57 kB
+
+✓ built in 1.06s
+[editorial] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 85 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  208.74 kB │ gzip: 34.18 kB
+
+✓ built in 605ms
+[editorial] node scripts/with-ssr.mjs cargo test --locked --test editorial_workflows -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-MrXPyo)
+    Finished `test` profile [unoptimized] target(s) in 5.02s
+     Running tests/editorial_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/editorial_workflows-879f37646baff061)
+
+running 1 test
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/articles/create
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> GET /admin/articles/create
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/taxonomy/category
+<-- Request complete
+--> POST /admin/taxonomy/tag
+<-- Request complete
+--> POST /admin/taxonomy/tag
+<-- Request complete
+--> POST /admin/articles/media
+<-- Request complete
+--> POST /admin/articles/media
+<-- Request complete
+--> POST /admin/articles/media
+<-- Request complete
+--> POST /admin/articles/media
+<-- Request complete
+--> POST /admin/articles/media
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> GET /articles/public-proof
+<-- Request complete
+--> GET /media/articles/public-proof/8e08f0e4-fd0c-4125-b335-57d9e1645791
+<-- Request complete
+--> GET /admin/articles/media/8e08f0e4-fd0c-4125-b335-57d9e1645791
+<-- Request complete
+--> GET /dashboard/listings/media/8e08f0e4-fd0c-4125-b335-57d9e1645791
+<-- Request complete
+--> GET /admin/articles/1/preview
+<-- Request complete
+--> GET /admin/articles/1/preview
+<-- Request complete
+--> POST /admin/articles/1/publish
+<-- Request complete
+--> POST /admin/articles/1
+<-- Request complete
+--> POST /admin/articles/1
+<-- Request complete
+--> POST /admin/articles/1/publish
+<-- Request complete
+--> GET /articles/public-proof
+<-- Request complete
+--> GET /articles/public-proof
+<-- Request complete
+--> GET /media/articles/public-proof/8e08f0e4-fd0c-4125-b335-57d9e1645791
+<-- Request complete
+--> GET /articles
+<-- Request complete
+--> GET /articles
+<-- Request complete
+--> GET /articles
+<-- Request complete
+--> GET /articles
+<-- Request complete
+--> GET /articles
+<-- Request complete
+--> POST /admin/articles/1
+<-- Request complete
+--> GET /articles/public-proof
+<-- Request complete
+--> GET /articles/revised-proof
+<-- Request complete
+--> GET /media/articles/public-proof/21e6e442-9e36-4164-80f9-da3b55765a50
+<-- Request complete
+--> GET /admin/articles/1/preview
+<-- Request complete
+--> POST /admin/articles/1
+<-- Request complete
+--> POST /admin/articles/1
+--> POST /admin/articles/1
+<-- Request complete
+<-- Request complete
+--> POST /admin/articles/1/publish
+<-- Request complete
+--> POST /admin/articles/1/publish
+<-- Request complete
+--> GET /articles/public-proof
+<-- Request complete
+--> GET /articles/revised-proof
+<-- Request complete
+--> POST /admin/articles/2
+<-- Request complete
+--> POST /admin/taxonomy/category/1/remove
+<-- Request complete
+--> POST /admin/taxonomy/tag/1
+<-- Request complete
+--> POST /admin/taxonomy/category/1
+<-- Request complete
+--> GET /articles/revised-proof
+<-- Request complete
+--> POST /admin/taxonomy/category/1
+<-- Request complete
+--> POST /admin/taxonomy/category/1
+<-- Request complete
+--> GET /articles/revised-proof
+<-- Request complete
+--> GET /articles
+<-- Request complete
+--> POST /admin/articles/1/unpublish
+<-- Request complete
+--> GET /articles/public-proof
+<-- Request complete
+--> GET /articles/revised-proof
+<-- Request complete
+--> GET /articles/hidden-proof
+<-- Request complete
+--> GET /feed.xml
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /feed.xml
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/articles/2.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/listings/1.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/articles/2.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /listings/sitemap-listing-0-849891f8ee1f4e30b912eb018ebba937
+<-- Request complete
+--> GET /listings/sitemap-listing-0-849891f8ee1f4e30b912eb018ebba937
+<-- Request complete
+--> GET /robots.txt
+<-- Request complete
+--> GET /sitemaps/articles/0.xml
+<-- Request complete
+--> GET /sitemaps/articles/999.xml
+<-- Request complete
+Editorial HTTP, publication, taxonomy, initial HTML, XML and private media contracts passed.
+test editorial_workflows_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.41s
+
+[editorial] node scripts/with-ssr.mjs node frontend/tests/editorial-workflows.mjs
+Editorial authoring/upload/preview/publication, initial HTML without JavaScript, safe Markdown, taxonomy protection, stale edits, slug redirects, feeds, pagination, keyboard and mobile journeys passed.
+cairn: CNT-001: pass
+cairn: CNT-002: pass
+cairn: CNT-003: pass
+cairn: CNT-004: pass
+cairn: CNT-005: pass
+cairn: CNT-006: pass

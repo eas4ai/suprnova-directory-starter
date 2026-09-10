@@ -1,7 +1,7 @@
 # Roadmap
 
 Status: Agreed 2026-09-10
-Current: admin-overview
+Current: seo-controls
 
 ## First starter delivery
 

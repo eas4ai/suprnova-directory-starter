@@ -1,7 +1,7 @@
 # SEO controls and Markdown publication
 
 Status: Agreed 2026-09-10
-Requirements: FND-001, FND-002, FND-003, FND-004, FND-005, PAY-001, PAY-004, PAY-005, PAY-006, PAY-007, PAY-008, DIR-001, DIR-002, DIR-003, DIR-004, DIR-005, DIR-006, DIR-007, DIR-008, PAY-002, PAY-003, PAY-009, PAY-010, PAY-011, PAY-012, PAY-013, PAY-014, PAY-015, PAY-016, CNT-001, CNT-002, CNT-003, CNT-004, CNT-005, CNT-006, ADM-001, ADM-002, ADM-003, KIT-001, KIT-002, KIT-003, KIT-004, KIT-005, UI-001, UI-002, OVR-001, OVR-002, OVR-003, SEO-001, SEO-002, SEO-003, SEO-004, SEO-005, SEO-006
+Requirements: SEO-001, SEO-002, SEO-003, SEO-004, SEO-005, SEO-006, FND-001, FND-002, FND-003, FND-004, FND-005, PAY-001, PAY-004, PAY-005, PAY-006, PAY-007, PAY-008, DIR-001, DIR-002, DIR-003, DIR-004, DIR-005, DIR-006, DIR-007, DIR-008, PAY-002, PAY-003, PAY-009, PAY-010, PAY-011, PAY-012, PAY-013, PAY-014, PAY-015, PAY-016, CNT-001, CNT-002, CNT-003, CNT-004, CNT-005, CNT-006, ADM-001, ADM-002, ADM-003, KIT-001, KIT-002, KIT-003, KIT-004, KIT-005, UI-001, UI-002, OVR-001, OVR-002, OVR-003
 
 ## Outcome
 
@@ -30,3 +30,9 @@ Done requires fresh passing evidence for all named requirements, meaningful
 failure demonstrations, browser checks where specified, and the recorded final
 self-audit. No deployment or unrelated provider integration is implied. Cairn
 stops at Done; activating the following commitment remains the developer's choice.
+
+## Todo
+
+- In progress: map existing SEO/publication paths and declare complete verification mechanisms.
+- Pending: implement and verify metadata, discovery, redirects, findings and Markdown publication.
+- Pending: refresh inherited checks, demonstrate failures and complete production review.

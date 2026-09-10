@@ -1,9 +1,28 @@
+![Suprnova Directory Starter Kit — build and ship a directory with Rust](assets/card.jpg)
+
 # Suprnova directory starter
 
 A free directory starter built on Suprnova, with owner submissions, moderation,
 directory search and free or paid publication through Stripe and Paddle.
 Licensed under [MIT](LICENSE), with [third-party notices](THIRD_PARTY_NOTICES.md).
 See [the roadmap](docs/spec/roadmap.md) for the current verification status.
+
+## Features
+
+- **Directory discovery:** searchable listings, category filters, pagination and public detail pages.
+- **Owner submissions and moderation:** saved drafts, revision history, approval and rejection, resubmission and suspension. Eligible approved content stays public while edits await review.
+- **Free and paid publication:** Stripe and Paddle, configurable publishing plans, separate test/live settings, authenticated webhooks and payment recovery.
+- **Editorial publishing:** article drafts, previews, explicit publication, categories, tags and RSS feeds.
+- **Accounts and administration:** registration, email verification, password recovery, permission-based roles, account suspension and audit history.
+- **Admin overview:** current publication counts, pending reviews and navigation tailored to each administrator's permissions.
+- **SEO controls:** site defaults and content overrides for search titles, descriptions, social images and indexing, plus Google Search Console and Bing verification values.
+- **Public metadata and sitemaps:** server-rendered canonical, Open Graph, Twitter card and structured data, crawler instructions and sitemaps that follow publication eligibility.
+- **Redirects and missing-page reports:** same-site 301 redirects, automatic redirects for published article slug changes and a bounded, path-only 404 report.
+- **SEO findings and previews:** missing and duplicate metadata findings, indexing status and search/social previews of saved public content.
+- **Public Markdown:** Markdown versions of eligible listings and articles, linked from their HTML pages and checked against current publication eligibility on every request.
+- **Media and notifications:** image uploads, protected draft media and owner notifications for moderation and payment events.
+- **Appearance:** responsive public and admin layouts, optional color presets and a remembered light/dark preference.
+- **Starter operations:** demo content and documented installation, migration, backup and restore workflows.
 
 ## Prerequisites
 

@@ -74,16 +74,17 @@ pub async fn index(req: Request) -> Response {
     let user = Auth::user_as::<User>()
         .await?
         .ok_or(FrameworkError::Unauthorized)?;
-    articles::require_permission(user.id, crate::billing::ADMIN_PERMISSION).await?;
     let listing_summary = if user
         .has_permission_to(listings::MODERATE_PERMISSION)
         .await?
     {
+        articles::require_permission(user.id, listings::MODERATE_PERMISSION).await?;
         Some(listing_summary(chrono::Utc::now().timestamp()).await?)
     } else {
         None
     };
     let article_summary = if user.has_permission_to(articles::EDIT_PERMISSION).await? {
+        articles::require_permission(user.id, articles::EDIT_PERMISSION).await?;
         Some(article_summary().await?)
     } else {
         None

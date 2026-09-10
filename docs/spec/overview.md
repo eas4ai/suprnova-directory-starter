@@ -20,5 +20,6 @@ Review occurs before payment. Payment eligibility and moderation approval are se
 | Editorial, taxonomy, RSS and SEO | content.md | CNT; complete-starter requirements |
 | Delegated administration and audit | administration.md | ADM; complete-starter requirements |
 | Notifications, media and starter adoption | adoption.md | KIT; complete-starter requirements |
+| Optional color presets and visitor appearance | appearance.md | UI; site-appearance requirements |
 
-Read glossary.md, foundation.md, payments.md, directory.md, content.md, administration.md, adoption.md and roadmap.md after this overview. Paths in the map are repository-relative except sibling spec filenames, which are relative to docs/spec. Existing implementation evidence and unverified findings remain in docs/recon.md and docs/pulsar-assessment.md.
+Read glossary.md, foundation.md, payments.md, directory.md, content.md, administration.md, adoption.md, appearance.md and roadmap.md after this overview. Paths in the map are repository-relative except sibling spec filenames, which are relative to docs/spec. Existing implementation evidence and unverified findings remain in docs/recon.md and docs/pulsar-assessment.md.

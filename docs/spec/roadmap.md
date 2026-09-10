@@ -12,6 +12,12 @@ Current: site-appearance
 
 The foundation and provider administration are complete. The developer confirmed paid-directory and complete-starter, including their requirement text, falsifiers and operating policies, on 2026-09-09. Implement them in this order. Paid publishing remains in the first delivery.
 
+## Appearance update
+
+5. site-appearance — optional Tailwind color presets with blank retaining the
+   current theme, plus a remembered visitor light/dark switch. The developer
+   confirmed this bounded update on 2026-09-09. See docs/spec/appearance.md.
+
 ## Next framework iteration
 
 NOWPayments adapter for the next Suprnova release: docs/commitments/nowpayments-framework-adapter.md. This is a separate framework workstream, not the next Current value in this repository.

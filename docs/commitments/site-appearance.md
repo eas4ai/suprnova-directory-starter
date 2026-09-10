@@ -12,9 +12,9 @@ switch in docs/spec/appearance.md. Preserve all completed starter contracts.
 
 - Completed: implement and verify validated configuration, request-scoped Vuetify
   themes, shared head styles and the accessible switch.
-- In progress: finish browser evidence for presets, persistence, SSR isolation and
-  public/account/admin surfaces; record all Cairn regression checks.
-- Pending: review the committed implementation and resolve findings.
+- Completed: verify browser presets, persistence, SSR isolation, public/account/admin
+  surfaces and documentation; record all 45 passing Cairn requirement checks.
+- In progress: review the committed implementation and resolve findings.
 
 The isolated appearance suite passed on 2026-09-09: configuration units, both
 builds, eight presets in both shells/modes, cookie persistence, concurrent server

@@ -1,0 +1,21 @@
+requirement: ADM-003
+requirement_digest: sha256:4ea9c1751177ad61d0761948c4f33a836bf3b81fe329ee60bc8ef496a2c70179
+sequence: 6
+history_digest: sha256:36a205a20f9724937a8d7d14c64cc69f0b0c9d700256954c1b52ffaa8ff7ca73
+mechanism: delegated-administration
+commit: 6397d52
+inputs_digest: sha256:b5e917dfe5fb5fcc346eb83a7bf55491f49b03633e4e5a4504fd030a56f48c9d
+mechanism_digest: sha256:748efaa9dfbbaeb141d0f8a7afde2511c55f53720058daecd47a2ebababbeb9d
+inputs_detail: .cairn/evidence/ADM-001/20260910T010108180Z-421728.inputs.json
+command: node scripts/verify-complete-starter.mjs administration
+cwd: .
+exit: 0
+output_digest: sha256:1c837a8d63f3ed07d38fbe5234c0b48c11a8f8d71288ecd45231c119c6a14644
+output: .cairn/evidence/ADM-001/20260910T010108180Z-421728.out
+stderr_output: .cairn/evidence/ADM-001/20260910T010108180Z-421728.err
+stderr_digest: sha256:027f0dccaa59bed4b7f3b7d527468035fa29e1c82b78acaad90e9a7a694eea4b
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-10T01:02:00.309Z

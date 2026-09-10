@@ -11,4 +11,4 @@ Store optional metadata on listing/article revisions and taxonomy records; prese
 
 ## Realized by
 
-a1b20086f7f165fa27571dda020344cfdf8a8899 Add revision-aware SEO controls and public Markdown twins
+- a1b20086f7f165fa27571dda020344cfdf8a8899 Add revision-aware SEO controls and public Markdown twins

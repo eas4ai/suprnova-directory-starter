@@ -1,0 +1,60 @@
+
+[build] cargo metadata --locked --no-deps --format-version 1
+[build] command passed
+
+[build] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-ZHggpJ)
+    Finished `dev` profile [unoptimized] target(s) in 24.30s
+[build] command passed
+
+[build] bun install --frozen-lockfile
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [129.00ms]
+[build] command passed
+
+[build] bun run build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 700 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-foundation-ZHggpJ/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-C0-3uP-e.css   61.83 kB │ gzip:  10.62 kB
+../public/assets/assets/main-DLRiDWOJ.js   396.04 kB │ gzip: 125.57 kB
+
+✓ built in 1.01s
+[build] command passed
+
+[build] bun run build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 85 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  208.74 kB │ gzip: 34.18 kB
+
+✓ built in 531ms
+[build] command passed
+cairn: FND-001: pass

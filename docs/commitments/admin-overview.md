@@ -34,4 +34,4 @@ stops at Done; activating the following commitment remains the developer's choic
 
 - Completed: establish and validate the commitment, requirement references and falsifiers.
 - Completed: declare and implement the overview mechanism and application changes; all three overview checks pass.
-- In progress: complete inherited checks and final review.
+- Completed: all 48 requirements have fresh passing evidence; failure demonstrations and final production review are recorded.

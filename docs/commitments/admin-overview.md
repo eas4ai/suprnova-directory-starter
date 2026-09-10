@@ -32,6 +32,6 @@ stops at Done; activating the following commitment remains the developer's choic
 
 ## Todo
 
-- In progress: establish the commitment and its falsifiable specification.
-- Pending: declare and implement the overview mechanism and application changes.
+- Completed: establish and validate the commitment, requirement references and falsifiers.
+- In progress: declare and implement the overview mechanism and application changes.
 - Pending: complete committed verification, inherited checks and final review.

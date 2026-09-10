@@ -11,4 +11,6 @@ The developer approved proceeding with the reviewed admin, SEO and traffic propo
 
 ## Realized by
 
+- 7194c2549a3ef2feb284fbd21b20004a9f640a77 Specify admin SEO and traffic commitments
+
 (none yet: recorded, not built)

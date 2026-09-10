@@ -9,6 +9,7 @@ import { snapshot } from './verification-workspace.mjs';
 const task = process.argv[2];
 const source = resolve(process.argv[3] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const groups = {
+  seo: Array.from({ length: 6 }, (_, index) => `SEO-${String(index + 1).padStart(3, '0')}`),
   editorial: Array.from({ length: 6 }, (_, index) => `CNT-${String(index + 1).padStart(3, '0')}`),
   administration: Array.from({ length: 3 }, (_, index) => `ADM-${String(index + 1).padStart(3, '0')}`),
   adoption: Array.from({ length: 5 }, (_, index) => `KIT-${String(index + 1).padStart(3, '0')}`),
@@ -27,7 +28,7 @@ function run(command, args, env) {
   assert.equal(result.status, 0, `${command} exited ${result.status} (signal ${result.signal ?? 'none'})`);
 }
 try {
-  assert.ok(requirements, 'Choose editorial, administration, adoption or overview verification.');
+  assert.ok(requirements, 'Choose seo, editorial, administration, adoption or overview verification.');
   assert.ok(requirements, 'Unknown verification group.');
   working = snapshot(source, 'directory-complete-');
   const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));

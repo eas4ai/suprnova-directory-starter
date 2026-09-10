@@ -1,0 +1,22 @@
+command: node scripts/verify-complete-starter.mjs seo
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - SEO-001
+  - SEO-002
+  - SEO-003
+  - SEO-004
+  - SEO-005
+  - SEO-006

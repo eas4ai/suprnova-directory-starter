@@ -5,10 +5,6 @@ directory search and free or paid publication through Stripe and Paddle.
 Licensed under [MIT](LICENSE), with [third-party notices](THIRD_PARTY_NOTICES.md).
 See [the roadmap](docs/spec/roadmap.md) for the current verification status.
 
-The framework and both payment adapters are pinned to Suprnova commit
-`107e6e7a122d5145160ea1547ca90ddc37459c27` for the reviewed checkout repairs.
-Cargo.lock records that exact revision; no local framework checkout is required.
-
 ## Prerequisites
 
 - Rust 1.94 or newer and Cargo; this checkout is verified with Rust 1.95.

@@ -321,14 +321,19 @@ pub async fn owner_search(
     ))
 }
 
+/// The overview and review queue count the same current submitted revisions.
+pub fn awaiting_review() -> Condition {
+    Condition::all().add(listing::Column::Archived.eq(false))
+        .add(Expr::cust("EXISTS (SELECT 1 FROM listing_revisions r WHERE r.id = listings.current_revision_id AND r.status = 'submitted')"))
+}
+
 pub async fn review_queue(
     actor_id: i64,
     page: Page,
 ) -> Result<(Vec<OwnerListing>, Pagination), FrameworkError> {
     super::workflow::require_moderator(actor_id).await?;
     let db = DB::connection()?;
-    let query = listing::Entity::find().filter(listing::Column::Archived.eq(false))
-        .filter(Expr::cust("EXISTS (SELECT 1 FROM listing_revisions r WHERE r.id = listings.current_revision_id AND r.status = 'submitted')"));
+    let query = listing::Entity::find().filter(awaiting_review());
     let total = query
         .clone()
         .count(db.inner())

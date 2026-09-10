@@ -1,0 +1,15 @@
+OVR-001 rejected: panicked at tests/overview_workflows.rs:186:5:
+assertion `left == right` failed
+  left: Object {"published": Number(4), "awaiting_review": Number(2), "total": Number(4)}
+ right: Object {"published": Number(2), "awaiting_review": Number(2), "total": Number(4)}
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test overview_workflows`
+
+OVR-002 rejected: panicked at tests/overview_workflows.rs:289:13:
+assertion `left == right` failed: editor received listing_summary
+  left: true
+ right: false
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test overview_workflows`
+
+OVR-003: wrong queue destination rejected by the browser URL assertion.

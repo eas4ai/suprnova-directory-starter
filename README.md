@@ -131,6 +131,14 @@ editors get article editing and publication. Taxonomy, billing, accounts and aud
 require their own permission. Role names alone carry no authority. Saving account access replaces starter direct
 grants and memberships that confer starter permissions; unrelated roles remain.
 
+**Administration → Overview** shows current publication counts and pending listing
+reviews for the capabilities you hold. Published counts use the same eligibility
+rules as the public directory; a published listing can also have changes awaiting
+review. Editors see published article counts, and accounts with `audit.view` see
+the five most recent administrative actions. Query failures remain errors rather
+than appearing as zero activity. Navigation groups the available content, billing,
+administrative and account destinations.
+
 Role grants require verified email. The UI prevents removal or suspension of the last
 active verified full administrator and rejects stale forms. The host command can
 recover access without overriding email verification. Suspension blocks new sign-in,

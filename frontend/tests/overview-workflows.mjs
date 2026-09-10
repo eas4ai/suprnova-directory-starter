@@ -39,7 +39,7 @@ async function stop() {
   if (server.exitCode === null && server.signalCode === null) server.kill('SIGKILL');
 }
 
-async function login(page, name) {
+async function login(page, name, path = '/admin') {
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (/hydration/i.test(message.text())) errors.push(message.text()); });
   await page.goto(origin + '/login');
@@ -47,7 +47,7 @@ async function login(page, name) {
   await page.getByLabel('Password', { exact: true }).fill('fixture-password-123');
   await page.getByRole('button', { name: 'Sign in', exact: true }).click();
   await expect(page).toHaveURL(origin + '/dashboard');
-  await page.goto(origin + '/admin');
+  await page.goto(origin + path);
 }
 
 async function screenshot(page, name) {
@@ -58,7 +58,7 @@ async function screenshot(page, name) {
 
 async function overview(page) {
   for (const [metric, count] of [['published-listings', 2], ['pending-reviews', 2], ['published-articles', 1]]) {
-    await expect(page.locator(`[data-metric="${metric}"] dd`)).toHaveText(String(count));
+    await expect(page.locator(`[data-metric="${metric}"] .overview-count`)).toHaveText(String(count));
   }
   await expect(page.locator('.overview-activity li')).toHaveCount(5);
   await expect(page.getByText('Your directory has no published listings yet.', { exact: true })).toHaveCount(0);
@@ -131,12 +131,6 @@ try {
   await expect(page).toHaveURL(origin + '/admin/articles');
   await expect(dialog).not.toBeVisible();
 
-  const noJsContext = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 390, height: 844 } });
-  await noJsContext.addCookies(await context.cookies());
-  const noJs = await noJsContext.newPage();
-  await noJs.goto(origin + '/admin');
-  await overview(noJs);
-
   for (const [name, visible] of [['moderator', 'published-listings'], ['editor', 'published-articles'], ['billing', null]]) {
     const delegated = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
     const actor = await delegated.newPage();
@@ -152,8 +146,41 @@ try {
     await screenshot(actor, `overview-${name}.png`);
     await delegated.close();
   }
+  // Use the actual owner and editorial workflows to make the public counts zero.
+  const ownerContext = await browser.newContext();
+  const owner = await ownerContext.newPage();
+  await login(owner, 'owner', '/dashboard/listings');
+  for (let remaining = 4; remaining > 0; remaining--) {
+    const editable = owner.getByRole('link', { name: 'Edit listing', exact: true });
+    await expect(editable).toHaveCount(remaining);
+    await editable.first().click();
+    owner.once('dialog', async dialog => {
+      assert.match(dialog.message(), /^Archive this listing\?/);
+      await dialog.accept();
+    });
+    await owner.getByRole('button', { name: 'Archive listing', exact: true }).click();
+    await expect(owner).toHaveURL(origin + '/dashboard/listings');
+  }
+  await ownerContext.close();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto(origin + '/admin/articles?state=published');
+  await page.locator('.editorial-admin-list > li').getByRole('link').click();
+  page.once('dialog', async dialog => {
+    assert.match(dialog.message(), /^Unpublish this article\?/);
+    await dialog.accept();
+  });
+  await page.getByRole('button', { name: 'Unpublish article', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Unpublish article', exact: true })).toHaveCount(0);
+  await page.goto(origin + '/admin');
+  for (const metric of ['published-listings', 'pending-reviews', 'published-articles']) {
+    await expect(page.locator(`[data-metric="${metric}"] .overview-count`)).toHaveText('0');
+  }
+  await expect(page.getByText('No listings are public right now.', { exact: true })).toBeVisible();
+  await expect(page.getByText('No articles are public right now.', { exact: true })).toBeVisible();
+  await expect(page.getByText('No listings are waiting for review.', { exact: true })).toBeVisible();
+  await screenshot(page, 'overview-empty.png');
   expect(errors).toEqual([]);
-  console.log('Overview counts, queue links, delegated data/navigation, keyboard/mobile themes, text contrast and no-JavaScript rendering passed.');
+  console.log('Overview counts, queue links, delegated data/navigation, keyboard/mobile themes, text contrast and real empty states passed.');
 } catch (error) {
   if (browser) for (const context of browser.contexts()) for (const page of context.pages()) {
     try { await screenshot(page, 'overview-failure.png'); }

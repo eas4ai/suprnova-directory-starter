@@ -1,0 +1,36 @@
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-luNM6X)
+    Finished `dev` profile [unoptimized] target(s) in 22.39s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-complete-luNM6X/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-luNM6X)
+    Finished `test` profile [unoptimized] target(s) in 2.22s
+     Running tests/seo_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/seo_workflows-c6a5ba4683a30b4d)
+
+thread 'seo_workflows_contract' (196051) panicked at tests/seo_workflows.rs:42:5:
+assertion `left == right` failed: SEO settings must be available to the full administrator: 404 Not Found
+  left: 404
+ right: 200
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test seo_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/directory-complete-luNM6X/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 38085...
+Inertia SSR server started.
+
+AssertionError [ERR_ASSERTION]: node exited 1 (signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-complete-starter.mjs:28:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-complete-starter.mjs:52:3
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)

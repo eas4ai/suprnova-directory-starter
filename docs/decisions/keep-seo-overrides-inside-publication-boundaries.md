@@ -11,4 +11,4 @@ Store optional metadata on listing/article revisions and taxonomy records; prese
 
 ## Realized by
 
-Revision SEO columns and versioned site settings in migration 13; `src/seo/`, `src/public_pages.rs`, publication queries, editor forms and `admin/Seo.vue`; pinned suprnova-markdown dependency; `tests/seo_workflows.rs`, browser journeys and six deliberate failure demonstrations.
+a1b20086f7f165fa27571dda020344cfdf8a8899 Add revision-aware SEO controls and public Markdown twins

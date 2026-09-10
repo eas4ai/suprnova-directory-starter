@@ -12,3 +12,7 @@ The developer requested common Tailwind color presets, explicitly retained blank
 ## Realized by
 
 (none yet: recorded, not built)
+
+## Realized by
+
+- d4266614733ce1bbb0d8349e76cf6496bd84cab8 Add optional color presets and remembered light and dark appearance

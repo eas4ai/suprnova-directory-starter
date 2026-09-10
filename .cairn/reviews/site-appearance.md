@@ -1,6 +1,6 @@
 # Site appearance review
 
-commit: aa8c19eef27945334a8dc42ca82ebcb67b8e158d
+commit: c8290c2afeab4b6a9f0e93a437583af55279f72d
 findings:
   - resolved: UI-002 dark placeholders now use the shared muted text token; direct Chromium verification increased contrast from 4.11:1 to 7.76:1, and the browser mechanism now checks pseudo-elements.
 
@@ -90,3 +90,15 @@ Static-tool limitations are disclosed above rather than reported as passes.
 The developer's blank-default and light/dark choices are preserved, the review
 finding was corrected before delivery, and the setup instructions use concrete
 configuration examples. The appearance change is ready to deliver.
+
+## Login link layout follow-up
+
+Reviewed the developer-requested change in 5242836: the existing link container
+uses a vertical flex layout with an 8px gap. Link targets, text, semantics and
+keyboard order remain intact. The narrow-browser check measured separate lines
+with an 8px gap; frontend type checking passed. All 45 requirements have fresh
+passing evidence, ending with UI-001/UI-002 at 20260910T014229232Z.
+No application code changed during this review and no new finding remains.
+Rechecked the 14-rule self-audit above against this one-line presentation change;
+no new state, dependency, boundary, security or performance concern is introduced.
+The local runtime database is excluded from staging and publication.

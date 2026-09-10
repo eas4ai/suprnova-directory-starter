@@ -1,7 +1,7 @@
 # Roadmap
 
 Status: Agreed 2026-09-08
-Current: complete-starter
+Current: site-appearance
 
 ## First starter delivery
 

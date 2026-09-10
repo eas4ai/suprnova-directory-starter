@@ -1,0 +1,123 @@
+[adoption] cargo fmt --check
+[adoption] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-dntw1Q)
+    Finished `dev` profile [unoptimized] target(s) in 15.35s
+[adoption] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [122.00ms]
+[adoption] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 698 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-complete-dntw1Q/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-ChD6qj05.css   59.70 kB │ gzip:  10.28 kB
+../public/assets/assets/main-CBmKxIXo.js   392.57 kB │ gzip: 124.71 kB
+
+✓ built in 784ms
+[adoption] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 83 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  201.48 kB │ gzip: 33.11 kB
+
+✓ built in 590ms
+[adoption] cargo test --locked --test demo_seed -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-dntw1Q)
+    Finished `test` profile [unoptimized] target(s) in 1.62s
+     Running tests/demo_seed.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/demo_seed-4619d33667e86df9)
+
+running 5 tests
+test reserved_account_and_category_collisions_refuse_without_partial_writes ... ok
+test concurrent_console_seeds_share_one_fixture_set ... ok
+test production_requires_override_even_after_successful_seed ... ok
+test late_write_failure_rolls_back_and_retry_succeeds ... ok
+test console_seed_is_repeatable_and_preserves_operator_and_demo_credentials ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.28s
+
+[adoption] node scripts/verify-adoption-install.mjs
+[adoption install] cargo run
+[adoption install] python3 -c
+[adoption install] cargo run
+[adoption install] python3 -c
+[adoption install] bash -euc
+[adoption install] python3 -c
+[adoption install] bash -euc
+[adoption install] python3 -c
+[adoption install] python3 -c
+[adoption install] cargo run
+[adoption install] cargo run
+[adoption install] cargo run
+[adoption install] cargo run
+[adoption install] cargo run
+[adoption install] cargo run
+[adoption install] cargo run
+[adoption install] cargo run
+[adoption install] bash -euc
+[adoption install] python3 -c
+[adoption install] bash -euc
+[adoption install] bash -euc
+[adoption install] python3 -c
+[adoption install] cargo run
+[adoption install] cargo run
+[adoption install] bash -euc
+Documented migrations, seeds, operator commands and SQLite/media/key restoration passed.
+[adoption] node scripts/with-ssr.mjs cargo test --locked --test adoption_workflows -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-dntw1Q)
+    Finished `test` profile [unoptimized] target(s) in 2.10s
+     Running tests/adoption_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/adoption_workflows-c50a0329227f3e70)
+
+running 4 tests
+test configuration_probe ... ok
+test storage_probe ... ok
+test configuration_and_storage_contract ... ok
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard/listings/1/edit
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard/listings/1/edit
+<-- Request complete
+Moderation/payment intents, rollback, replay, restart, captured mail, retry limits, leases and private bounded owner history passed.
+test adoption_workflows_contract ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.46s
+
+[adoption] node scripts/with-ssr.mjs node frontend/tests/adoption-workflows.mjs
+Configured public/admin branding, initial metadata without JavaScript, escaped durable owner notification history and mobile journeys passed.
+cairn: KIT-001: pass
+cairn: KIT-002: pass
+cairn: KIT-003: pass
+cairn: KIT-004: pass
+cairn: KIT-005: pass

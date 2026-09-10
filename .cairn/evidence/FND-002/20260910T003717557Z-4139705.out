@@ -1,0 +1,24 @@
+[database] first migration run
+
+[database] cargo run --locked --bin directory -- migrate
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-L3KLvU)
+    Finished `dev` profile [unoptimized] target(s) in 18.60s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`
+Running migrations...
+Migrations completed successfully!
+[database] command passed
+
+[database] bun scripts/check-schema.mjs /home/shawn/workspace2/scratchpads/directory-foundation-L3KLvU/database.db --seed-probe
+[database] command passed
+[database] repeat migration run
+
+[database] cargo run --locked --bin directory -- migrate
+    Finished `dev` profile [unoptimized] target(s) in 0.60s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`
+Running migrations...
+Migrations completed successfully!
+[database] command passed
+
+[database] bun scripts/check-schema.mjs /home/shawn/workspace2/scratchpads/directory-foundation-L3KLvU/database.db
+[database] command passed
+cairn: FND-002: pass

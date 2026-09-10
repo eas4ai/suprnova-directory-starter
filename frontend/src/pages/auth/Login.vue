@@ -84,7 +84,7 @@ function submit() {
           </button>
         </div>
 
-        <div class="text-center">
+        <div class="flex flex-col items-center gap-2 text-center">
           <a href="/forgot-password" class="text-link">Forgot your password?</a>
           <a href="/register" class="text-link">
             Don't have an account? Register

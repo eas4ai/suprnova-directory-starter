@@ -1,0 +1,356 @@
+[administration] cargo fmt --check
+[administration] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-03TwVl)
+    Finished `dev` profile [unoptimized] target(s) in 20.17s
+[administration] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [647.00ms]
+[administration] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 706 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-complete-03TwVl/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-CV_P36Z-.css   63.62 kB │ gzip:  10.85 kB
+../public/assets/assets/main-BCXZYtW9.js   413.10 kB │ gzip: 129.92 kB
+
+✓ built in 836ms
+[administration] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 91 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  233.52 kB │ gzip: 38.32 kB
+
+✓ built in 395ms
+[administration] node scripts/with-ssr.mjs cargo test --locked --test administration_workflows -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-03TwVl)
+    Finished `test` profile [unoptimized] target(s) in 2.21s
+     Running tests/administration_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/administration_workflows-028c2a7f77657893)
+
+running 1 test
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/taxonomy/category
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /admin/listings/99999/decision
+<-- Request complete
+--> POST /admin/taxonomy/category
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /admin/listings/99999/decision
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /admin/listings/99999/decision
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/taxonomy/category
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /admin/listings/99999/decision
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/taxonomy/category
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /admin/listings/99999/decision
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/taxonomy/category
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> POST /admin/accounts/3
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /admin/listings
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/taxonomy
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /listings/administration-publication-proof-72e972319cbc4e4f95605727284fd9c3
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> GET /dashboard
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /listings/administration-publication-proof-72e972319cbc4e4f95605727284fd9c3
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /listings/administration-publication-proof-72e972319cbc4e4f95605727284fd9c3
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> POST /admin/accounts/2
+<-- Request complete
+--> GET /listings/administration-publication-proof-72e972319cbc4e4f95605727284fd9c3
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+--> GET /admin/accounts/2
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /admin/taxonomy/category
+<-- Request complete
+--> POST /admin/articles
+<-- Request complete
+--> POST /admin/articles/1/publish
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /admin/taxonomy/category/1
+<-- Request complete
+--> POST /admin/articles/1/unpublish
+<-- Request complete
+--> POST /admin/plans/administration-audit-plan
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> POST /admin/accounts/10
+<-- Request complete
+--> POST /admin/accounts/10
+<-- Request complete
+--> POST /admin/accounts/1
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/accounts
+<-- Request complete
+test administration_workflows_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.88s
+
+[administration] node scripts/with-ssr.mjs node frontend/tests/administration-workflows.mjs
+Account search, keyboard role grants, live session capabilities, suspension/reinstatement, stale access recovery, host/user audit history and mobile journeys passed.
+cairn: ADM-001: pass
+cairn: ADM-002: pass
+cairn: ADM-003: pass

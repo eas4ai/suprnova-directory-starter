@@ -29,7 +29,13 @@ for (const [requirement, file, before, after] of cases) {
     const path = join(working, file);
     const original = readFileSync(path, 'utf8');
     assert.equal(original.split(before).length, 2, `${requirement}: mutation must match exactly once`);
-    writeFileSync(path, original.replace(before, after));
+    let mutated = original.replace(before, after);
+    if (requirement === 'OVR-002') {
+      const guard = '        articles::require_permission(user.id, listings::MODERATE_PERMISSION).await?;\n';
+      assert.equal(mutated.split(guard).length, 2, 'OVR-002: secondary permission guard must match once');
+      mutated = mutated.replace(guard, '');
+    }
+    writeFileSync(path, mutated);
     const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
     Object.assign(env, { APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'https://catalog.example.test', APP_NAME: 'Directory',
       APP_KEY: randomBytes(32).toString('base64url'), MAIL_FROM: 'test@example.test', BILLING_CHECKOUT_MODE: 'test',

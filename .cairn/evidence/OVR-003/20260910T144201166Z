@@ -1,0 +1,21 @@
+requirement: OVR-003
+requirement_digest: sha256:5cd8a538b258df89d21da4123f88d7afbde46541ebee0ab94aab93df5585e2d2
+sequence: 3
+history_digest: sha256:4baa118207a5a88b46b3673186033c1f41a5b720858ac40ed8cfbc20ce049b46
+mechanism: admin-overview
+commit: 1f852bd
+inputs_digest: sha256:08e1d365693f59b49a88fb57e09aca7f592f78c7090524d4b5c83242331a8df5
+mechanism_digest: sha256:7d89a66b4042f3c6384d3c0935b7a091c3b74f5e87a8d5bedf7fa74ffb6ff256
+inputs_detail: .cairn/evidence/OVR-001/20260910T144102086Z-3737597.inputs.json
+command: node scripts/verify-complete-starter.mjs overview
+cwd: .
+exit: 0
+output_digest: sha256:9345ddce36ea02ba565960e525826017177ce3942b9547253e98548138a8ee7d
+output: .cairn/evidence/OVR-001/20260910T144102086Z-3737597.out
+stderr_output: .cairn/evidence/OVR-001/20260910T144102086Z-3737597.err
+stderr_digest: sha256:68864006b8cd2fe15232d7d1c5656fbfbd9051eed344688e8356da40c936d3ed
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-10T14:42:01.165Z

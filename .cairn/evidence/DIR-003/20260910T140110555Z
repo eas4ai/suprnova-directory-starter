@@ -1,0 +1,21 @@
+requirement: DIR-003
+requirement_digest: sha256:f07c0b28686855b8a6bd9b4af73dd6789d200cf0ca986de0c8ff9ae272d05d68
+sequence: 15
+history_digest: sha256:85db1906f3c456658c63eac2cf2bb78acb9ba9a5b0ebacce6e5f5fef7fbf7dc7
+mechanism: directory-workflows
+commit: 65e0f27
+inputs_digest: sha256:bb651189ffdeaad530d1366f31e484183c83fb5bf24a84137d54710cbf5c23f6
+mechanism_digest: sha256:d459955d11eaf21916c51de6926890b46c7846901805a3a4daf472eaa3e6a0d8
+inputs_detail: .cairn/evidence/DIR-001/20260910T140011077Z-3232702.inputs.json
+command: node scripts/verify-paid-directory.mjs directory
+cwd: .
+exit: 0
+output_digest: sha256:799113745133107cb02e1c357a70c8fb6111fa3b8d2a74aec564a55ae1bf25f8
+output: .cairn/evidence/DIR-001/20260910T140011077Z-3232702.out
+stderr_output: .cairn/evidence/DIR-001/20260910T140011077Z-3232702.err
+stderr_digest: sha256:7e0fe1b55f49e5360cad19bd7663132460fd728e30e7705d6afa4a752ad63b6d
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-10T14:01:10.555Z

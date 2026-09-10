@@ -26,6 +26,7 @@ name = "console"
 path = "src/bin/console.rs"
 
 [dependencies]
+suprnova-markdown = { git = "https://github.com/eas4ai/suprnova-markdown.git", rev = "dcc6de06a177d66cfc1a9897ded584e19040f40c" }
 suprnova = { git = "https://github.com/eas4ai/suprnova.git", rev = "107e6e7a122d5145160ea1547ca90ddc37459c27" }
 suprnova-payments-stripe = { git = "https://github.com/eas4ai/suprnova.git", rev = "107e6e7a122d5145160ea1547ca90ddc37459c27" }
 suprnova-payments-paddle = { git = "https://github.com/eas4ai/suprnova.git", rev = "107e6e7a122d5145160ea1547ca90ddc37459c27" }

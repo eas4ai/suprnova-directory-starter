@@ -9,6 +9,7 @@ export type Account = {
   can_taxonomy: boolean
   can_accounts: boolean
   can_audit: boolean
+  can_seo: boolean
 }
 
 export type Site = { name: string; description: string; origin: string; logo_url: string | null; accent: string; theme: string }

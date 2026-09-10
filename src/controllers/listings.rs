@@ -88,7 +88,8 @@ pub(super) async fn render_index(req: Request, heading: &str) -> Response {
         &category,
         &pagination,
         req.path() == "/",
-    )?;
+    )
+    .await?;
     inertia_response!(
         &req,
         "directory/Index",
@@ -109,7 +110,7 @@ pub(super) async fn render_index(req: Request, heading: &str) -> Response {
 pub async fn show(req: Request) -> Response {
     let slug = req.param("slug").map_err(|_| listings::missing())?;
     let listing = queries::detail(slug, chrono::Utc::now().timestamp()).await?;
-    let seo = crate::public_pages::listing(&listing)?;
+    let seo = crate::public_pages::listing(&listing).await?;
     inertia_response!(
         &req,
         "directory/Show",

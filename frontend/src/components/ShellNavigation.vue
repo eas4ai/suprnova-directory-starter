@@ -22,6 +22,7 @@ const groups = computed(() => props.admin
       { label: 'Billing', links: user.value?.can_billing
         ? [{ href: '/admin/plans', label: 'Publishing plans' }, { href: '/admin/billing', label: 'Payment providers' }] : [] },
       { label: 'Administration', links: [
+        ...(user.value?.can_seo ? [{ href: '/admin/seo', label: 'SEO' }] : []),
         ...(user.value?.can_accounts ? [{ href: '/admin/accounts', label: 'Accounts' }] : []),
         ...(user.value?.can_audit ? [{ href: '/admin/audit', label: 'Audit history' }] : []),
       ] },

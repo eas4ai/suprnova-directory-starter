@@ -42,6 +42,7 @@ impl From<term::Model> for Term {
 }
 #[derive(Serialize)]
 pub struct ArticleRevision {
+    pub seo: crate::seo::Overrides,
     pub id: i64,
     pub slug: String,
     pub title: String,
@@ -73,6 +74,7 @@ pub struct ArticleSummary {
 }
 #[derive(Serialize)]
 pub struct PublicArticle {
+    pub seo: crate::seo::Overrides,
     pub id: i64,
     pub slug: String,
     pub title: String,
@@ -163,6 +165,7 @@ impl Revisions {
     fn card(&self, row: &article::Model) -> Result<PublicArticle, FrameworkError> {
         let revision = self.row(row.published_revision_id, row.id)?;
         Ok(PublicArticle {
+            seo: crate::seo::Overrides::decode(&revision.seo)?,
             id: row.id,
             slug: row.slug.clone(),
             title: revision.title.clone(),
@@ -205,6 +208,7 @@ pub async fn editor(actor: i64, id: i64) -> Result<EditorArticle, FrameworkError
             .map(|_| format!("/articles/{}", row.slug)),
         published_revision_id: row.published_revision_id,
         current: ArticleRevision {
+            seo: crate::seo::Overrides::decode(&current.seo)?,
             id: current.id,
             slug: current.slug.clone(),
             title: current.title.clone(),
@@ -323,9 +327,31 @@ pub async fn search(
     tag: &str,
     page: Page,
 ) -> Result<(Vec<PublicArticle>, Pagination), FrameworkError> {
+    search_inner(q, category, tag, page, false).await
+}
+
+pub async fn search_indexable(
+    q: &str,
+    category: &str,
+    tag: &str,
+    page: Page,
+) -> Result<(Vec<PublicArticle>, Pagination), FrameworkError> {
+    search_inner(q, category, tag, page, true).await
+}
+
+async fn search_inner(
+    q: &str,
+    category: &str,
+    tag: &str,
+    page: Page,
+    indexable: bool,
+) -> Result<(Vec<PublicArticle>, Pagination), FrameworkError> {
     validate_search(q, category, tag)?;
     let db = DB::connection()?;
     let mut query = article::Entity::find().filter(published());
+    if indexable {
+        query = query.filter(crate::seo::discovery::article_indexable());
+    }
     if !q.trim().is_empty() {
         query = query.filter(Expr::cust_with_values("EXISTS (SELECT 1 FROM article_revisions r WHERE r.id = articles.published_revision_id AND r.search_text LIKE ? ESCAPE '!')", [pattern(q)]));
     }

@@ -6,6 +6,8 @@ use suprnova::FrameworkError;
 #[serde(deny_unknown_fields)]
 pub struct SaveArticle {
     pub version: i64,
+    #[serde(default)]
+    pub seo: crate::seo::Overrides,
     pub slug: String,
     pub title: String,
     pub summary: String,
@@ -28,6 +30,7 @@ pub fn valid_slug(value: &str) -> bool {
 impl SaveArticle {
     pub(super) fn validate(mut self) -> Result<Self, FrameworkError> {
         self.slug = self.slug.trim().to_owned();
+        self.seo = self.seo.validate()?;
         self.title = self.title.trim().to_owned();
         self.summary = self.summary.trim().to_owned();
         self.body = self.body.trim().to_owned();

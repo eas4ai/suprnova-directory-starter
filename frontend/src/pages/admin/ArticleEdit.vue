@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { emptySeo } from '../../types/seo'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 import { Head, Link, router, useForm } from '@inertiajs/vue3'
 import ArticleForm from '../../components/ArticleForm.vue'
@@ -6,7 +7,7 @@ import type { ArticleInput, EditorArticle, Term } from '../../types/articles'
 const props = defineProps<{ article: EditorArticle | null; terms: Term[] }>()
 function initial(): ArticleInput {
   const r = props.article?.current
-  return { version: props.article?.version ?? 0, slug: r?.slug ?? '', title: r?.title ?? '', summary: r?.summary ?? '', body: r?.body ?? '', media_id: r?.media_id ?? null, media_alt: r?.media_alt ?? '', term_ids: r?.terms.map(t => t.id) ?? [] }
+  return { seo: { ...(r?.seo ?? emptySeo()) }, version: props.article?.version ?? 0, slug: r?.slug ?? '', title: r?.title ?? '', summary: r?.summary ?? '', body: r?.body ?? '', media_id: r?.media_id ?? null, media_alt: r?.media_alt ?? '', term_ids: r?.terms.map(t => t.id) ?? [] }
 }
 const form = useForm(initial())
 const action = useForm({ version: props.article?.version ?? 0 })

@@ -7,6 +7,8 @@ use super::invalid;
 #[serde(deny_unknown_fields)]
 pub struct SaveListing {
     pub version: i64,
+    #[serde(default)]
+    pub seo: crate::seo::Overrides,
     pub title: String,
     pub summary: String,
     pub description: String,
@@ -18,6 +20,7 @@ pub struct SaveListing {
 
 impl SaveListing {
     pub(super) fn validate(mut self) -> Result<Self, FrameworkError> {
+        self.seo = self.seo.validate()?;
         self.title = self.title.trim().to_owned();
         self.summary = self.summary.trim().to_owned();
         self.description = self.description.trim().to_owned();

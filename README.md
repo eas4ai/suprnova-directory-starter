@@ -193,6 +193,68 @@ choice for one year. Server-rendered public pages honor the cookie before
 JavaScript runs. Dark mode uses lighter accent shades for readable links and
 buttons. No extra dependency or theme editor is needed.
 
+## SEO controls and Markdown publication
+
+Use **Administration → SEO** for site defaults, verification values, findings,
+search/social previews, manual redirects and the 404 report. Access requires both
+`admin.access` and `seo.manage` on a verified, active account. The full
+`admin:access grant` bundle includes this permission; existing installations can
+rerun that command for their intended administrator after migration. Editors keep
+using their existing listing, article and taxonomy permissions for content SEO.
+
+Search titles, descriptions, social images and noindex flags are optional. Blank
+values fall back to the content title, summary and cover, then site defaults.
+Listing overrides become public through moderation; article overrides become public
+through publishing. Saving a draft never changes public metadata. Taxonomy edits
+apply immediately. Successful settings, redirect and taxonomy changes are audited;
+verification values are omitted from audit summaries. Conflicting saves preserve
+entered values and require reloading the saved version.
+
+The title format requires `{title}` once and permits `{site}` once. Publisher and
+social profiles describe the actual publisher; no reviews, ratings or business facts
+are generated. Paste Google Search Console or Bing verification **values**, without
+HTML tags, save, and complete verification in that service. For Search Console's
+HTML-tag method, use a URL-prefix property matching `APP_URL`; domain properties use
+DNS verification outside this form. Submit `/sitemap.xml` after verification. No
+OAuth connection, search-query import or ranking score is provided.
+
+Public canonical URLs use the configured `APP_URL`. Real pagination keeps its own
+page number; tracking parameters are omitted. A single active taxonomy filter can
+be indexed. Search queries, combined filters and non-default page sizes
+receive noindex. Content or site noindex excludes affected URLs from sitemaps while
+allowing crawlers to read the instruction. Whole-site noindex empties the sitemap
+index. Article/listing sitemap dates use stored public revision dates; static and
+taxonomy URLs omit modification dates. Noindex does not make content private.
+
+Manual redirects return 301 and drop query strings. Sources must be plain site
+paths outside existing route namespaces and public files; encoded paths and
+Markdown paths are rejected. Destinations must currently resolve to a public
+listing, article or index. Limits are 1,000 redirects and five steps per chain.
+Cycles, stale edits and removing a destination with incoming redirects are rejected.
+Published article slug changes retain their existing automatic redirects.
+
+The 404 report stores path-only observations for 30 days, capped at 1,000 paths,
+with 25 rows per page. It omits queries, credentials, sensitive namespaces, encoded
+paths, Markdown paths and long segments. Counts include bots and are not unique
+visitors. Findings compare saved metadata across eligible public content; previews
+use the same resolver as public HTML. Search/social services may display different
+text. External image availability is not checked by the server.
+
+Eligible articles and listings advertise a `.md` alternate link in their HTML.
+The pinned `suprnova-markdown` plugin supplies Markdown responses; the application
+loads the current public revision and checks eligibility on every request.
+Unpublishing, suspension, expiry or revoked eligibility removes the twin immediately
+for subsequent requests. GET and HEAD are supported; responses use UTF-8
+`text/markdown`, `X-Robots-Tag: noindex`, `nosniff` and `Cache-Control: no-store`.
+HTML remains canonical. Noindex content stays publicly readable in both formats.
+The dependency is pinned to `dcc6de06a177d66cfc1a9897ded584e19040f40c` and shares the
+starter's framework revision; do not update one without checking the other.
+
+Run `node scripts/verify-complete-starter.mjs seo` for disposable HTTP, SSR and
+browser verification. Screenshots go to `target/seo-ui`. Run
+`node scripts/demonstrate-seo-failures.mjs` to exercise deliberately broken copies.
+These commands do not modify the operator database.
+
 ## Listings and moderation
 
 After migrating, create the initial categories:
@@ -559,7 +621,7 @@ marked seed, operations, backup and restore blocks above. The helper
 workspace; it does not read the checkout's operator configuration. Foundation
 setup checks execute the install/serve blocks and browser account and moderation
 journeys exercise the real application. The complete-starter groups are
-`editorial`, `administration` and `adoption`; run the earlier verification commands
+`editorial`, `administration`, `adoption`, `overview` and `seo`; run the earlier verification commands
 as regressions as well. Passing editing-time checks are not Cairn receipts.
 
 Local acceptance establishes SQLite, captured mail, local persistent media and

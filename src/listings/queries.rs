@@ -124,6 +124,8 @@ pub async fn public_categories(now: i64) -> Result<Vec<Category>, FrameworkError
 
 #[derive(Serialize)]
 pub struct PublicCard {
+    pub seo: crate::seo::Overrides,
+    pub modified_at: i64,
     pub id: i64,
     pub slug: String,
     pub title: String,
@@ -148,6 +150,25 @@ pub async fn search(
     page: Page,
     now: i64,
 ) -> Result<(Vec<PublicCard>, Pagination), FrameworkError> {
+    search_inner(q, category_slug, page, now, false).await
+}
+
+pub async fn search_indexable(
+    q: &str,
+    category_slug: &str,
+    page: Page,
+    now: i64,
+) -> Result<(Vec<PublicCard>, Pagination), FrameworkError> {
+    search_inner(q, category_slug, page, now, true).await
+}
+
+async fn search_inner(
+    q: &str,
+    category_slug: &str,
+    page: Page,
+    now: i64,
+    indexable: bool,
+) -> Result<(Vec<PublicCard>, Pagination), FrameworkError> {
     if q.chars().count() > 200 {
         return Err(invalid("q", "Search must be at most 200 characters."));
     }
@@ -160,6 +181,9 @@ pub async fn search(
     }
     let db = DB::connection()?;
     let mut query = listing::Entity::find().filter(eligible(now));
+    if indexable {
+        query = query.filter(crate::seo::discovery::listing_indexable());
+    }
     if !q.trim().is_empty() {
         let pattern = format!(
             "%{}%",
@@ -239,6 +263,7 @@ pub fn render_description(source: &str) -> Result<String, FrameworkError> {
 
 #[derive(Serialize)]
 pub struct Revision {
+    pub seo: crate::seo::Overrides,
     pub id: i64,
     pub title: String,
     pub summary: String,
@@ -417,6 +442,7 @@ impl Revisions {
     fn private_revision(&self, id: i64) -> Result<Revision, FrameworkError> {
         let row = self.rows.get(&id).ok_or_else(missing)?;
         Ok(Revision {
+            seo: crate::seo::Overrides::decode(&row.seo)?,
             id,
             title: row.title.clone(),
             summary: row.summary.clone(),
@@ -448,6 +474,8 @@ impl Revisions {
             .filter(|row| row.listing_id == listing.id && row.status == "approved")
             .ok_or_else(missing)?;
         Ok(PublicCard {
+            seo: crate::seo::Overrides::decode(&row.seo)?,
+            modified_at: row.decided_at.unwrap_or(row.created_at),
             id: listing.id,
             slug: listing.slug.clone(),
             title: row.title.clone(),

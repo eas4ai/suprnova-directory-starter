@@ -24,11 +24,14 @@ pub struct TaxonomyItem {
     pub name: String,
     pub active: bool,
     pub version: i64,
+    pub seo: crate::seo::Overrides,
 }
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct SaveTerm {
     pub version: i64,
+    #[serde(default)]
+    pub seo: crate::seo::Overrides,
     pub slug: String,
     pub name: String,
     pub active: bool,
@@ -49,7 +52,7 @@ pub async fn list(actor: i64, kind: &str) -> Result<Vec<TaxonomyItem>, Framework
     validate_kind(kind)?;
     let db = DB::connection()?;
     if kind == "listing_category" {
-        return Ok(category::Entity::find()
+        return category::Entity::find()
             .order_by_asc(category::Column::Name)
             .order_by_asc(category::Column::Id)
             .limit(1000)
@@ -57,17 +60,20 @@ pub async fn list(actor: i64, kind: &str) -> Result<Vec<TaxonomyItem>, Framework
             .await
             .map_err(database_error)?
             .into_iter()
-            .map(|row| TaxonomyItem {
-                id: row.id,
-                kind: kind.into(),
-                slug: row.slug,
-                name: row.name,
-                active: row.active,
-                version: row.version,
+            .map(|row| {
+                Ok(TaxonomyItem {
+                    id: row.id,
+                    kind: kind.into(),
+                    slug: row.slug,
+                    name: row.name,
+                    active: row.active,
+                    version: row.version,
+                    seo: crate::seo::Overrides::decode(&row.seo)?,
+                })
             })
-            .collect());
+            .collect::<Result<Vec<_>, FrameworkError>>();
     }
-    Ok(term::Entity::find()
+    term::Entity::find()
         .filter(term::Column::Kind.eq(kind))
         .order_by_asc(term::Column::Name)
         .order_by_asc(term::Column::Id)
@@ -76,15 +82,18 @@ pub async fn list(actor: i64, kind: &str) -> Result<Vec<TaxonomyItem>, Framework
         .await
         .map_err(database_error)?
         .into_iter()
-        .map(|row| TaxonomyItem {
-            id: row.id,
-            kind: row.kind,
-            slug: row.slug,
-            name: row.name,
-            active: row.active,
-            version: row.version,
+        .map(|row| {
+            Ok(TaxonomyItem {
+                id: row.id,
+                kind: row.kind,
+                slug: row.slug,
+                name: row.name,
+                active: row.active,
+                version: row.version,
+                seo: crate::seo::Overrides::decode(&row.seo)?,
+            })
         })
-        .collect())
+        .collect::<Result<Vec<_>, FrameworkError>>()
 }
 
 pub async fn save(
@@ -95,6 +104,7 @@ pub async fn save(
 ) -> Result<i64, FrameworkError> {
     require_permission(actor, TAXONOMY_PERMISSION).await?;
     validate_kind(kind)?;
+    input.seo = input.seo.validate()?;
     input.name = input.name.trim().into();
     input.slug = input.slug.trim().into();
     if input.name.is_empty() || input.name.chars().count() > 100 || input.name.contains('\0') {
@@ -139,6 +149,7 @@ pub async fn save(
                     category::Column::Version,
                     Expr::col(category::Column::Version).add(1),
                 )
+                .col_expr(category::Column::Seo, Expr::value(input.seo.encode()?))
                 .col_expr(category::Column::Name, Expr::value(input.name))
                 .col_expr(category::Column::Active, Expr::value(input.active))
                 .filter(category::Column::Id.eq(id))
@@ -168,6 +179,7 @@ pub async fn save(
                 return Err(invalid("slug", "This slug is already in use."));
             }
             category::ActiveModel {
+                seo: Set(input.seo.encode()?),
                 slug: Set(input.slug),
                 name: Set(input.name),
                 active: Set(input.active),
@@ -200,6 +212,7 @@ pub async fn save(
                 term::Column::Version,
                 Expr::col(term::Column::Version).add(1),
             )
+            .col_expr(term::Column::Seo, Expr::value(input.seo.encode()?))
             .col_expr(term::Column::Name, Expr::value(input.name))
             .col_expr(term::Column::Active, Expr::value(input.active))
             .filter(term::Column::Id.eq(id))
@@ -230,6 +243,7 @@ pub async fn save(
             return Err(invalid("slug", "This slug is already in use."));
         }
         term::ActiveModel {
+            seo: Set(input.seo.encode()?),
             kind: Set(kind.into()),
             slug: Set(input.slug),
             name: Set(input.name),

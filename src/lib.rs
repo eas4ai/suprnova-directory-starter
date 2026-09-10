@@ -17,3 +17,5 @@ pub mod accounts;
 
 pub mod demo;
 pub mod notifications;
+
+pub mod seo;

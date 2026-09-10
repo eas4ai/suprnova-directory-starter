@@ -1832,6 +1832,7 @@ dependencies = [
  "serde",
  "sha2 0.10.9",
  "suprnova",
+ "suprnova-markdown",
  "suprnova-payments-paddle",
  "suprnova-payments-stripe",
  "tokio",
@@ -6899,6 +6900,15 @@ dependencies = [
  "tracing",
  "uuid",
  "webauthn-rs",
+]
+
+[[package]]
+name = "suprnova-markdown"
+version = "0.1.0"
+source = "git+https://github.com/eas4ai/suprnova-markdown.git?rev=dcc6de06a177d66cfc1a9897ded584e19040f40c#dcc6de06a177d66cfc1a9897ded584e19040f40c"
+dependencies = [
+ "async-trait",
+ "suprnova",
 ]
 
 [[package]]

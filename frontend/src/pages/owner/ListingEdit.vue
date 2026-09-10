@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { emptySeo } from '../../types/seo'
 import OwnerNotifications from '../../components/OwnerNotifications.vue'
 import type { OwnerNotice } from '../../types/notifications'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
@@ -8,7 +9,7 @@ import type { Category, ListingInput, OwnerListing } from '../../types/listings'
 const props = defineProps<{ listing: OwnerListing | null; categories: Category[]; notifications: OwnerNotice[] }>()
 function initial(): ListingInput {
   const revision = props.listing?.current
-  return { version: props.listing?.version ?? 0, title: revision?.title ?? '', summary: revision?.summary ?? '', description: revision?.description ?? '', url: revision?.url ?? '', category_ids: [...(revision?.category_ids ?? [])], media_id: revision?.media_id ?? null, media_alt: revision?.media_alt ?? '' }
+  return { seo: { ...(revision?.seo ?? emptySeo()) }, version: props.listing?.version ?? 0, title: revision?.title ?? '', summary: revision?.summary ?? '', description: revision?.description ?? '', url: revision?.url ?? '', category_ids: [...(revision?.category_ids ?? [])], media_id: revision?.media_id ?? null, media_alt: revision?.media_alt ?? '' }
 }
 const form = useForm(initial())
 const action = useForm({ version: props.listing?.version ?? 0 })

@@ -33,6 +33,6 @@ stops at Done; activating the following commitment remains the developer's choic
 
 ## Todo
 
-- In progress: map existing SEO/publication paths and declare complete verification mechanisms.
-- Pending: implement and verify metadata, discovery, redirects, findings and Markdown publication.
+- Done: map existing SEO/publication paths and declare complete verification mechanisms; all six violating copies fail at their intended assertions.
+- In progress: implement and verify metadata, discovery, redirects, findings and Markdown publication.
 - Pending: refresh inherited checks, demonstrate failures and complete production review.

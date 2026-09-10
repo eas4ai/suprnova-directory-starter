@@ -76,7 +76,7 @@ pub async fn index(req: Request) -> Response {
     let category = req.query_param("category").unwrap_or_default();
     let tag = req.query_param("tag").unwrap_or_default();
     let (articles, pagination) = queries::search(&q, &category, &tag, page(&req)?).await?;
-    let seo = public_pages::article_index(&articles, &q, &category, &tag, &pagination)?;
+    let seo = public_pages::article_index(&articles, &q, &category, &tag, &pagination).await?;
     inertia_response!(
         &req,
         "articles/Index",
@@ -103,7 +103,7 @@ pub async fn show(req: Request) -> Response {
             .header("Location", format!("/articles/{}", article.card.slug))
             .header("Cache-Control", "no-store"));
     }
-    let seo = public_pages::article(&article)?;
+    let seo = public_pages::article(&article).await?;
     inertia_response!(
         &req,
         "articles/Show",

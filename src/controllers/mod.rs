@@ -10,3 +10,5 @@ pub mod listings;
 pub mod publishing;
 
 pub mod accounts;
+
+pub mod seo;

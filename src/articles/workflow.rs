@@ -137,6 +137,7 @@ pub async fn save(actor: i64, id: Option<i64>, input: SaveArticle) -> Result<i64
         }
     }
     let proposed = revision::ActiveModel {
+        seo: Set(input.seo.encode()?),
         article_id: Set(row.id),
         slug: Set(input.slug),
         search_text: Set(format!("{}\n{}", input.title, input.summary).to_lowercase()),

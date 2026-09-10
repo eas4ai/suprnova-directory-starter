@@ -16,6 +16,8 @@ mod m20260909_000010_preserve_moderation_reason;
 mod m20260909_000011_create_owner_notifications;
 mod m20260909_000012_create_demo_seed;
 
+mod m20260910_000013_create_seo_controls;
+
 pub struct Migrator;
 
 #[async_trait::async_trait]
@@ -35,6 +37,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260909_000010_preserve_moderation_reason::Migration),
             Box::new(m20260909_000011_create_owner_notifications::Migration),
             Box::new(m20260909_000012_create_demo_seed::Migration),
+            Box::new(m20260910_000013_create_seo_controls::Migration),
         ]
     }
 }

@@ -126,6 +126,7 @@ pub async fn save(
         }
     }
     let proposed = revision::ActiveModel {
+        seo: Set(input.seo.encode()?),
         listing_id: Set(row.id),
         search_text: Set(format!("{}\n{}", input.title, input.summary).to_lowercase()),
         title: Set(input.title),

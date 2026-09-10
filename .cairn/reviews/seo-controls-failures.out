@@ -1,0 +1,87 @@
+SEO-001: testing violating copy
+SEO-001 rejected: panicked at tests/seo_workflows.rs:136:5:
+assertion `left == right` failed
+  left: Object {"title_format": String("{title} · {site}"), "description": String(""), "image": String(""), "publisher": String("Example publisher"), "profiles": Array [String("https://example.test/publisher")], "google_verification": String("google-proof-token"), "bing_verification": String("BING123"), "noindex": Bool(false)}
+ right: Object {"title_format": String("{title} · {site}"), "description": String("A saved site description."), "image": String(""), "publisher": String("Example publisher"), "profiles": Array [String("https://example.test/publisher")], "google_verification": String("google-proof-token"), "bing_verification": String("BING123"), "noindex": Bool(false)}
+note: run with `RUST_BACKTRACE=1` environm
+SEO-002: testing violating copy
+SEO-002 rejected: panicked at tests/seo_workflows.rs:226:9:
+initial HTML omitted name="twitter:card"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test seo_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/seo-negative-1sOGbV/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 39217...
+Inertia SSR server started.
+
+
+SEO-003: testing violating copy
+SEO-003 rejected: panicked at tests/seo_workflows.rs:360:5:
+SEO-003: noindex listing entered sitemap
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test seo_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/seo-negative-1sOGbV/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 40739...
+Inertia SSR server started.
+
+
+SEO-004: testing violating copy
+SEO-004 rejected: panicked at tests/seo_workflows.rs:503:5:
+assertion `left == right` failed: SEO-004: redirect destination changed
+  left: Some("/articles")
+ right: Some("/articles/seo-article")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test seo_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/seo-negative-1sOGbV/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 39511...
+Inertia SSR server started.
+
+
+SEO-005: testing violating copy
+SEO-005 rejected: panicked at tests/seo_workflows.rs:294:5:
+assertion `left == right` failed: SEO-005: preview disagrees with public metadata
+  left: String("Shared search title · Directory broken-preview")
+ right: String("Shared search title · Directory")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test seo_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/seo-negative-1sOGbV/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 45211...
+Inertia SSR server started.
+
+
+SEO-006: testing violating copy
+SEO-006 rejected: panicked at tests/seo_workflows.rs:626:9:
+assertion `left == right` failed: SEO-006: Markdown must disable shared caching
+  left: "public, max-age=3600"
+ right: "no-store"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test seo_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/seo-negative-1sOGbV/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 34339...
+Inertia SSR server started.
+
+

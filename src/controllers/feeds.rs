@@ -51,39 +51,25 @@ pub async fn rss(_req: Request) -> Response {
     response(body, "application/rss+xml; charset=utf-8")
 }
 
-async fn page_urls(now: i64) -> Result<Vec<String>, FrameworkError> {
-    let mut paths = vec!["/".into(), "/listings".into(), "/articles".into()];
-    paths.extend(
-        listings::queries::public_categories(now)
-            .await?
-            .into_iter()
-            .map(|term| format!("/listings?category={}", term.slug)),
-    );
-    paths.extend(
-        articles::queries::terms(true)
-            .await?
-            .into_iter()
-            .map(|term| format!("/articles?{}={}", term.kind, term.slug)),
-    );
-    Ok(paths)
-}
-
 #[handler]
 pub async fn sitemap(_req: Request) -> Response {
     let origin = site::origin()?;
     let now = chrono::Utc::now().timestamp();
     let db = DB::connection()?;
+    let noindex = crate::seo::settings::load().await?.defaults.noindex;
     let listings = listings::entities::listing::Entity::find()
         .filter(listings::queries::eligible(now))
+        .filter(crate::seo::discovery::listing_indexable())
         .count(db.inner())
         .await
         .map_err(database_error)?;
     let articles = articles::entities::article::Entity::find()
         .filter(articles::queries::published())
+        .filter(crate::seo::discovery::article_indexable())
         .count(db.inner())
         .await
         .map_err(database_error)?;
-    let pages = page_urls(now).await?.len() as u64;
+    let pages = crate::seo::discovery::page_paths(now).await?.len() as u64;
     let groups = [
         ("listings", listings.div_ceil(SITEMAP_SIZE)),
         ("articles", articles.div_ceil(SITEMAP_SIZE)),
@@ -94,7 +80,7 @@ pub async fn sitemap(_req: Request) -> Response {
     }
     let mut body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><sitemapindex xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">".to_owned();
     for (kind, count) in groups {
-        for page in 1..=count {
+        for page in 1..=if noindex { 0 } else { count } {
             body.push_str(&format!(
                 "<sitemap><loc>{}</loc></sitemap>",
                 xml(&format!("{origin}/sitemaps/{kind}/{page}.xml"))
@@ -113,6 +99,9 @@ pub async fn sitemap(_req: Request) -> Response {
 
 #[handler]
 pub async fn sitemap_page(req: Request) -> Response {
+    if crate::seo::settings::load().await?.defaults.noindex {
+        return Err(missing().into());
+    }
     let kind = req.param("kind").map_err(|_| missing())?;
     let number = req
         .param("page")
@@ -127,23 +116,24 @@ pub async fn sitemap_page(req: Request) -> Response {
     };
     let now = chrono::Utc::now().timestamp();
     let paths = match kind {
-        "listings" => listings::queries::search("", "", page, now)
+        "listings" => listings::queries::search_indexable("", "", page, now)
             .await?
             .0
             .into_iter()
-            .map(|row| format!("/listings/{}", row.slug))
+            .map(|row| (format!("/listings/{}", row.slug), Some(row.modified_at)))
             .collect::<Vec<_>>(),
-        "articles" => articles::queries::search("", "", "", page)
+        "articles" => articles::queries::search_indexable("", "", "", page)
             .await?
             .0
             .into_iter()
-            .map(|row| format!("/articles/{}", row.slug))
+            .map(|row| (format!("/articles/{}", row.slug), Some(row.modified_at)))
             .collect(),
-        "pages" => page_urls(now)
+        "pages" => crate::seo::discovery::page_paths(now)
             .await?
             .into_iter()
             .skip(((number - 1) * SITEMAP_SIZE) as usize)
             .take(SITEMAP_SIZE as usize)
+            .map(|path| (path, None))
             .collect(),
         _ => return Err(missing().into()),
     };
@@ -152,9 +142,17 @@ pub async fn sitemap_page(req: Request) -> Response {
     }
     let origin = site::origin()?;
     let mut body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">".to_owned();
-    for path in paths {
+    for (path, modified) in paths {
+        let lastmod = modified
+            .map(|time| {
+                chrono::DateTime::from_timestamp(time, 0)
+                    .map(|date| format!("<lastmod>{}</lastmod>", date.to_rfc3339()))
+                    .ok_or_else(|| FrameworkError::internal("Public modification time is invalid."))
+            })
+            .transpose()?
+            .unwrap_or_default();
         body.push_str(&format!(
-            "<url><loc>{}</loc></url>",
+            "<url><loc>{}</loc>{lastmod}</url>",
             xml(&format!("{origin}{path}"))
         ));
     }

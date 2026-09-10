@@ -46,6 +46,7 @@ async fn row(id: i64) -> listing::Model {
 }
 fn content(version: i64, category: i64) -> SaveListing {
     SaveListing {
+        seo: Default::default(),
         version,
         title: "Adoption notification listing".into(),
         summary: "A saved notification fixture".into(),

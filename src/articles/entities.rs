@@ -32,6 +32,7 @@ pub mod revision {
         pub title: String,
         pub summary: String,
         pub search_text: String,
+        pub seo: String,
         pub body: String,
         pub media_id: Option<String>,
         pub media_alt: String,
@@ -68,6 +69,7 @@ pub mod term {
         pub name: String,
         pub active: bool,
         pub version: i64,
+        pub seo: String,
     }
     #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
     pub enum Relation {}

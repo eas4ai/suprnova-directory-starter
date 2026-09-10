@@ -87,6 +87,8 @@ pub async fn register() {
 pub fn register_http_stack() {
     // Global middleware (runs on every request in registration order)
     global_middleware!(middleware::LoggingMiddleware);
+    global_middleware!(crate::seo::middleware::SeoRoutes);
+    global_middleware!(crate::seo::markdown::PublicMarkdown);
 
     // Session middleware (required for authentication)
     let session_config = SessionConfig::from_env();

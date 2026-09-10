@@ -1,0 +1,74 @@
+
+[setup] node frontend/tests/foundation-setup.mjs
+[setup:install]
+cp .env.example .env
+node -e 'const fs=require("node:fs"); const crypto=require("node:crypto"); const p=".env"; fs.writeFileSync(p,fs.readFileSync(p,"utf8").replace(/^APP_KEY=.*$/m,"APP_KEY="+crypto.randomBytes(32).toString("base64url")))'
+cargo build --locked --bins
+cd frontend
+bun install --frozen-lockfile
+bun run build
+bun run build:ssr
+cd ..
+cargo run --locked --bin directory -- migrate
+
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-ybI9uK)
+    Finished `dev` profile [unoptimized] target(s) in 24.49s
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [706.00ms]
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 700 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-foundation-ybI9uK/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-C0-3uP-e.css   61.83 kB │ gzip:  10.62 kB
+../public/assets/assets/main-DLRiDWOJ.js   396.04 kB │ gzip: 125.57 kB
+
+✓ built in 1.15s
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 85 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  208.74 kB │ gzip: 34.18 kB
+
+✓ built in 877ms
+    Finished `dev` profile [unoptimized] target(s) in 0.77s
+     Running `/home/shawn/workspace2/suprnova-directory-starter/target/debug/directory migrate`
+Running migrations...
+Migrations completed successfully!
+[setup:vite]
+cd frontend
+bun run dev
+
+[setup:ssr]
+node --env-file=.env frontend/bootstrap/ssr/ssr.js
+
+[setup:serve]
+cargo run --locked --bin directory -- serve --no-migrate
+
+README install, example migration, Vite, application and browser form checks passed.
+[setup] command passed
+cairn: FND-005: pass

@@ -1,0 +1,441 @@
+[seo] cargo fmt --check
+[seo] cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-g6EqqB)
+    Finished `dev` profile [unoptimized] target(s) in 22.92s
+[seo] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [819.00ms]
+[seo] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 706 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-complete-g6EqqB/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-CV_P36Z-.css   63.62 kB │ gzip:  10.85 kB
+../public/assets/assets/main-BCXZYtW9.js   413.10 kB │ gzip: 129.92 kB
+
+✓ built in 794ms
+[seo] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 91 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  233.52 kB │ gzip: 38.32 kB
+
+✓ built in 519ms
+[seo] node scripts/with-ssr.mjs cargo test --locked --test seo_workflows -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-complete-g6EqqB)
+    Finished `test` profile [unoptimized] target(s) in 2.44s
+     Running tests/seo_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/seo_workflows-4915533f26c18d7b)
+
+running 1 test
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects/1
+<-- Request complete
+--> POST /admin/seo/redirects/1/remove
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /admin/articles
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191
+<-- Request complete
+--> GET /admin/listings/1
+<-- Request complete
+--> POST /admin/articles/1
+<-- Request complete
+--> GET /articles/seo-article
+<-- Request complete
+--> GET /articles/seo-article
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /articles
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /articles
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/listings/1.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> POST /admin/taxonomy/listing_category/1
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/listings/1.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /articles/seo-article
+<-- Request complete
+--> GET /robots.txt
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/listings/1.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /sitemaps/listings/1.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /articles/seo-article
+<-- Request complete
+--> GET /articles/seo-article
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/listings/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /articles/seo-article.md
+<-- Request complete
+--> GET /articles/seo-article
+<-- Request complete
+--> GET /sitemap.xml
+<-- Request complete
+--> GET /sitemaps/listings/1.xml
+<-- Request complete
+--> GET /sitemaps/articles/1.xml
+<-- Request complete
+--> GET /sitemaps/pages/1.xml
+<-- Request complete
+--> GET /articles/seo-article.md
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /articles/seo-article
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> GET /old-guide
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> GET /older-guide
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo/redirects/1
+<-- Request complete
+--> POST /admin/seo/redirects/1/remove
+<-- Request complete
+--> POST /admin/seo/redirects/1
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> POST /admin/seo/redirects
+<-- Request complete
+--> GET /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> HEAD /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> POST /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> PUT /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> DELETE /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> OPTIONS /listings/seo-listing-59001b00a2cd4eeab78956fb58466191.md
+<-- Request complete
+--> GET /articles/seo-article.md
+<-- Request complete
+--> HEAD /articles/seo-article.md
+<-- Request complete
+--> POST /articles/seo-article.md
+<-- Request complete
+--> PUT /articles/seo-article.md
+<-- Request complete
+--> DELETE /articles/seo-article.md
+<-- Request complete
+--> OPTIONS /articles/seo-article.md
+<-- Request complete
+--> GET /admin/seo.md
+<-- Request complete
+--> GET /articles/seo-private.md
+<-- Request complete
+--> GET /.md
+<-- Request complete
+--> GET /articles/seo-article.md.md
+<-- Request complete
+--> GET /articles/seo%2farticle.md
+<-- Request complete
+--> GET /listings/../private.md
+<-- Request complete
+--> POST /admin/articles/1
+<-- Request complete
+--> POST /admin/articles/1/publish
+<-- Request complete
+--> GET /articles/seo-article
+<-- Request complete
+--> GET /articles/seo-article.md
+<-- Request complete
+--> GET /articles/seo-renamed.md
+<-- Request complete
+--> GET /articles/seo-renamed
+<-- Request complete
+--> POST /admin/articles/1/unpublish
+<-- Request complete
+--> GET /articles/seo-renamed.md
+<-- Request complete
+--> GET /old-guide
+<-- Request complete
+--> POST /admin/articles/1/publish
+<-- Request complete
+--> GET /articles/seo-renamed.md
+<-- Request complete
+--> GET /missing-guide
+<-- Request complete
+--> GET /missing-guide
+<-- Request complete
+--> GET /reset-password/PRIVATE404
+<-- Request complete
+--> GET /encoded%2fPRIVATE404
+<-- Request complete
+--> GET /admin/PRIVATE404
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /new-observation
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /observation-unavailable
+<-- Request complete
+--> GET /missing-guide
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+--> POST /admin/seo
+<-- Request complete
+--> GET /admin/seo
+<-- Request complete
+test seo_workflows_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 8.73s
+
+[seo] node scripts/with-ssr.mjs node frontend/tests/seo-workflows.mjs
+SEO settings persistence, stale/invalid inputs, keyboard/mobile themes, redirects, previews, SSR and Inertia metadata, Markdown discovery and delegated permissions passed.
+cairn: SEO-001: pass
+cairn: SEO-002: pass
+cairn: SEO-003: pass
+cairn: SEO-004: pass
+cairn: SEO-005: pass
+cairn: SEO-006: pass

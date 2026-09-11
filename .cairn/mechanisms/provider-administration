@@ -22,3 +22,4 @@ requirements:
   - PAY-008
 reviewed:
   - PAY-001 sha256:88cb0a671a89e6443adcb96e5edf94ec2351a9cdf32a2536dec94a3925e302c3
+  - PAY-001 sha256:1af61b53911c61f25abcfe20021aa6c54ac13c2dc77e580db1e54d0a2d404d19

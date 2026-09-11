@@ -64,3 +64,9 @@ Desktop light/dark, 320-pixel layouts and no-JavaScript screenshots were generat
 14. UI copy, README, decision records and delivery notes explain actual behavior and limits in the project's vocabulary.
 
 Local acceptance covers SQLite, disposable media/mail, real local SSR/browser requests and synthetic payment fixtures. It does not establish external Search Console/Bing verification, ranking outcomes or deployment behavior. The operator database was preserved; no deployment or push was performed.
+
+### PAY-001 mechanism review for Suprnova 2.0.0 — 2026-09-11
+
+Reviewed the revised PAY-001 requirement, provider-administration declaration and verification script. Only the required adapter revision changed; permission, CSRF, persistence, deployment-key and browser checks remain applicable. The mechanism builds locked binaries and exercises both providers through HTTP and browser journeys, including denied actors and restart persistence. Its 15:37:50 passing receipt already used the 2.0.0 lockfile. Exact revision enforcement remains covered by foundation-build and the pinned-checkout verifier used by paid checkout. No mismatch found.
+
+For the changed revision contract, a disposable manifest and lockfile from commit 4670ede were rejected by the current pinned-checkout verifier with exit 1: “suprnova must use the recorded checkout revision.” Output: target/upgrade-checkout-wrong-pin.out. The corrected current manifest passed the verifier against a clean archive of release commit 3229aa9af542c991196274fa3c235cdce88a68e2, including the required Stripe and Paddle checkout, idempotency, retrieval and timeout tests. No application code changed during this review. Fresh committed-tree checks follow this declaration review.

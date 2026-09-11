@@ -1,0 +1,21 @@
+requirement: SEO-004
+requirement_digest: sha256:9574bb0e3d815b701fe2f5c66320c201069ea14ec6ceba2ce3669495dc1e7ffa
+sequence: 6
+history_digest: sha256:a74337c8cbe2d91f115624d9b2e2b6cae3598aa6c14c33b96f14400b44112199
+mechanism: seo-controls
+commit: de44fa2
+inputs_digest: sha256:43f9a360bee5582481881927adf8de6b95792395f432db03f2a2fb6bd98cfa47
+mechanism_digest: sha256:ff44e00089bd22d6e51337fc91edd3318a608a0368bf7bc3957e2627d5673001
+inputs_detail: .cairn/evidence/SEO-001/20260911T153344444Z-680399.inputs.json
+command: node scripts/verify-complete-starter.mjs seo
+cwd: .
+exit: 0
+output_digest: sha256:89011184e247ad9b0145d6e9061d182f888c1a554c97c52e0f006c0fe78e514b
+output: .cairn/evidence/SEO-001/20260911T153344444Z-680399.out
+stderr_output: .cairn/evidence/SEO-001/20260911T153344444Z-680399.err
+stderr_digest: sha256:417ea3f9bd7200afeb5573264182894a5103592e63ad22fa43df1d612b6dad0e
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-11T15:34:34.626Z

@@ -4,6 +4,14 @@ findings:
 
 ## Retained README work review — 2026-09-11
 
+### FND-001 mechanism review for the requested 2.0.0 upgrade
+
+The developer requested upgrading the starter pin to Suprnova 2.0.0 after the release discrepancy audit. Inspected the revised FND-001 requirement/falsifier, foundation-build declaration, verifyPin, and build. The only check change is the expected exact revision, now 3229aa9af542c991196274fa3c235cdce88a68e2. It still checks all three direct framework/adapter sources, every locked Suprnova source, both binary names, locked Rust builds, frozen frontend installation, client/SSR outputs, and unchanged dependency locks. No mismatch remains between this mechanism and the revised requirement.
+
+A disposable fixture carrying the old committed Cargo.toml and Cargo.lock from 4670ede was rejected at the exact-revision assertion, exit 1. The first fixture mistakenly selected the already-upgraded commit and reached compilation; it was stopped, its processes terminated and disposable tree removed, and the corrected fixture asserted the old pin before execution. The corrected current candidate passed node scripts/verify-foundation.mjs build, including both binaries, TypeScript/client build and SSR build. These are editing-time demonstrations; fresh Cairn evidence follows this recorded review. The earlier formal failure against the old expected pin remains preserved.
+
+Ripwire found one verifyPin caller and no incompatible call. Its script quality delta and test gate returned 0 against the already-committed tree (zero changed symbols); these do not replace the actual negative and positive mechanism executions above. No production application code changed in this mechanism review.
+
 Reviewed the changes since the completed SEO delivery at 4ddf866: the README feature list, framework link and developer-supplied header image, followed by the scope approval and refreshed evidence. No application, dependency, mechanism or test code changed. The developer explicitly confirmed retaining assets/card.jpg in loop-035. The image matches the supplied artwork, exists as a JPEG, and the relative README link and descriptive alternative text agree with it. The framework link uses the developer-corrected https://suprnova.app address. The feature list describes the implemented starter and does not claim the pending traffic reports.
 
 All 54 requirements passed again after the committed retention approval, from 2026-09-11T14:07:49.300Z through 2026-09-11T14:23:00.663Z. Examined the latest receipts and verified the SHA-256 hashes of both captured output files for every receipt. Historical failure demonstrations and the implementation review below remain applicable because their code and mechanisms are unchanged. No new implementation finding arose from this documentation-only retention review.

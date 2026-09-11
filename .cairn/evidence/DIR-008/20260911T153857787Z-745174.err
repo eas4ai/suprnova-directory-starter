@@ -1,0 +1,36 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-SoT0AP)
+    Finished `dev` profile [unoptimized] target(s) in 20.28s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-SoT0AP/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-SoT0AP)
+    Finished `test` profile [unoptimized] target(s) in 14.71s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-95390b72e30fcfe2)
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-SoT0AP)
+    Finished `test` profile [unoptimized] target(s) in 2.04s
+     Running tests/payment_sdk_wire.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/payment_sdk_wire-30fd1f75d2fa1556)
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-SoT0AP)
+    Finished `test` profile [unoptimized] target(s) in 2.81s
+     Running tests/paid_lifecycle.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/paid_lifecycle-3d57c4b8b7999313)
+    Finished `test` profile [unoptimized] target(s) in 0.28s
+     Running tests/paid_lifecycle.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/paid_lifecycle-3d57c4b8b7999313)
+AssertionError [ERR_ASSERTION]: suprnova must use the recorded checkout revision.
+    at file:///home/shawn/workspace2/scratchpads/directory-paid-SoT0AP/scripts/verify-pinned-checkout.mjs:116:12
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+AssertionError [ERR_ASSERTION]: node exited 1 (signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:27:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:58:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)

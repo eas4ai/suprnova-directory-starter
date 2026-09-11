@@ -1,0 +1,788 @@
+[payments] cargo fmt --check
+[payments] cargo build --locked --bins
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-SoT0AP)
+    Finished `dev` profile [unoptimized] target(s) in 20.28s
+[payments] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [319.00ms]
+[payments] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 706 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-SoT0AP/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-CV_P36Z-.css   63.62 kB │ gzip:  10.85 kB
+../public/assets/assets/main-BCXZYtW9.js   413.10 kB │ gzip: 129.92 kB
+
+✓ built in 1.47s
+[payments] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 91 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  233.52 kB │ gzip: 38.32 kB
+
+✓ built in 479ms
+[payments] cargo test --locked --lib billing:: -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-SoT0AP)
+    Finished `test` profile [unoptimized] target(s) in 14.71s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-95390b72e30fcfe2)
+
+running 19 tests
+test billing::paddle_evidence::tests::cancellation_only_supplies_end_boundaries ... ok
+test billing::paddle_evidence::tests::completed_capture_and_inclusive_tax ... ok
+test billing::paddle_evidence::tests::recurring_requires_transaction_period_and_bound_subscription ... ok
+test billing::paddle_evidence::tests::sdk_adjusted_totals_round_trip_retains_required_evidence ... ok
+test billing::stripe_evidence_tests::foreign_local_payment_row_cannot_supply_refund_or_dispute_evidence ... ok
+test billing::paddle_evidence::tests::reversal_matches_paid_item_not_unique_adjustment_item_id ... ok
+test billing::stripe_evidence_tests::dispute_states_require_same_charge_and_report_current_resolution ... ok
+test billing::stripe_evidence_tests::one_time_paid_checkout_preserves_actual_total_and_never_expires ... ok
+test billing::paddle_evidence::tests::refunds_accumulate_and_duplicate_ids_do_not_double_count ... ok
+test billing::paddle_evidence::tests::rejects_foreign_or_incomplete_capture ... ok
+test billing::paddle_evidence::tests::reversal_never_clears_an_unrelated_dispute ... ok
+test billing::stripe_evidence_tests::recurring_paid_invoice_uses_its_own_period_and_capture ... ok
+test billing::stripe_evidence_tests::recurring_supports_current_invoice_parent_and_payment_shapes ... ok
+test billing::stripe_evidence_tests::recurring_requires_explicit_non_prorated_line_evidence ... ok
+test billing::stripe_evidence_tests::scheduled_cancellation_preserves_access_until_effective_end ... ok
+test billing::stripe_evidence_tests::refunds_report_cumulative_amount_and_validate_original_payment ... ok
+test billing::stripe_evidence_tests::recurring_rejects_duplicate_period_lines_and_incomplete_or_unpaid_evidence ... ok
+test billing::stripe_evidence_tests::one_time_rejects_foreign_terms_and_unsettled_checkout ... ok
+test billing::settings::tests::constructor_failure_preserves_configuration ... ok
+
+test result: ok. 19 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 4.60s
+
+[payments] cargo test --locked --test payment_sdk_wire -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-SoT0AP)
+    Finished `test` profile [unoptimized] target(s) in 2.04s
+     Running tests/payment_sdk_wire.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/payment_sdk_wire-30fd1f75d2fa1556)
+
+running 6 tests
+test unsupported_and_invalid_references_never_reach_http ... ok
+test stripe_checkout_expands_and_preserves_paid_line_evidence ... ok
+test paddle_complete_adjustments_preserve_new_reversal_enum_and_item_ids ... ok
+test stripe_invoice_expands_payments_and_keeps_modern_subscription_and_period_fields ... ok
+test paddle_transaction_keeps_capture_and_adjusted_totals_through_typed_sdk ... ok
+test stripe_disputes_fetch_every_page_with_charge_filter_and_cursor ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+[payments] node scripts/with-ssr.mjs cargo test --locked --test paid_lifecycle -- --nocapture
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-paid-SoT0AP)
+    Finished `test` profile [unoptimized] target(s) in 2.81s
+     Running tests/paid_lifecycle.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/paid_lifecycle-3d57c4b8b7999313)
+
+running 2 tests
+test browser::serve_paid_browser_fixture ... ignored, Started only by the paid browser verifier
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/2/submit
+<-- Request complete
+--> POST /dashboard/listings/2/checkout
+<-- Request complete
+--> POST /dashboard/listings/2/checkout
+<-- Request complete
+--> POST /admin/listings/2/decision
+<-- Request complete
+--> POST /dashboard/listings/2/checkout
+<-- Request complete
+--> POST /dashboard/listings/2/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/3/submit
+<-- Request complete
+--> POST /admin/listings/3/decision
+<-- Request complete
+--> POST /dashboard/listings/3/checkout
+--> POST /dashboard/listings/3/checkout
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/purchases/c2d8935e-179b-4a92-987e-060bb1e134ee
+<-- Request complete
+--> GET /dashboard/purchases/c2d8935e-179b-4a92-987e-060bb1e134ee
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/4/submit
+<-- Request complete
+--> POST /admin/listings/4/decision
+<-- Request complete
+--> POST /dashboard/listings/4/checkout
+--> POST /dashboard/listings/4/checkout
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/purchases/81e8a008-e32b-4bb4-8ba8-7fbfc71f43bf
+<-- Request complete
+--> GET /dashboard/purchases/81e8a008-e32b-4bb4-8ba8-7fbfc71f43bf
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/5/submit
+<-- Request complete
+--> POST /admin/listings/5/decision
+<-- Request complete
+--> POST /dashboard/listings/5/checkout
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /dashboard/listings/5/checkout
+<-- Request complete
+--> POST /dashboard/purchases/dbfcbf4f-4199-469d-a69e-c3c76d1eae7e/cancel
+<-- Request complete
+--> POST /dashboard/purchases/dbfcbf4f-4199-469d-a69e-c3c76d1eae7e/cancel
+<-- Request complete
+--> POST /dashboard/purchases/dbfcbf4f-4199-469d-a69e-c3c76d1eae7e/cancel
+<-- Request complete
+--> POST /dashboard/purchases/dbfcbf4f-4199-469d-a69e-c3c76d1eae7e/cancel
+<-- Request complete
+--> POST /dashboard/purchases/dbfcbf4f-4199-469d-a69e-c3c76d1eae7e/cancel
+<-- Request complete
+--> POST /dashboard/listings/5/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/6/submit
+<-- Request complete
+--> POST /admin/listings/6/decision
+<-- Request complete
+--> POST /dashboard/listings/6/checkout
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /dashboard/listings/6/checkout
+<-- Request complete
+--> POST /dashboard/purchases/00029bed-761c-489c-a86a-7cb69ddf1f59/cancel
+<-- Request complete
+--> POST /dashboard/purchases/00029bed-761c-489c-a86a-7cb69ddf1f59/cancel
+<-- Request complete
+--> POST /dashboard/purchases/00029bed-761c-489c-a86a-7cb69ddf1f59/cancel
+<-- Request complete
+--> POST /dashboard/purchases/00029bed-761c-489c-a86a-7cb69ddf1f59/cancel
+<-- Request complete
+--> POST /dashboard/purchases/00029bed-761c-489c-a86a-7cb69ddf1f59/cancel
+<-- Request complete
+--> POST /dashboard/listings/6/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/7/submit
+<-- Request complete
+--> POST /admin/listings/7/decision
+<-- Request complete
+--> POST /dashboard/listings/7/checkout
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /dashboard/listings/7/checkout
+<-- Request complete
+--> POST /dashboard/purchases/59edfb7a-bf93-4dee-8088-16f145a08cc8/cancel
+<-- Request complete
+--> POST /dashboard/purchases/59edfb7a-bf93-4dee-8088-16f145a08cc8/cancel
+<-- Request complete
+--> POST /dashboard/purchases/59edfb7a-bf93-4dee-8088-16f145a08cc8/cancel
+<-- Request complete
+--> POST /dashboard/purchases/59edfb7a-bf93-4dee-8088-16f145a08cc8/cancel
+<-- Request complete
+--> POST /dashboard/purchases/59edfb7a-bf93-4dee-8088-16f145a08cc8/cancel
+<-- Request complete
+--> POST /dashboard/listings/7/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/8/submit
+<-- Request complete
+--> POST /admin/listings/8/decision
+<-- Request complete
+--> POST /dashboard/listings/8/checkout
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /dashboard/listings/8/checkout
+<-- Request complete
+--> POST /dashboard/purchases/3e6b013a-ac94-414c-bd2d-d63a4dd80c7a/cancel
+<-- Request complete
+--> POST /dashboard/purchases/3e6b013a-ac94-414c-bd2d-d63a4dd80c7a/cancel
+<-- Request complete
+--> POST /dashboard/purchases/3e6b013a-ac94-414c-bd2d-d63a4dd80c7a/cancel
+<-- Request complete
+--> POST /dashboard/purchases/3e6b013a-ac94-414c-bd2d-d63a4dd80c7a/cancel
+<-- Request complete
+--> POST /dashboard/purchases/3e6b013a-ac94-414c-bd2d-d63a4dd80c7a/cancel
+<-- Request complete
+--> POST /dashboard/listings/8/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/9/submit
+<-- Request complete
+--> POST /admin/listings/9/decision
+<-- Request complete
+--> POST /dashboard/listings/9/checkout
+<-- Request complete
+--> POST /admin/plans/once
+<-- Request complete
+--> POST /billing/webhooks/stripe/live
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/10/submit
+<-- Request complete
+--> POST /admin/listings/10/decision
+<-- Request complete
+--> POST /dashboard/listings/10/checkout
+<-- Request complete
+--> POST /admin/plans/once
+<-- Request complete
+[{"event_id":"ac65e7f1-bf3c-4b46-9663-d1456a9d01f8","status":"applied","error_code":null}]
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/11/submit
+<-- Request complete
+--> POST /admin/listings/11/decision
+<-- Request complete
+--> POST /dashboard/listings/11/checkout
+<-- Request complete
+--> POST /admin/plans/once
+<-- Request complete
+--> POST /billing/webhooks/paddle/live
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/12/submit
+<-- Request complete
+--> POST /admin/listings/12/decision
+<-- Request complete
+--> POST /dashboard/listings/12/checkout
+<-- Request complete
+--> POST /admin/plans/once
+<-- Request complete
+[{"event_id":"1685144a-8a6a-46c4-b333-d92030d5a46c","status":"applied","error_code":null}]
+paid lifecycle: plans, HTTP ownership/CSRF, immutable checkout, authenticated acceptance, crash rollback, replay, refunds and disputes passed for live
+test paid_lifecycle_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 27.46s
+
+[payments] node scripts/with-ssr.mjs cargo test --locked --test paid_lifecycle -- --nocapture
+    Finished `test` profile [unoptimized] target(s) in 0.28s
+     Running tests/paid_lifecycle.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/paid_lifecycle-3d57c4b8b7999313)
+
+running 2 tests
+test browser::serve_paid_browser_fixture ... ignored, Started only by the paid browser verifier
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/2/submit
+<-- Request complete
+--> POST /dashboard/listings/2/checkout
+<-- Request complete
+--> POST /dashboard/listings/2/checkout
+<-- Request complete
+--> POST /admin/listings/2/decision
+<-- Request complete
+--> POST /dashboard/listings/2/checkout
+<-- Request complete
+--> POST /dashboard/listings/2/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /admin/plans
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings/1/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/3/submit
+<-- Request complete
+--> POST /admin/listings/3/decision
+<-- Request complete
+--> POST /dashboard/listings/3/checkout
+--> POST /dashboard/listings/3/checkout
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/purchases/6fa5472b-4b35-4900-a0e6-ca1c1dbcb09a
+<-- Request complete
+--> GET /dashboard/purchases/6fa5472b-4b35-4900-a0e6-ca1c1dbcb09a
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/4/submit
+<-- Request complete
+--> POST /admin/listings/4/decision
+<-- Request complete
+--> POST /dashboard/listings/4/checkout
+--> POST /dashboard/listings/4/checkout
+<-- Request complete
+<-- Request complete
+--> GET /dashboard/purchases/0700564d-d3d9-4bec-9b7a-47313f0e8f63
+<-- Request complete
+--> GET /dashboard/purchases/0700564d-d3d9-4bec-9b7a-47313f0e8f63
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/5/submit
+<-- Request complete
+--> POST /admin/listings/5/decision
+<-- Request complete
+--> POST /dashboard/listings/5/checkout
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /dashboard/listings/5/checkout
+<-- Request complete
+--> POST /dashboard/purchases/c5c236bf-3222-4eae-b036-b48d0f69d1e0/cancel
+<-- Request complete
+--> POST /dashboard/purchases/c5c236bf-3222-4eae-b036-b48d0f69d1e0/cancel
+<-- Request complete
+--> POST /dashboard/purchases/c5c236bf-3222-4eae-b036-b48d0f69d1e0/cancel
+<-- Request complete
+--> POST /dashboard/purchases/c5c236bf-3222-4eae-b036-b48d0f69d1e0/cancel
+<-- Request complete
+--> POST /dashboard/purchases/c5c236bf-3222-4eae-b036-b48d0f69d1e0/cancel
+<-- Request complete
+--> POST /dashboard/listings/5/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/6/submit
+<-- Request complete
+--> POST /admin/listings/6/decision
+<-- Request complete
+--> POST /dashboard/listings/6/checkout
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /dashboard/listings/6/checkout
+<-- Request complete
+--> POST /dashboard/purchases/b3df6d61-5ce0-4af3-8a0f-198bd049d000/cancel
+<-- Request complete
+--> POST /dashboard/purchases/b3df6d61-5ce0-4af3-8a0f-198bd049d000/cancel
+<-- Request complete
+--> POST /dashboard/purchases/b3df6d61-5ce0-4af3-8a0f-198bd049d000/cancel
+<-- Request complete
+--> POST /dashboard/purchases/b3df6d61-5ce0-4af3-8a0f-198bd049d000/cancel
+<-- Request complete
+--> POST /dashboard/purchases/b3df6d61-5ce0-4af3-8a0f-198bd049d000/cancel
+<-- Request complete
+--> POST /dashboard/listings/6/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/7/submit
+<-- Request complete
+--> POST /admin/listings/7/decision
+<-- Request complete
+--> POST /dashboard/listings/7/checkout
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /dashboard/listings/7/checkout
+<-- Request complete
+--> POST /dashboard/purchases/af033f1b-4eea-486c-8d1e-26ae42e04f0d/cancel
+<-- Request complete
+--> POST /dashboard/purchases/af033f1b-4eea-486c-8d1e-26ae42e04f0d/cancel
+<-- Request complete
+--> POST /dashboard/purchases/af033f1b-4eea-486c-8d1e-26ae42e04f0d/cancel
+<-- Request complete
+--> POST /dashboard/purchases/af033f1b-4eea-486c-8d1e-26ae42e04f0d/cancel
+<-- Request complete
+--> POST /dashboard/purchases/af033f1b-4eea-486c-8d1e-26ae42e04f0d/cancel
+<-- Request complete
+--> POST /dashboard/listings/7/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/8/submit
+<-- Request complete
+--> POST /admin/listings/8/decision
+<-- Request complete
+--> POST /dashboard/listings/8/checkout
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /dashboard/listings/8/checkout
+<-- Request complete
+--> POST /dashboard/purchases/bdc25181-7661-4c2b-850b-01b649a56f6e/cancel
+<-- Request complete
+--> POST /dashboard/purchases/bdc25181-7661-4c2b-850b-01b649a56f6e/cancel
+<-- Request complete
+--> POST /dashboard/purchases/bdc25181-7661-4c2b-850b-01b649a56f6e/cancel
+<-- Request complete
+--> POST /dashboard/purchases/bdc25181-7661-4c2b-850b-01b649a56f6e/cancel
+<-- Request complete
+--> POST /dashboard/purchases/bdc25181-7661-4c2b-850b-01b649a56f6e/cancel
+<-- Request complete
+--> POST /dashboard/listings/8/checkout
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/9/submit
+<-- Request complete
+--> POST /admin/listings/9/decision
+<-- Request complete
+--> POST /dashboard/listings/9/checkout
+<-- Request complete
+--> POST /admin/plans/once
+<-- Request complete
+--> POST /billing/webhooks/stripe/test
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/10/submit
+<-- Request complete
+--> POST /admin/listings/10/decision
+<-- Request complete
+--> POST /dashboard/listings/10/checkout
+<-- Request complete
+--> POST /admin/plans/once
+<-- Request complete
+[{"event_id":"8093e3e5-a3e3-487a-95a4-ef7952d6ca08","status":"applied","error_code":null}]
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/11/submit
+<-- Request complete
+--> POST /admin/listings/11/decision
+<-- Request complete
+--> POST /dashboard/listings/11/checkout
+<-- Request complete
+--> POST /admin/plans/once
+<-- Request complete
+--> POST /billing/webhooks/paddle/test
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/12/submit
+<-- Request complete
+--> POST /admin/listings/12/decision
+<-- Request complete
+--> POST /dashboard/listings/12/checkout
+<-- Request complete
+--> POST /admin/plans/once
+<-- Request complete
+[{"event_id":"22fa9794-6a2f-47ce-a5ab-99f67f538f76","status":"applied","error_code":null}]
+paid lifecycle: plans, HTTP ownership/CSRF, immutable checkout, authenticated acceptance, crash rollback, replay, refunds and disputes passed for test
+test paid_lifecycle_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 6.09s
+
+[payments] node scripts/verify-pinned-checkout.mjs
+AssertionError [ERR_ASSERTION]: suprnova must use the recorded checkout revision.
+    at file:///home/shawn/workspace2/scratchpads/directory-paid-SoT0AP/scripts/verify-pinned-checkout.mjs:116:12
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+AssertionError [ERR_ASSERTION]: node exited 1 (signal none)
+
+1 !== 0
+
+    at run (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:27:10)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-paid-directory.mjs:58:5
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+cairn: DIR-008: fail
+cairn: PAY-002: fail
+cairn: PAY-003: fail
+cairn: PAY-009: fail
+cairn: PAY-010: fail
+cairn: PAY-011: fail
+cairn: PAY-012: fail
+cairn: PAY-013: fail
+cairn: PAY-014: fail
+cairn: PAY-015: fail
+cairn: PAY-016: fail

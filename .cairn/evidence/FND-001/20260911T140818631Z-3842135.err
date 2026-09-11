@@ -1,0 +1,8 @@
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-foundation-RWeeRm)
+    Finished `dev` profile [unoptimized] target(s) in 20.46s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-foundation-RWeeRm/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts

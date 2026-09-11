@@ -6728,8 +6728,8 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "suprnova"
-version = "1.3.7"
-source = "git+https://github.com/eas4ai/suprnova.git?rev=107e6e7a122d5145160ea1547ca90ddc37459c27#107e6e7a122d5145160ea1547ca90ddc37459c27"
+version = "2.0.0"
+source = "git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2#3229aa9af542c991196274fa3c235cdce88a68e2"
 dependencies = [
  "aes-gcm",
  "ammonia",
@@ -6837,8 +6837,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-live"
-version = "1.3.7"
-source = "git+https://github.com/eas4ai/suprnova.git?rev=107e6e7a122d5145160ea1547ca90ddc37459c27#107e6e7a122d5145160ea1547ca90ddc37459c27"
+version = "2.0.0"
+source = "git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2#3229aa9af542c991196274fa3c235cdce88a68e2"
 dependencies = [
  "askama",
  "askama_parser",
@@ -6863,8 +6863,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-macros"
-version = "1.3.7"
-source = "git+https://github.com/eas4ai/suprnova.git?rev=107e6e7a122d5145160ea1547ca90ddc37459c27#107e6e7a122d5145160ea1547ca90ddc37459c27"
+version = "2.0.0"
+source = "git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2#3229aa9af542c991196274fa3c235cdce88a68e2"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -6874,8 +6874,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-magnetar"
-version = "1.3.7"
-source = "git+https://github.com/eas4ai/suprnova.git?rev=107e6e7a122d5145160ea1547ca90ddc37459c27#107e6e7a122d5145160ea1547ca90ddc37459c27"
+version = "2.0.0"
+source = "git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2#3229aa9af542c991196274fa3c235cdce88a68e2"
 dependencies = [
  "aes-gcm",
  "apple",
@@ -6905,7 +6905,7 @@ dependencies = [
 [[package]]
 name = "suprnova-markdown"
 version = "0.1.0"
-source = "git+https://github.com/eas4ai/suprnova-markdown.git?rev=dcc6de06a177d66cfc1a9897ded584e19040f40c#dcc6de06a177d66cfc1a9897ded584e19040f40c"
+source = "git+https://github.com/eas4ai/suprnova-markdown.git?rev=9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec#9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec"
 dependencies = [
  "async-trait",
  "suprnova",
@@ -6913,8 +6913,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-payments-paddle"
-version = "1.3.7"
-source = "git+https://github.com/eas4ai/suprnova.git?rev=107e6e7a122d5145160ea1547ca90ddc37459c27#107e6e7a122d5145160ea1547ca90ddc37459c27"
+version = "2.0.0"
+source = "git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2#3229aa9af542c991196274fa3c235cdce88a68e2"
 dependencies = [
  "async-trait",
  "chrono",
@@ -6930,8 +6930,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-payments-stripe"
-version = "1.3.7"
-source = "git+https://github.com/eas4ai/suprnova.git?rev=107e6e7a122d5145160ea1547ca90ddc37459c27#107e6e7a122d5145160ea1547ca90ddc37459c27"
+version = "2.0.0"
+source = "git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2#3229aa9af542c991196274fa3c235cdce88a68e2"
 dependencies = [
  "async-stripe",
  "async-stripe-client-core",
@@ -6954,8 +6954,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-web-push"
-version = "1.3.7"
-source = "git+https://github.com/eas4ai/suprnova.git?rev=107e6e7a122d5145160ea1547ca90ddc37459c27#107e6e7a122d5145160ea1547ca90ddc37459c27"
+version = "2.0.0"
+source = "git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2#3229aa9af542c991196274fa3c235cdce88a68e2"
 dependencies = [
  "base64 0.22.1",
  "chrono",

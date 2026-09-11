@@ -26,6 +26,9 @@ See [the roadmap](docs/spec/roadmap.md) for the current verification status.
 
 ## Prerequisites
 
+Framework and payment adapters target Suprnova 2.0.0 at release commit
+`3229aa9af542c991196274fa3c235cdce88a68e2`.
+
 - Rust 1.94 or newer and Cargo; this checkout is verified with Rust 1.95.
 - Bun 1.4.1 for frontend packages and database inspection.
 - Node 24 for local key generation and verification. Cairn is needed only for
@@ -267,7 +270,7 @@ Unpublishing, suspension, expiry or revoked eligibility removes the twin immedia
 for subsequent requests. GET and HEAD are supported; responses use UTF-8
 `text/markdown`, `X-Robots-Tag: noindex`, `nosniff` and `Cache-Control: no-store`.
 HTML remains canonical. Noindex content stays publicly readable in both formats.
-The dependency is pinned to `dcc6de06a177d66cfc1a9897ded584e19040f40c` and shares the
+The dependency is pinned to `9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec` and shares the
 starter's framework revision; do not update one without checking the other.
 
 Run `node scripts/verify-complete-starter.mjs seo` for disposable HTTP, SSR and

@@ -11,8 +11,8 @@ Verified the [published v2.0.0 release](https://github.com/eas4ai/suprnova/relea
 The framework working checkout is newer, so this audit used an exported release
 snapshot, not its current branch. Source links below name the exact release commit.
 
-**This starter has not been upgraded.** Its framework and Stripe/Paddle adapters
-still pin `107e6e7a122d5145160ea1547ca90ddc37459c27`; its Markdown plugin still pins
+**At the time of this audit, the starter had not been upgraded.** Its framework
+and Stripe/Paddle adapters pinned `107e6e7a122d5145160ea1547ca90ddc37459c27`; its Markdown plugin pinned
 `dcc6de06a177d66cfc1a9897ded584e19040f40c`. The installed `suprnova --version`
 reports **1.3.5**. Tests of the released CLI used a separately rebuilt 2.0.0
 binary. Updating a Cargo dependency does not update the installed CLI.

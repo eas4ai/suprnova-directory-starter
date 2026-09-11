@@ -1,6 +1,16 @@
-commit: 8a1e12db60a33e4817351c229e60a61cdfc2d48f
+commit: 67c6b1c28f9bcdfdd41ac5d838bde9f6aaf4c758
 findings:
   - resolved: The inherited provider fixture expected seven administrator capabilities. bc35eef requires all eight, including seo.manage, and keeps repeat-grant, revocation and denial assertions. All 54 requirements have fresh passes after that correction.
+
+## Suprnova 2.0.0 upgrade review — 2026-09-11
+
+Reviewed the requested upgrade against the exact released commit 3229aa9af542c991196274fa3c235cdce88a68e2. Cargo.toml and Cargo.lock agree for the framework and both adapters. The Markdown dependency at 9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec uses the same revision; its four unit tests, two middleware tests and one doctest passed before its compatibility commit was published. The lockfile contains one Suprnova identity and no unrelated registry version changes. Compared with the pre-upgrade audit commit 4670ede, src/, cmd/, frontend/ and tests/ have no changes. The two verification script edits only replace their expected exact revision; their assertions remain intact.
+
+All 54 requirements have fresh passing committed-tree receipts, recorded between 15:47:05 and 15:58:39 UTC. Verified both captured output hashes for each latest receipt (108 hashes). Coverage includes locked server/console and TypeScript/client/SSR builds, database and accounts, permission and credential boundaries, directory and paid workflows, upstream Stripe/Paddle checkout tests, editorial and Markdown publication, delegated administration, setup/demo adoption, appearance and overview. The negative old-pin demonstrations and corrected executions are recorded in the mechanism reviews below. Initial failures from stale expected-pin constants remain in evidence history; the final passes follow their corrections. No weakened tests or patched dependency caches were used.
+
+Attacked what the mechanisms might miss: checked dependency source identity, exact release provenance, active documentation/specification pins, absence of application changes, retained scaffold workarounds and the distinction between dependency and installed CLI versions. No new finding. The discrepancy document now distinguishes its pre-upgrade audit snapshot from the verified upgrade. The four outstanding upstream issues remain outstanding; this work does not claim to repair them. Tests use isolated fixtures and mocked provider boundaries, not real-money production transactions. The release archive reports the existing proc-macro-error2 future-compatibility warning; current builds and tests pass.
+
+Production self-audit: rules 1–4 are satisfied by the scoped pin update, unchanged application interfaces and aligned lockfile/specifications; rules 5–8 by retained error, secret, permission, persistence, retry and timeout contracts exercised by the checks; rules 9–11 by the tracked work and verified receipts, with limits recorded above; rules 12–14 by following the explicit upgrade request, reviewing the complete diff and documenting the result plainly. No further revision is needed for this upgrade. Starter commits remain local; the Markdown compatibility prerequisite is published.
 
 ## Retained README work review — 2026-09-11
 

@@ -17,6 +17,14 @@ and Stripe/Paddle adapters pinned `107e6e7a122d5145160ea1547ca90ddc37459c27`; it
 reports **1.3.5**. Tests of the released CLI used a separately rebuilt 2.0.0
 binary. Updating a Cargo dependency does not update the installed CLI.
 
+**Subsequent starter upgrade verified:** the starter now pins the framework and
+Stripe/Paddle adapters to the exact 2.0.0 release commit above, and the Markdown
+plugin to `9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec`, which uses that same framework
+revision. All 54 starter acceptance requirements passed on 2026-09-11, including
+locked Rust builds, frontend/SSR builds, HTTP contracts and browser workflows.
+The released adapters' checkout tests also passed. This dependency upgrade does
+not change the outstanding framework findings below or the installed CLI.
+
 ### Fixed in the 2.0.0 release
 
 | Historical finding | Verified status and evidence | Effect on this starter |

@@ -1,0 +1,43 @@
+   Compiling directory v1.0.0 (/home/shawn/workspace2/scratchpads/directory-paid-MlYGde)
+    Finished `dev` profile [unoptimized] target(s) in 17.69s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-MlYGde/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts
+   Compiling directory v1.0.0 (/home/shawn/workspace2/scratchpads/directory-paid-MlYGde)
+    Finished `test` profile [unoptimized] target(s) in 13.62s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-d2ef6fe06015293f)
+   Compiling directory v1.0.0 (/home/shawn/workspace2/scratchpads/directory-paid-MlYGde)
+    Finished `test` profile [unoptimized] target(s) in 1.71s
+     Running tests/payment_sdk_wire.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/payment_sdk_wire-88ccb387566427f8)
+   Compiling directory v1.0.0 (/home/shawn/workspace2/scratchpads/directory-paid-MlYGde)
+    Finished `test` profile [unoptimized] target(s) in 2.60s
+     Running tests/paid_lifecycle.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/paid_lifecycle-d772ca4558732c8f)
+    Finished `test` profile [unoptimized] target(s) in 0.26s
+     Running tests/paid_lifecycle.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/paid_lifecycle-d772ca4558732c8f)
+    Finished `test` profile [unoptimized] target(s) in 0.55s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/suprnova_payments_stripe-f53ba43333472111)
+    Finished `test` profile [unoptimized] target(s) in 0.26s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/suprnova_payments_stripe-f53ba43333472111)
+    Finished `test` profile [unoptimized] target(s) in 0.25s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/suprnova_payments_stripe-f53ba43333472111)
+    Finished `test` profile [unoptimized] target(s) in 0.28s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/suprnova_payments_paddle-d8768336f12850bb)
+    Finished `test` profile [unoptimized] target(s) in 0.25s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/suprnova_payments_paddle-d8768336f12850bb)
+    Finished `test` profile [unoptimized] target(s) in 0.25s
+warning: the following packages contain code that will be rejected by a future version of Rust: proc-macro-error2 v2.0.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/suprnova_payments_paddle-d8768336f12850bb)

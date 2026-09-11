@@ -32,7 +32,7 @@ Deliver these linked commitments in order; each preserves the preceding contract
    docs/spec/traffic-reporting.md.
 
 The Markdown plugin compatibility prerequisite is complete and published at
-`dcc6de06a177d66cfc1a9897ded584e19040f40c`. Starter integration belongs to
+`9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec`. Starter integration belongs to
 seo-controls. External analytics and Search Console data imports remain separate.
 
 ## Framework workstream

@@ -40,7 +40,7 @@ real visible content. HTML remains canonical; Markdown is non-indexable by
 default. Apply publication checks within MarkdownSource, and do not accept the
 plugin's default one-hour public cache for eligibility-sensitive content.
 
-Use the verified plugin commit dcc6de06a177d66cfc1a9897ded584e19040f40c from
+Use the verified plugin commit 9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec from
 https://github.com/eas4ai/suprnova-markdown.git. It matches the starter's framework
 revision. Preserve one framework dependency identity. The plugin supplies routing
 and response metadata; the starter supplies approved content.

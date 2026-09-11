@@ -5,7 +5,7 @@ Prefix: PAY
 
 The developer confirmed all requirements, falsifiers and operating rules on 2026-09-09. The repaired framework revision and Larafast directory reference were confirmed before implementation resumed.
 
-[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters at revision `107e6e7a122d5145160ea1547ca90ddc37459c27`.
+[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters at revision `3229aa9af542c991196274fa3c235cdce88a68e2`.
 Falsifier: Either provider requires application source edits, saved configuration disappears after restart, or a guest or account without the permission can read or change billing configuration through a direct request.
 Mechanism: Proposed provider-administration-access HTTP tests and provider-administration-browser journeys, including both providers, restart persistence, denied actors and invalid CSRF tokens.
 Status: Agreed 2026-09-09
@@ -146,10 +146,11 @@ Mechanism: Proposed adapter wire-contract tests with a local HTTP fixture server
   requires operator-owned accounts, prices and webhook delivery. Local passes do
   not claim an external provider account was successfully charged.
 - The developer selected and completed framework adapter repairs in Suprnova.
-  The agreed integration pins Suprnova and its adapters to commit
-  `107e6e7a122d5145160ea1547ca90ddc37459c27`, which contains the fixes, until a
-  reviewed release tag includes them. This amends the v1.3.7 constraint in FND-001 and PAY-001; implementation and
-  verification establish when the starter actually uses it.
+  On 2026-09-11 the developer requested moving the integration to Suprnova 2.0.0.
+  Pin the framework and its adapters to the exact release commit
+  `3229aa9af542c991196274fa3c235cdce88a68e2`, which includes those repairs.
+  This replaces the previous pre-release pin in FND-001 and PAY-001;
+  implementation and verification establish when the starter actually uses it.
   Never invent a provider idempotency feature: when unsupported, retain an
   ambiguous attempt and recover through verified correlation/state or an explicit
   operator recovery path instead of issuing another create request. Verify the exact

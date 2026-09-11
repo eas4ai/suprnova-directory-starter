@@ -1,0 +1,16 @@
+
+[build] cargo metadata --locked --no-deps --format-version 1
+[build] command passed
+AssertionError [ERR_ASSERTION]: suprnova must use the agreed repaired framework revision
++ actual - expected
+
++ 'git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2'
+- 'git+https://github.com/eas4ai/suprnova.git?rev=107e6e7a122d5145160ea1547ca90ddc37459c27'
+
+    at verifyPin (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:41:12)
+    at Object.build (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:55:3)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:123:53
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+cairn: FND-001: fail

@@ -1,0 +1,21 @@
+requirement: OVR-003
+requirement_digest: sha256:5cd8a538b258df89d21da4123f88d7afbde46541ebee0ab94aab93df5585e2d2
+sequence: 8
+history_digest: sha256:2685ed9e330462c5af141634a3959f3e8cc54438581ed520bd0cc27c1c9def64
+mechanism: admin-overview
+commit: 0827c20
+inputs_digest: sha256:8d6c32a98d01c2baafc30485b9edef8d5e43087e8cf33e64b40485781e2a9eee
+mechanism_digest: sha256:7d89a66b4042f3c6384d3c0935b7a091c3b74f5e87a8d5bedf7fa74ffb6ff256
+inputs_detail: .cairn/evidence/OVR-001/20260911T164213601Z-1492788.inputs.json
+command: node scripts/verify-complete-starter.mjs overview
+cwd: .
+exit: 0
+output_digest: sha256:72ef7b323fcd020fdd90dd06f2a3093fc9c9b834976bb410ff0c5e90fc029fe0
+output: .cairn/evidence/OVR-001/20260911T164213601Z-1492788.out
+stderr_output: .cairn/evidence/OVR-001/20260911T164213601Z-1492788.err
+stderr_digest: sha256:895332db9977f7ac6506965f8b3b348ac34efb3d55b9466b7d432d7a277a939a
+signal: none
+execution_error: null
+result: pass
+source: line
+recorded: 2026-09-11T16:43:00.761Z

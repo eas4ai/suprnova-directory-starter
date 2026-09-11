@@ -1,0 +1,269 @@
+[directory] cargo fmt --check
+[directory] cargo build --locked --bins
+   Compiling directory v1.0.0 (/home/shawn/workspace2/scratchpads/directory-paid-ulq6GR)
+    Finished `dev` profile [unoptimized] target(s) in 17.48s
+[directory] bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [118.00ms]
+[directory] bun run --cwd frontend build
+$ vue-tsc --noEmit && vite build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 706 modules transformed.
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-paid-ulq6GR/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-CV_P36Z-.css   63.62 kB │ gzip:  10.85 kB
+../public/assets/assets/main-BCXZYtW9.js   413.10 kB │ gzip: 129.92 kB
+
+✓ built in 526ms
+[directory] bun run --cwd frontend build:ssr
+$ vite build --ssr src/ssr.ts
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 91 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  233.52 kB │ gzip: 38.32 kB
+
+✓ built in 280ms
+[directory] cargo test --locked --lib listings::media::tests -- --nocapture
+   Compiling directory v1.0.0 (/home/shawn/workspace2/scratchpads/directory-paid-ulq6GR)
+    Finished `test` profile [unoptimized] target(s) in 13.98s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-d2ef6fe06015293f)
+
+running 4 tests
+test listings::media::tests::generated_keys_and_private_root_reject_traversal ... ok
+test listings::media::tests::reencoding_discards_jpeg_comment_metadata ... ok
+test listings::media::tests::accepts_only_decodable_raster_images_and_bounds_dimensions ... ok
+test listings::media::tests::persists_complete_bytes_with_generated_name ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.02s
+
+[directory] node scripts/with-ssr.mjs cargo test --locked --test directory_workflows -- --nocapture
+   Compiling directory v1.0.0 (/home/shawn/workspace2/scratchpads/directory-paid-ulq6GR)
+    Finished `test` profile [unoptimized] target(s) in 2.38s
+     Running tests/directory_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory_workflows-91716c358c8cab5a)
+
+running 1 test
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> GET /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /dashboard/listings/media/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /dashboard/listings/media/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /dashboard/listings/media/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /dashboard/listings/1/edit
+<-- Request complete
+--> GET /dashboard/listings/1/edit
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /dashboard/listings/1/archive
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> POST /dashboard/listings/media
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/a255d154-63fa-4536-8114-6ef36402239f
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> GET /listings
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/2/submit
+<-- Request complete
+--> POST /admin/listings/2/decision
+<-- Request complete
+--> POST /dashboard/listings
+<-- Request complete
+--> POST /dashboard/listings/3/submit
+<-- Request complete
+--> POST /admin/listings/3/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /dashboard/listings/1
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /dashboard/listings/1/submit
+<-- Request complete
+--> POST /admin/listings/1/decision
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> POST /admin/listings/1/suspension
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+--> GET /admin/audit
+<-- Request complete
+--> POST /dashboard/listings/1/archive
+<-- Request complete
+--> GET /listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce
+<-- Request complete
+--> GET /media/listings/original-100-tool-f8b3e1ccf6314713a8e8d2683d218fce/c5ff96f6-18f6-4462-b9ad-7146db9e312a
+<-- Request complete
+test directory_workflows_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.26s
+
+[directory] node scripts/with-ssr.mjs node frontend/tests/directory-workflows.mjs
+Owner save/restart/upload, rejection/resubmission/approval, unpaid visibility, stale edit recovery, public search/detail, keyboard and mobile journeys passed.
+cairn: DIR-001: pass
+cairn: DIR-002: pass
+cairn: DIR-003: pass
+cairn: DIR-004: pass
+cairn: DIR-005: pass
+cairn: DIR-006: pass
+cairn: DIR-007: pass

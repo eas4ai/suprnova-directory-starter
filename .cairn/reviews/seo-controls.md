@@ -1,6 +1,14 @@
-commit: 67c6b1c28f9bcdfdd41ac5d838bde9f6aaf4c758
+commit: b875933ff0322a67239c2e3f7fae3c635ab35aae
 findings:
   - resolved: The inherited provider fixture expected seven administrator capabilities. bc35eef requires all eight, including seo.manage, and keeps repeat-grant, revocation and denial assertions. All 54 requirements have fresh passes after that correction.
+
+## Version 1.0.0 release review — 2026-09-11
+
+The developer requested version 1.0.0 and publication of a release. Reviewed the candidate against the completed 2.0.0 dependency upgrade: the only implementation changes are the directory package version in Cargo.toml/Cargo.lock and the private frontend package version, all now 1.0.0. No application code, dependency resolution, verification mechanism or test assertions changed. Locked Cargo metadata and frozen Bun installation passed. The exact Suprnova 2.0.0 and compatible Markdown pins remain intact.
+
+All 54 requirements passed again on the versioned candidate, between 16:31:36 and 16:43:01 UTC. Verified the stdout and stderr hashes for every latest receipt (108 hashes). These checks cover both binaries, frontend and SSR, HTTP contracts and browser workflows, including the released payment adapters. The previous mechanism failure demonstrations remain applicable because the mechanisms and application logic did not change. No new finding arose from reviewing version consistency, the release diff, dependency identity or the proposed release notes.
+
+Production self-audit against rules 1–14: the explicit release request defines scope; the three metadata edits are minimal and consistent; public contracts, error handling, security, persistence and reliability behavior are unchanged and their existing checks passed; the todo and evidence are current; the release notes describe actual coverage and retain the SQLite/synthetic-payment, installed-CLI and upstream-issue limits. No revision is needed. Publication is authorized by the developer and follows this committed review. Traffic reporting remains planned.
 
 ## Suprnova 2.0.0 upgrade review — 2026-09-11
 

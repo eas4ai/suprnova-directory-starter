@@ -1,0 +1,219 @@
+
+[providers] format: cargo fmt --check
+
+[providers] format: passed
+
+[providers] build: cargo build --locked --bins
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-providers-pitzsE)
+    Finished `dev` profile [unoptimized] target(s) in 19.97s
+
+[providers] build: passed
+
+[providers] HTTP and persistence contract: cargo test --locked --test provider_administration -- --nocapture
+
+running 1 test
+--> GET /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /login
+<-- Request complete
+--> POST /login
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+Provider access, direct-request denial, CSRF, encrypted storage and both real adapters passed.
+--> POST /admin/billing
+<-- Request complete
+Local validation, stale/concurrent edits and failed-write atomicity passed.
+--> GET /admin/billing
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+--> POST /admin/billing
+<-- Request complete
+--> GET /register
+<-- Request complete
+--> POST /register
+<-- Request complete
+--> GET /admin/billing
+<-- Request complete
+BILLING_OPERATOR_ID=2
+Mapping edits/removal, ciphertext integrity, revocation and registration privilege denial passed.
+test provider_administration_contract ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.75s
+
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-providers-pitzsE)
+    Finished `test` profile [unoptimized] target(s) in 2.52s
+     Running tests/provider_administration.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/provider_administration-76fb53646ac6c64f)
+
+[providers] HTTP and persistence contract: passed
+
+[providers] first administrator grant: /home/shawn/workspace2/suprnova-directory-starter/target/debug/console admin:access grant --user-id 2
+Administrative access granted for account 2.
+
+[providers] first administrator grant: passed
+
+[providers] idempotent administrator grant: /home/shawn/workspace2/suprnova-directory-starter/target/debug/console admin:access grant --user-id 2
+Administrative access granted for account 2.
+
+[providers] idempotent administrator grant: passed
+
+[providers] unknown administrator rejected: /home/shawn/workspace2/suprnova-directory-starter/target/debug/console admin:access grant --user-id 9223372036854775807
+error: No account has that ID. Create and verify the account first.
+
+[providers] unknown administrator rejected: passed
+
+[providers] restart with the original key: cargo test --locked --test provider_key_policy -- --nocapture
+
+running 1 test
+test deployment_key_policy ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-providers-pitzsE)
+    Finished `test` profile [unoptimized] target(s) in 2.00s
+     Running tests/provider_key_policy.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/provider_key_policy-3d5c79b715d8b5b5)
+
+[providers] restart with the original key: passed
+
+[providers] missing deployment key: cargo test --locked --test provider_key_policy -- --nocapture
+
+running 1 test
+test deployment_key_policy ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+    Finished `test` profile [unoptimized] target(s) in 0.26s
+     Running tests/provider_key_policy.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/provider_key_policy-3d5c79b715d8b5b5)
+
+[providers] missing deployment key: passed
+
+[providers] default deployment key: cargo test --locked --test provider_key_policy -- --nocapture
+
+running 1 test
+test deployment_key_policy ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+    Finished `test` profile [unoptimized] target(s) in 0.26s
+     Running tests/provider_key_policy.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/provider_key_policy-3d5c79b715d8b5b5)
+
+[providers] default deployment key: passed
+
+[providers] wrong deployment key: cargo test --locked --test provider_key_policy -- --nocapture
+
+running 1 test
+test deployment_key_policy ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+
+    Finished `test` profile [unoptimized] target(s) in 0.27s
+     Running tests/provider_key_policy.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/provider_key_policy-3d5c79b715d8b5b5)
+
+[providers] wrong deployment key: passed
+
+[providers] constructor failure and corrected case: cargo test --locked --lib billing::settings::tests::constructor_failure_preserves_configuration -- --nocapture
+
+running 1 test
+test billing::settings::tests::constructor_failure_preserves_configuration ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 24 filtered out; finished in 0.28s
+
+   Compiling directory v0.1.0 (/home/shawn/workspace2/scratchpads/directory-providers-pitzsE)
+    Finished `test` profile [unoptimized] target(s) in 17.08s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-702e5f8ff12d0fe5)
+
+[providers] constructor failure and corrected case: passed
+
+[providers] frontend install: bun install --frozen-lockfile --cwd frontend
+bun install v1.4.1 (4661e494f)
+
++ @playwright/test@1.63.0
++ @tailwindcss/forms@0.5.11
++ @tailwindcss/typography@0.5.20
++ @tailwindcss/vite@4.3.3
++ @types/node@24.13.3
++ @vitejs/plugin-vue@6.0.8
++ tailwindcss@4.3.3
++ typescript@6.0.3
++ vite@8.2.2
++ vue-tsc@3.3.11
++ @fluent/bundle@0.19.1
++ @inertiajs/vue3@3.7.0
++ @vuetify/v0@1.0.1
++ vue@3.5.42
+
+81 packages installed [627.00ms]
+
+[providers] frontend install: passed
+
+[providers] frontend build: bun run --cwd frontend build
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 706 modules transformed.
+rendering chunks...
+computing gzip size...
+../public/assets/.vite/manifest.json         0.18 kB │ gzip:   0.14 kB
+../public/assets/assets/main-CV_P36Z-.css   63.62 kB │ gzip:  10.85 kB
+../public/assets/assets/main-BCXZYtW9.js   413.10 kB │ gzip: 129.92 kB
+
+✓ built in 668ms
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-providers-pitzsE/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+
+[providers] frontend build: passed
+
+[providers] frontend SSR build: bun run --cwd frontend build:ssr
+vite v8.2.2 building ssr environment for production...
+transforming...
+✓ 91 modules transformed.
+rendering chunks...
+computing gzip size...
+bootstrap/ssr/ssr.js  233.52 kB │ gzip: 38.32 kB
+
+✓ built in 402ms
+$ vite build --ssr src/ssr.ts
+
+[providers] frontend SSR build: passed
+
+[providers] browser administration journeys: node scripts/with-ssr.mjs node frontend/tests/provider-administration.mjs
+Both provider forms, validation, secret clearing, mode isolation, keyboard save, stale-edit conflict, mobile layout and CLI revocation passed.
+
+[providers] browser administration journeys: passed
+cairn: PAY-001: pass
+cairn: PAY-004: pass
+cairn: PAY-005: pass
+cairn: PAY-006: pass
+cairn: PAY-007: pass
+cairn: PAY-008: pass

@@ -4,7 +4,7 @@ Status: Agreed 2026-09-09
 
 This is a free MIT-licensed starter for developers operating directories. Operators can charge for listings. The first delivery includes directory discovery, owner submissions, moderation, paid publishing through Stripe and Paddle, articles, taxonomy, RSS, SEO, administration, accounts, notifications, storage, demo data and adoption documentation.
 
-The application uses Suprnova revision `107e6e7a122d5145160ea1547ca90ddc37459c27`, Vue, Inertia and Vuetify 0. Suprnova owns authentication, payment-provider integration and RBAC. Application modules own directory permissions, ownership, moderation, plans and publication entitlements. One application and relational database keep installation and transactions understandable; this architecture is agreed.
+The application uses Suprnova revision `3229aa9af542c991196274fa3c235cdce88a68e2`, Vue, Inertia and Vuetify 0. Suprnova owns authentication, payment-provider integration and RBAC. Application modules own directory permissions, ownership, moderation, plans and publication entitlements. One application and relational database keep installation and transactions understandable; this architecture is agreed.
 
 Larafast Directories is the working reference for directory workflows, page composition and administration. Reimplement the agreed behavior in Suprnova without redistributing the purchased reference source or assets. Earlier Pulsar investigation remains historical groundwork, not the selected directory reference. The target retains its shared/HTTP bootstrap separation. The suprnova.app UI supplies implementation references; its branding is not selected. Approved listing revisions remain public during review when otherwise eligible.
 

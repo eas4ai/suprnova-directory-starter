@@ -1,0 +1,49 @@
+Old foundation pin rejection
+
+[build] cargo metadata --locked --no-deps --format-version 1
+[build] command passed
+cairn: FND-001: fail
+AssertionError [ERR_ASSERTION]: suprnova must use the agreed repaired framework revision
++ actual - expected
+
++ 'git+https://github.com/eas4ai/suprnova.git?rev=3229aa9af542c991196274fa3c235cdce88a68e2'
+- 'git+https://github.com/eas4ai/suprnova.git?rev=2bd4bd53d04fa4581fdbb152ebd70cfb682b342c'
+
+    at verifyPin (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:41:12)
+    at Object.build (file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:55:3)
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-foundation.mjs:123:53
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+
+Old checkout pin rejection
+AssertionError [ERR_ASSERTION]: suprnova must use the recorded checkout revision.
+    at file:///home/shawn/workspace2/suprnova-directory-starter/scripts/verify-pinned-checkout.mjs:116:12
+    at ModuleJob.run (node:internal/modules/esm/module_job:327:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:663:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:99:5)
+
+Revised SEO mechanism demonstrations
+SEO-001: testing violating copy
+SEO-001 rejected: panicked at tests/seo_workflows.rs:136:5:
+assertion `left == right` failed
+  left: Object {"title_format": String("{title} · {site}"), "description": String(""), "image": String(""), "publisher": String("Example publisher"), "profiles": Array [String("https://example.test/publisher")], "google_verification": String("google-proof-token"), "bing_verification": String("BING123"), "noindex": Bool(false)}
+ right: Object {"title_format": String("{title} · {site}"), "description": String("A saved site description."), "image": String(""), "publisher": String("Example publisher"), "profiles": Array [String("https://example.test/publisher")], "google_verification": String("google-proof-token"), "bing_verification": String("BING123"), "noindex": Bool(false)}
+note: run with `RUST_BACKTRACE=1` environm
+SEO-006: testing violating copy
+SEO-006 rejected: panicked at tests/seo_workflows.rs:737:9:
+assertion `left == right` failed: SEO-006: Markdown must disable shared caching
+  left: "public, max-age=3600"
+ right: "no-store"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+error: test failed, to rerun pass `--test seo_workflows`
+AssertionError [ERR_ASSERTION]: Verification command exited 101
+
+101 !== 0
+
+    at file:///home/shawn/workspace2/scratchpads/seo-negative-IS4sd9/scripts/with-ssr.mjs:45:10
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+Starting SSR server on port 43379...
+Inertia SSR server started.
+
+

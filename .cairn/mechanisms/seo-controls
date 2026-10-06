@@ -20,3 +20,5 @@ requirements:
   - SEO-004
   - SEO-005
   - SEO-006
+reviewed:
+  - SEO-001 sha256:7805abeb592222e448f738704c52b7305c14bbae1918ea2a8ce9f81f2baa182a

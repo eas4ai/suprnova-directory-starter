@@ -13,3 +13,11 @@ The separate compatibility fix keeps the UTC timestamp values native and removes
 ## PAY-001 completed review
 
 Inspected the revised exact-adapter requirement, unchanged permission/CSRF/persistence falsifier, provider-administration declaration and script. The foundation checker still enforces all three direct sources and every framework lock source. The disposable old framework/adapter pin was rejected by the pinned-checkout verifier at its intended assertion. The corrected provider mechanism passed HTTP and persistence, repeated administrator grants, unknown-user rejection, key-policy failure/corrected cases, constructor failure/correction, client/SSR and browser journeys for both provider forms. No assertion was removed or weakened. Fresh formal evidence follows the marker.
+
+## SEO-001 and SEO-006 completed review
+
+Reviewed both revised definitions/falsifiers, the seo-controls declaration, verification script and HTTP/browser tests. SEO-001 only splits the two existing actor obligations into sentences; it changes no permission or metadata behavior. SEO-006 retains its public-eligibility, method/path, Unicode, header and no-shared-cache contract while its operating rules point to the verified compatible Markdown commit. The complete build enforces one exact framework identity. The declared inputs include the plugin pin and lockfile. No mismatch or assertion change is needed.
+
+Executed the existing deliberate-violation harness for these two requirements in a disposable copy: discarding the saved description failed the metadata assertion, and enabling shared caching failed the Markdown cache assertion. The corrected complete SEO mechanism then passed its HTTP suite and browser settings, stale/invalid inputs, keyboard/mobile themes, redirects, previews, SSR/Inertia metadata, Markdown discovery and delegated permission checks. Demonstration output is retained in suprnova-3-2-1-failures.out. Historical demonstrations for unchanged requirements remain applicable. Fresh formal receipts follow these reviewed digests.
+
+The legacy specification linter originally rejected the unchanged SEO-001 sentence in both the 1.0.0 baseline and upgrade. Splitting it preserves both obligations and produces a clean lint result.

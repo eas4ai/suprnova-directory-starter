@@ -1,7 +1,7 @@
 # Roadmap
 
 Status: Agreed 2026-09-10
-Current: suprnova-3-2-1
+Current: upgrade-guidance
 
 ## First starter delivery
 
@@ -41,6 +41,10 @@ NOWPayments adapter for the next Suprnova release: docs/commitments/nowpayments-
 
 ## Framework 3.2.1 maintenance release
 
-On 2026-10-05 the developer requested upgrading this starter after Pulsar and Nebula, including the same verified commit, push and release-tag workflow. Current is the bounded maintenance commitment in docs/commitments/suprnova-3-2-1.md. Traffic reporting remains planned.
+On 2026-10-05 the developer requested upgrading this starter after Pulsar and Nebula, including the same verified commit, push and release-tag workflow. That completed maintenance commitment is recorded in docs/commitments/suprnova-3-2-1.md. Traffic reporting remains planned.
 
 The Markdown prerequisite for Suprnova 3.2.1 is verified and published at `565c2205b1d1d77aa05a29247f3a2416abc60791`.
+
+## Upgrade documentation
+
+The developer requested and confirmed an upgrade guide for each upgraded repository. Current is docs/commitments/upgrade-guidance.md; the starter guide is [UPGRADE.md](../../UPGRADE.md). The completed Suprnova 3.2.1 implementation and its 54 acceptance requirements remain unchanged.

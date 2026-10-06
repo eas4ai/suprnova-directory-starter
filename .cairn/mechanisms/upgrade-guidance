@@ -1,0 +1,11 @@
+command: node .cairn/checks/verify-upgrade-guide.mjs
+results: per-requirement
+inputs:
+  - UPGRADE.md
+  - Cargo.toml
+  - Cargo.lock
+  - frontend/package.json
+  - README.md
+  - .cairn/checks/verify-upgrade-guide.mjs
+requirements:
+  - UPG-001

@@ -1,6 +1,6 @@
 # Starter upgrade guidance
 
-Status: Agreed 2026-10-05
+Status: Done 2026-10-05
 Requirements: UPG-001
 
 ## Outcome and boundary
@@ -10,6 +10,6 @@ The developer requested and confirmed an upgrade guide for each upgraded reposit
 ## Todo
 
 - Done: write and validate UPGRADE.md and the focused mechanism; positive and four disposable failure cases passed.
-- In progress: collect committed-tree evidence and record the production review.
+- Done: collect passing committed-tree evidence, verify all 55 current receipts and record the production review.
 
 Publish documentation on main after verification; no new release tag is needed for documentation alone.

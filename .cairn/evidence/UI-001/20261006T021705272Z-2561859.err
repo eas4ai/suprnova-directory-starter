@@ -1,0 +1,14 @@
+   Compiling directory v1.0.1 (/home/shawn/workspace2/scratchpads/directory-complete-xVW34Z)
+    Finished `dev` profile [unoptimized] target(s) in 17.77s
+$ vue-tsc --noEmit && vite build
+
+(!) outDir /home/shawn/workspace2/scratchpads/directory-complete-xVW34Z/public/assets is not inside project root and will not be emptied.
+Use --emptyOutDir to override.
+
+$ vite build --ssr src/ssr.ts
+   Compiling directory v1.0.1 (/home/shawn/workspace2/scratchpads/directory-complete-xVW34Z)
+    Finished `test` profile [unoptimized] target(s) in 16.08s
+     Running unittests src/lib.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/directory-8d5f5f5fcfc1685e)
+   Compiling directory v1.0.1 (/home/shawn/workspace2/scratchpads/directory-complete-xVW34Z)
+    Finished `test` profile [unoptimized] target(s) in 2.22s
+     Running tests/adoption_workflows.rs (/home/shawn/workspace2/suprnova-directory-starter/target/debug/deps/adoption_workflows-39faf53fd1598783)

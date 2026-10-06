@@ -8,12 +8,12 @@ pub const PREDEFINED: [&str; 3] = ["administrator", "moderator", "editor"];
 pub async fn seed<C: ConnectionTrait>(db: &C) -> Result<Vec<i64>, sea_orm::DbErr> {
     let mut permissions = Vec::with_capacity(ADMIN_PERMISSIONS.len());
     for name in ADMIN_PERMISSIONS {
-        let now = chrono::Utc::now().to_rfc3339();
+        let now = chrono::Utc::now();
         PermissionEntity::insert(PermissionActiveModel {
             name: Set(name.to_owned()),
             display_name: Set(Some(name.to_owned())),
             guard_name: Set("web".to_owned()),
-            created_at: Set(now.clone()),
+            created_at: Set(now),
             updated_at: Set(now),
             ..Default::default()
         })
@@ -37,12 +37,12 @@ pub async fn seed<C: ConnectionTrait>(db: &C) -> Result<Vec<i64>, sea_orm::DbErr
     }
 
     for name in PREDEFINED {
-        let now = chrono::Utc::now().to_rfc3339();
+        let now = chrono::Utc::now();
         RoleEntity::insert(RoleActiveModel {
             name: Set(name.into()),
             display_name: Set(Some(name.into())),
             guard_name: Set("web".into()),
-            created_at: Set(now.clone()),
+            created_at: Set(now),
             updated_at: Set(now),
             ..Default::default()
         })

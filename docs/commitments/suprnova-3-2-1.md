@@ -13,6 +13,7 @@ Update dependency manifests/locks, exact-pin verification, active specification 
 
 ## Todo
 
-- In progress: align the exact framework and Markdown pins and review revised mechanisms.
-- Pending: verify all inherited requirements on committed inputs and review the release.
-- Pending: publish main and v1.0.1.
+- Done: align and verify exact framework/Markdown pins, client/SSR and both binaries; review revised mechanisms and deliberate failures.
+- Done: verify all 54 inherited requirements on committed inputs, verify 108 output hashes and record the production release review.
+
+Publication follows the completed verification commitment: push main and create annotated v1.0.1, then verify both remote references. This operation is authorized by the developer; its outcome is reported after the push.

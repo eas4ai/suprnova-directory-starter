@@ -5,7 +5,7 @@ Prefix: PAY
 
 The developer confirmed all requirements, falsifiers and operating rules on 2026-09-09. The repaired framework revision and Larafast directory reference were confirmed before implementation resumed.
 
-[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters at revision `3229aa9af542c991196274fa3c235cdce88a68e2`.
+[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters at revision `2bd4bd53d04fa4581fdbb152ebd70cfb682b342c`.
 Falsifier: Either provider requires application source edits, saved configuration disappears after restart, or a guest or account without the permission can read or change billing configuration through a direct request.
 Mechanism: Proposed provider-administration-access HTTP tests and provider-administration-browser journeys, including both providers, restart persistence, denied actors and invalid CSRF tokens.
 Status: Agreed 2026-09-09
@@ -146,9 +146,9 @@ Mechanism: Proposed adapter wire-contract tests with a local HTTP fixture server
   requires operator-owned accounts, prices and webhook delivery. Local passes do
   not claim an external provider account was successfully charged.
 - The developer selected and completed framework adapter repairs in Suprnova.
-  On 2026-09-11 the developer requested moving the integration to Suprnova 2.0.0.
+  On 2026-10-05 the developer requested moving the integration to Suprnova 3.2.1.
   Pin the framework and its adapters to the exact release commit
-  `3229aa9af542c991196274fa3c235cdce88a68e2`, which includes those repairs.
+  `2bd4bd53d04fa4581fdbb152ebd70cfb682b342c`, which includes those repairs.
   This replaces the previous pre-release pin in FND-001 and PAY-001;
   implementation and verification establish when the starter actually uses it.
   Never invent a provider idempotency feature: when unsupported, retain an

@@ -1,6 +1,6 @@
 [package]
 name = "directory"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2024"
 rust-version = "1.94.0"
 description = "A directory starter kit by Suprnova"
@@ -26,10 +26,10 @@ name = "console"
 path = "src/bin/console.rs"
 
 [dependencies]
-suprnova-markdown = { git = "https://github.com/eas4ai/suprnova-markdown.git", rev = "9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec" }
-suprnova = { git = "https://github.com/eas4ai/suprnova.git", rev = "3229aa9af542c991196274fa3c235cdce88a68e2" }
-suprnova-payments-stripe = { git = "https://github.com/eas4ai/suprnova.git", rev = "3229aa9af542c991196274fa3c235cdce88a68e2" }
-suprnova-payments-paddle = { git = "https://github.com/eas4ai/suprnova.git", rev = "3229aa9af542c991196274fa3c235cdce88a68e2" }
+suprnova-markdown = { git = "https://github.com/eas4ai/suprnova-markdown.git", rev = "565c2205b1d1d77aa05a29247f3a2416abc60791" }
+suprnova = { git = "https://github.com/eas4ai/suprnova.git", rev = "2bd4bd53d04fa4581fdbb152ebd70cfb682b342c" }
+suprnova-payments-stripe = { git = "https://github.com/eas4ai/suprnova.git", rev = "2bd4bd53d04fa4581fdbb152ebd70cfb682b342c" }
+suprnova-payments-paddle = { git = "https://github.com/eas4ai/suprnova.git", rev = "2bd4bd53d04fa4581fdbb152ebd70cfb682b342c" }
 tokio = { version = "1", features = ["full"] }
 sea-orm-migration = { version = "2.0", features = ["sqlx-sqlite", "sqlx-postgres", "runtime-tokio-native-tls"] }
 sea-orm = { version = "2.0", features = ["sqlx-sqlite", "sqlx-postgres", "runtime-tokio-native-tls", "macros", "with-chrono", "postgres-use-serial-pk"] }

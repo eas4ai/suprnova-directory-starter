@@ -26,8 +26,8 @@ See [the roadmap](docs/spec/roadmap.md) for the current verification status.
 
 ## Prerequisites
 
-Framework and payment adapters target Suprnova 2.0.0 at release commit
-`3229aa9af542c991196274fa3c235cdce88a68e2`.
+Framework and payment adapters target Suprnova 3.2.1 at release commit
+`2bd4bd53d04fa4581fdbb152ebd70cfb682b342c`.
 
 - Rust 1.94 or newer and Cargo; this checkout is verified with Rust 1.95.
 - Bun 1.4.1 for frontend packages and database inspection.
@@ -549,7 +549,12 @@ before deployment. Set `APP_ENV=production`, `APP_DEBUG=false`, an explicit stab
 `SESSION_COOKIE_PREFIX=__Host-`. Use an absolute writable `DATABASE_URL` and private
 `DIRECTORY_MEDIA_ROOT`; retain them outside replaceable release directories.
 Configure authenticated encrypted SMTP and a real sender; the example local
-unencrypted capture server is not a production relay.
+unencrypted capture server is not a production relay. Suprnova 3.2.1 rejects
+non-delivering mail drivers in production. Configure `RATE_LIMIT_DRIVER=redis`
+and `RATE_LIMIT_REDIS_URL=redis://your-private-redis:6379/0` for shared production
+rate limits. A deployment with exactly one application process may explicitly set
+`RATE_LIMIT_ALLOW_MEMORY_IN_PRODUCTION=true` and retain the memory driver;
+its counters reset on restart and cannot protect multiple processes.
 
 Terminate TLS at a reverse proxy and forward requests to the application bound
 on loopback or a private network. Keep the SSR worker private; never expose its

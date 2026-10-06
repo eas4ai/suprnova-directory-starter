@@ -7,7 +7,7 @@ import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const revision = '3229aa9af542c991196274fa3c235cdce88a68e2';
+const revision = '2bd4bd53d04fa4581fdbb152ebd70cfb682b342c';
 const source = resolve(process.argv[2] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const cargoHome = resolve(process.env.CARGO_HOME ?? join(homedir(), '.cargo'));
 const environment = Object.fromEntries(['PATH', 'HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));

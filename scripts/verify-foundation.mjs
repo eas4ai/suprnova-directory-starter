@@ -35,7 +35,7 @@ function verifyPin(root) {
     encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'],
   });
   const app = JSON.parse(metadata).packages.find(pkg => pkg.name === 'directory');
-  const revision = '3229aa9af542c991196274fa3c235cdce88a68e2';
+  const revision = '2bd4bd53d04fa4581fdbb152ebd70cfb682b342c';
   const selectedSource = `git+https://github.com/eas4ai/suprnova.git?rev=${revision}`;
   for (const name of ['suprnova', 'suprnova-payments-stripe', 'suprnova-payments-paddle']) {
     assert.equal(app?.dependencies.find(dependency => dependency.name === name)?.source,

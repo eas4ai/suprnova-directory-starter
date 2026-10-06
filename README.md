@@ -270,7 +270,7 @@ Unpublishing, suspension, expiry or revoked eligibility removes the twin immedia
 for subsequent requests. GET and HEAD are supported; responses use UTF-8
 `text/markdown`, `X-Robots-Tag: noindex`, `nosniff` and `Cache-Control: no-store`.
 HTML remains canonical. Noindex content stays publicly readable in both formats.
-The dependency is pinned to `9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec` and shares the
+The dependency is pinned to `565c2205b1d1d77aa05a29247f3a2416abc60791` and shares the
 starter's framework revision; do not update one without checking the other.
 
 Run `node scripts/verify-complete-starter.mjs seo` for disposable HTTP, SSR and

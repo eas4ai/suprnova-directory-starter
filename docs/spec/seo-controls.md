@@ -3,7 +3,7 @@
 Status: Agreed 2026-09-10
 Prefix: SEO
 
-[SEO-001] Authorized operators MUST manage site metadata defaults and search-engine verification values; authorized content editors MUST manage optional search titles, descriptions, social images and indexability for listings, articles and taxonomy.
+[SEO-001] Authorized operators MUST manage site metadata defaults and search-engine verification values. Authorized content editors MUST manage optional search titles, descriptions, social images and indexability for listings, articles and taxonomy.
 Falsifier: An unauthorized direct request reads or mutates protected settings, saved overrides do not appear in public output, blank overrides do not use content defaults, or an unapproved revision changes public metadata.
 Mechanism: Proposed seo-controls; settings and revision lifecycle HTTP tests, permission matrix and initial-HTML assertions.
 
@@ -40,7 +40,7 @@ real visible content. HTML remains canonical; Markdown is non-indexable by
 default. Apply publication checks within MarkdownSource, and do not accept the
 plugin's default one-hour public cache for eligibility-sensitive content.
 
-Use the verified plugin commit 9aa7a482782ddc6eef92393ab2b0f36a2fefb7ec from
+Use the verified plugin commit 565c2205b1d1d77aa05a29247f3a2416abc60791 from
 https://github.com/eas4ai/suprnova-markdown.git. It matches the starter's framework
 revision. Preserve one framework dependency identity. The plugin supplies routing
 and response metadata; the starter supplies approved content.

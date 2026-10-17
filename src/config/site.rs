@@ -157,7 +157,7 @@ pub fn appearance(cookie: Option<&str>) -> &'static str {
             (name == "site_appearance").then_some(value)
         })
     });
-    if value == Some("dark") {
+    if value == Some("light") {
         "dark"
     } else {
         "light"

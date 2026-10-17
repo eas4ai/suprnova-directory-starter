@@ -471,3 +471,130 @@ inputs:
 requirements:
   - UPG-001
 ```
+
+
+## Suprnova 4.2 upgrade reconnaissance — 2026-10-17
+
+This section supersedes the scaffold observations above for the current upgrade.
+The inspected application baseline is `d1eb68a`; application code is unchanged
+from `3d568ec`. Historical passing records are not fresh upgrade evidence.
+
+| State | Finding and evidence |
+| --- | --- |
+| Exists | Starter 1.0.1 pins Suprnova and both payment adapters to 3.2.1 revision `2bd4bd53d04fa4581fdbb152ebd70cfb682b342c`; committed Rust and Bun locks exist (`Cargo.toml`, `Cargo.lock`, `frontend/bun.lock`). |
+| Exists | Accounts, owner submissions, moderation, payments, articles, administration, appearance and SEO have implementation and acceptance scripts (`src/routes.rs`, `scripts/verify-foundation.mjs`, `scripts/verify-paid-directory.mjs`, `scripts/verify-complete-starter.mjs`, `frontend/tests/`). This closes the earlier observation that these files were absent, not a new runtime verification. |
+| Exists | Account permissions use old RBAC pivot names in direct SQL and entity operations; role/permission IDs are signed and display_name is written (`src/accounts/queries.rs:15`, `src/accounts/roles.rs:8`). These call sites need adaptation to the 4.0 RBAC schema. |
+| Exists | The migrator registers application-owned sessions and framework CreateRbacTables without the new compatibility migrations (`src/migrations/mod.rs:25`). Existing populated databases require coverage in addition to fresh installation. |
+| Exists | AccountUserProvider forwards credential checks and password changes but has no rehash forwarding hook (`src/accounts/provider.rs:42`). Console errors collapse to exit code 1 (`src/bin/console.rs:49`). |
+| Exists | Inertia installs the default Vue configuration, CSS is imported from JavaScript, and Vite has one client entry (`src/bootstrap.rs:143`, `frontend/src/main.ts:3`, `frontend/vite.config.ts:35`). Separate SSR source and build already exist (`frontend/src/ssr.ts`, `frontend/package.json`). |
+| Exists | The Markdown wrapper checks current publication eligibility, restricts methods, forces no-store, and distinguishes lookup failures (`src/seo/markdown.rs`). These protections must survive the plugin API upgrade. |
+| Documented | The 4.0 guide calls for explicit environment configuration, session/RBAC compatibility migrations, current CSRF cookies, auth-provider adaptation and console exit-code propagation: https://suprnova.app/docs/upgrade-4-0. The 4.1 guide describes optional security-header/CSP and Sentry integration: https://suprnova.app/docs/upgrade-4-1. The 4.2 guide requires explicit CSS entries and documents cache/cookie behavior: https://suprnova.app/docs/upgrade-4-2. Guides were fetched on 2026-10-17. |
+| Exists | Remote Suprnova tag v4.2.0 resolves to `6f6f83feae1dfde97d614d083625872987407780` (git ls-remote). The latest remote Markdown release v0.3.0 resolves to `14cb9e0756ea032f8117bcc1309bf4f7ef838d8c`; its manifest selects Suprnova tag v4.1.0 (`../suprnova-markdown/Cargo.toml`; remote HEAD matches). A published compatible Markdown revision is a prerequisite; mixing framework source identities does not satisfy the contract. |
+| Documented | Foundation, payment and SEO specifications intentionally pin the prior versions (`docs/spec/foundation.md`, `payments.md`, `seo-controls.md`). Updating these pins is the requested change, not evidence of existing code/spec drift. All 55 delivered requirements remain acceptance obligations; the eight planned traffic requirements stay outside this upgrade (`docs/spec/roadmap.md`). |
+| Documented | History since the newest Agreed date includes the 3.2.1 upgrade, native RBAC timestamp repair, Markdown obligations, release review and upgrade guide, followed by the authorized Sudus migration (`git log --since=2026-10-05`; commits `1cb875d`, `512becc`, `49a06da`, `89700be`, `689198a`, `0713af1`, `d1eb68a`). |
+| Contradicted | The supplied working agreement still names Cairn 1.x, but `cairn wake` is unavailable and initialized Sudus reports no commitment started. Replace the agreement only through the existing-project authorization step. |
+| Unverified | No 4.2 build, fresh migration, populated migration, browser test or adapter test has run. PostgreSQL, real provider accounts, external SMTP and deployment remain outside local SQLite acceptance (`docs/spec/adoption.md`). |
+| Unverified | Earlier operational findings in `docs/discrepancies.md` remain historical until their corresponding fresh checks run. The carried license/admin backlog item is preserved as `ec98b25a55f5562c80973859b7d001e7f243ed43`; its presence is not a current defect claim. |
+
+### Upgrade radius and proposed verification
+
+- FND: manifests/locks, shared and HTTP bootstrap, migrations, authentication,
+  console, frontend entries and existing foundation checks. Preserve current
+  public/admin behavior while adopting documented framework changes.
+- ADM/PAY: RBAC entities and direct SQL, operator grant/revoke, last-admin
+  protection, signed account IDs, provider adapters and immutable payment state.
+- DIR/CNT/SEO/UI/OVR/KIT: rerun existing workflow, SSR/browser, publication,
+  notifications, clean-install and documentation mechanisms. Preserve private
+  content and Markdown eligibility boundaries.
+- UPG: update backup, migration, worker and rollback instructions to match the
+  final pins. Never exercise the operator's untracked database or environment.
+- New FWU checks: populated 3.2.1 migration, session security, real served assets
+  and cache headers, console exit status, and single framework identity.
+
+No fresh runtime result is asserted by this reconnaissance. The existing
+requirements hold as the intended contract; their 4.2 implementation remains
+unverified. Optional search/recommendations, Sentry and a new CSP policy are not
+part of this compatibility upgrade.
+
+
+### Markdown prerequisite completed — 2026-10-17
+
+Exists: after explicit developer approval, `suprnova-markdown` v0.4.0 was
+committed and published at `6f27ecae53babc0fd637c23b41bc5b244543c78e`.
+Remote main and the peeled release tag were verified with `git ls-remote`.
+Its manifest uses Suprnova tag v4.2.0; library source and API are unchanged.
+
+Exists: `cargo fmt --check`, `cargo test --locked` (4 unit, 6 middleware,
+1 doctest), `cargo check --locked --lib`, guide example syntax checks and
+Ripwire quality/test gates passed in the plugin checkout. A separate consumer
+metadata graph resolved exactly one Suprnova 4.2 identity without default or
+testing features. The plugin working tree was clean after publication.
+
+Unverified: starter runtime integration and acceptance remain pending. The
+plugin results do not establish that the starter's migration or workflows pass.
+
+
+### Sudus contract preparation and mechanism review — 2026-10-17
+
+Documented: the developer confirmed the six FWU requirements and the Markdown
+prerequisite. The roadmap now names `suprnova-4-2` with 61 requirements: the
+55 delivered contracts and six compatibility obligations. FND-001, PAY-001,
+the overview and SEO operating rules now select the approved framework and
+published plugin revisions. The historical documentation-only scope is labeled
+as historical rather than contradicting this upgrade.
+
+Exists: 21 mechanisms have been declared. Each has an observed failing example,
+and all 61 requirement review bindings were checked against their current text.
+The old mechanism commands and test suites were retained; the upgrade-guide
+check moved from the reserved `.cairn/checks` path into `scripts`. The foundation
+build check now inspects resolved dependency identities as well as direct pins.
+Its first full-metadata run hit Node's buffer limit; a bounded 32 MiB capture
+fixed that harness failure, and the next run reached the intended pin assertion.
+The buffer error is not counted as a failure-sensitivity demonstration.
+
+The demonstrations below each test a representative violation of their group.
+A grouped receipt marks the group failed; it does not mean every falsifier was
+individually mutated. Output was inspected for the intended assertion rather
+than accepting a compiler failure, timeout, or missing executable. Every
+mutation was restored immediately after its check. These are failure-sensitivity
+records, not new acceptance passes. Full behavioral checks and the new 4.2
+migration, authentication and browser suites remain implementation work.
+
+| Representative | Failing receipt | Changed input | Observed failure |
+| --- | --- | --- | --- |
+| ADM-002 | `abc4872bbf2a8e5aed90b52b1448ab90851f5c34` | `src/accounts/mod.rs` | panicked at tests/administration_workflows.rs |
+| CNT-002 | `d20ad0c21d85f8427734d2b8b6eddd8d7634b482` | `src/articles/queries.rs` | panicked at tests/editorial_workflows.rs |
+| DIR-006 | `5601e94d66fe62cd5a7de859ea1faae6bc135dd7` | `src/listings/queries.rs` | panicked at tests/directory_workflows.rs |
+| FND-002 | `4caab2bbfa83648c1f9c7ba22645e737dff415bf` | `src/migrations/m20240101_000001_create_users_table.rs` | Missing account column: users.remember_token |
+| FND-003 | `311a844f1705a4cb8fbb5deeeac03f2a2c2416e1` | `src/middleware/authenticate.rs` | panicked at tests/foundation_accounts.rs |
+| FND-004 | `824862840abeba7bba89a9445253bf1baba27c0e` | `src/routes.rs` | panicked at tests/foundation_ui.rs |
+| KIT-004 | `2256ebbe7aa609b303e5be1582fd9fb4c024bc45` | `LICENSE` | Missing MIT license term: MIT License |
+| OVR-001 | `4a1b8725e697d48f9f05b2b0f9588ae323494782` | `src/controllers/admin.rs` | panicked at tests/overview_workflows.rs |
+| PAY-001 | `f33ef831e9ebb2629ba7344ba50d80f714dcc5e2` | `src/controllers/billing.rs` | panicked at tests/provider_administration.rs |
+| PAY-014 | `99125a4dfc0d051f47aa85841137076346210fb0` | `src/billing/reconcile.rs` | panicked at tests/paid_lifecycle.rs |
+| SEO-001 | `ead9cdf10a788469d3761e70afc245adb0475380` | `src/seo/settings.rs` | A saved site description |
+| UI-002 | `304b6acdde6a721624f4348cc8f2e422a17a6343` | `src/config/site.rs` | test result: FAILED |
+
+Additional observed failures: FND-001 rejects the still-pinned 3.2.1 manifest
+(receipt `9a68b0c1f49910b01cb9ea44a4ea355ee075e100`); FND-005 rejects a missing
+installation command block (`23c4d5bbf46936bb39a4fcfd49c2124605dfedd0`); UPG-001
+rejects a wrong release identifier (`be570295255ce73699ca0b34266fd6c42e7eb55f`).
+FWU-001 through FWU-006 reject the current missing 4.2 dependency, RBAC/session
+migration, provider rehash hook, explicit CSS entry, console exit-code forwarding
+and updated operations guide respectively. Those guards supplement the runtime
+checks, which cannot pass until their compatibility implementation is complete.
+
+Exists: the proposed AGENTS.md is copied exactly from the Sudus 4.5.0 working
+agreement. Settings retain `origin` as authority, classify source/interface
+paths, identify local database/storage as data, and refuse those runtime paths
+in network snapshots. Codex is the review harness without a model override.
+The operator SQLite database and its journals are now gitignored; their contents
+were neither read nor changed. Final authorization remains pending and no
+application dependency or runtime source upgrade has been committed.
+
+Observed verification: spec lint, JavaScript syntax checks, diff whitespace and
+exact working-agreement/template comparison pass. Ripwire quality delta reports
+no regressions. Its test gate exits 4 for two documentation nodes (the README
+heading and the historical discrepancies section) without graph-linked tests;
+the executable mechanism demonstrations above are the relevant preparation
+checks. This is not a claim that the application upgrade passes acceptance.

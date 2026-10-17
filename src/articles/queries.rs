@@ -17,7 +17,7 @@ use suprnova::{DB, FrameworkError};
 
 pub fn published() -> Condition {
     Condition::all().add(article::Column::PublishedRevisionId.is_not_null())
-        .add(article::Column::PublishedAt.is_null())
+        .add(article::Column::PublishedAt.is_not_null())
         .add(Expr::cust("EXISTS (SELECT 1 FROM article_revisions published WHERE published.id = articles.published_revision_id AND published.article_id = articles.id)"))
 }
 

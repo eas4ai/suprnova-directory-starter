@@ -56,7 +56,7 @@ impl Defaults {
                 "Include {title} once and optionally {site}; no other placeholders are supported.",
             ));
         }
-        self.description = text(&self.description, "description", 320)?;
+        self.description = String::new();
         self.image = image_url(&self.image, "image")?;
         self.publisher = text(&self.publisher, "publisher", 120)?;
         for (field, value) in [

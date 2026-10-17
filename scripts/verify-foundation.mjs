@@ -31,16 +31,27 @@ function run(command, args, cwd, options = {}) {
 }
 
 function verifyPin(root) {
-  const metadata = run('cargo', ['metadata', '--locked', '--no-deps', '--format-version', '1'], root, {
+  const metadata = run('cargo', ['metadata', '--locked', '--format-version', '1'], root, {
     encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'],
   });
-  const app = JSON.parse(metadata).packages.find(pkg => pkg.name === 'directory');
+  const packages = JSON.parse(metadata).packages;
+  const app = packages.find(pkg => pkg.name === 'directory');
   const revision = '6f6f83feae1dfde97d614d083625872987407780';
   const selectedSource = `git+https://github.com/eas4ai/suprnova.git?tag=v4.2.0`;
   for (const name of ['suprnova', 'suprnova-payments-stripe', 'suprnova-payments-paddle']) {
     assert.equal(app?.dependencies.find(dependency => dependency.name === name)?.source,
       selectedSource, `${name} must use the agreed repaired framework revision`);
+    const resolved = packages.filter(pkg => pkg.name === name);
+    assert.equal(resolved.length, 1, `${name} must have exactly one dependency identity`);
+    assert.equal(resolved[0].source, `${selectedSource}#${revision}`,
+      `${name} must resolve the published framework source without a local override`);
   }
+  const markdown = packages.filter(pkg => pkg.name === 'suprnova-markdown');
+  const markdownRevision = '6f27ecae53babc0fd637c23b41bc5b244543c78e';
+  assert.equal(markdown.length, 1, 'Markdown must have exactly one dependency identity');
+  assert.equal(markdown[0].source,
+    `git+https://github.com/eas4ai/suprnova-markdown.git?rev=${markdownRevision}#${markdownRevision}`,
+    'Markdown must resolve the published compatible revision without a local override');
   assert.deepEqual(app.targets.filter(target => target.kind.includes('bin')).map(target => target.name).sort(), ['console', 'directory']);
   const lock = readFileSync(join(root, 'Cargo.lock'), 'utf8');
   const frameworkSources = [...lock.matchAll(/^source = "(git\+https:\/\/github\.com\/eas4ai\/suprnova\.git[^"\n]+)"$/gm)].map(match => match[1]);

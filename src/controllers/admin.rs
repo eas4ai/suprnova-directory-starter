@@ -36,7 +36,7 @@ async fn listing_summary(now: i64) -> Result<ListingSummary, FrameworkError> {
     let db = DB::connection()?;
     Ok(ListingSummary {
         published: listing::Entity::find()
-            .filter(listings::queries::eligible(now))
+            .filter(listing::Column::Archived.eq(false))
             .count(db.inner())
             .await
             .map_err(database_error)?,

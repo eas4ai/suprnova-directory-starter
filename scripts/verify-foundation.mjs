@@ -32,7 +32,7 @@ function run(command, args, cwd, options = {}) {
 
 function verifyPin(root) {
   const metadata = run('cargo', ['metadata', '--locked', '--format-version', '1'], root, {
-    encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'],
+    encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'], maxBuffer: 32 * 1024 * 1024,
   });
   const packages = JSON.parse(metadata).packages;
   const app = packages.find(pkg => pkg.name === 'directory');

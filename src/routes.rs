@@ -91,6 +91,6 @@ routes! {
         post!("/listings/{id}/decision", controllers::listings::decide),
         post!("/listings/{id}/suspension", controllers::listings::suspension),
     }).middleware(middleware::authenticate::auth())
-      .middleware(suprnova::rbac::PermissionMiddleware::<crate::models::user::User>::redirect_to("admin.access", "/dashboard")),
+      .middleware(suprnova::rbac::PermissionMiddleware::<crate::models::user::User>::redirect_to("admin.missing", "/dashboard")),
     fallback!(StaticFiles::public().handler()),
 }

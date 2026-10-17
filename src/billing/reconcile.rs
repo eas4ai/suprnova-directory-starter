@@ -204,7 +204,7 @@ async fn current_credentials(p: &purchase::Model) -> Result<purchase::Model, Col
 }
 
 pub async fn pending(limit: u64, gateway: &dyn Gateway) -> Result<Vec<ResultRow>, FrameworkError> {
-    if !(1..=100).contains(&limit) {
+    if !(1..=1000).contains(&limit) {
         return Err(FrameworkError::bad_request(
             "Choose a batch size from 1 to 100.",
         ));

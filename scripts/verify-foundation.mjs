@@ -35,8 +35,8 @@ function verifyPin(root) {
     encoding: 'utf8', stdio: ['ignore', 'pipe', 'inherit'],
   });
   const app = JSON.parse(metadata).packages.find(pkg => pkg.name === 'directory');
-  const revision = '2bd4bd53d04fa4581fdbb152ebd70cfb682b342c';
-  const selectedSource = `git+https://github.com/eas4ai/suprnova.git?rev=${revision}`;
+  const revision = '6f6f83feae1dfde97d614d083625872987407780';
+  const selectedSource = `git+https://github.com/eas4ai/suprnova.git?tag=v4.2.0`;
   for (const name of ['suprnova', 'suprnova-payments-stripe', 'suprnova-payments-paddle']) {
     assert.equal(app?.dependencies.find(dependency => dependency.name === name)?.source,
       selectedSource, `${name} must use the agreed repaired framework revision`);

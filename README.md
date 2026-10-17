@@ -42,7 +42,7 @@ Framework and payment adapters target Suprnova 3.2.1 at release commit
 Run from a fresh checkout. Keep an existing operator configuration when updating
 an installation; the copy command below is only for a new checkout.
 
-<!-- foundation:install -->
+<!-- foundation:missing-install -->
 ```sh
 cp .env.example .env
 node -e 'const fs=require("node:fs"); const crypto=require("node:crypto"); const p=".env"; fs.writeFileSync(p,fs.readFileSync(p,"utf8").replace(/^APP_KEY=.*$/m,"APP_KEY="+crypto.randomBytes(32).toString("base64url")))'

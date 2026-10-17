@@ -17,7 +17,7 @@ pub async fn active_on<C: ConnectionTrait>(db: &C, id: i64) -> Result<bool, Fram
         .one(db)
         .await
         .map_err(database_error)?
-        .is_none_or(|a| a.suspended))
+        .is_none_or(|a| !a.suspended))
 }
 pub async fn is_active(id: i64) -> Result<bool, FrameworkError> {
     active_on(DB::connection()?.inner(), id).await

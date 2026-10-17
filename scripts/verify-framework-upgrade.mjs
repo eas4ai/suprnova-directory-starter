@@ -97,7 +97,7 @@ try {
       ['scripts/verify-foundation.mjs', 'setup'], ['scripts/verify-provider-administration.mjs'],
       ['scripts/verify-paid-directory.mjs', 'directory'], ['scripts/verify-paid-directory.mjs', 'payments'],
       ...['editorial', 'administration', 'adoption', 'overview', 'seo'].map(group => ['scripts/verify-complete-starter.mjs', group]),
-      ['scripts/verify-appearance.mjs'], ['.cairn/checks/verify-upgrade-guide.mjs'],
+      ['scripts/verify-appearance.mjs'], ['scripts/verify-upgrade-guide.mjs'],
     ];
     for (const args of commands) run('node', args);
   }

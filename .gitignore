@@ -192,3 +192,7 @@ vite.config.ts.timestamp-*
 
 # Cairn keeps evidence in Git; only the active action is transient.
 .cairn/in-progress
+
+# Operator SQLite state is never source or verification evidence.
+/database.db
+/database.db-*

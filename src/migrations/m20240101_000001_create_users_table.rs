@@ -26,6 +26,7 @@ impl MigrationTrait for Migration {
                             .unique_key(),
                     )
                     .col(ColumnDef::new(Users::Password).string().not_null())
+                    .col(ColumnDef::new(Users::RememberToken).string().null())
                     // Nullable verification timestamp. `NULL` = unverified;
                     // `EmailVerification::verify` stamps it on consume. Paired
                     // with the `email_verified_at: Option<DateTime<Utc>>` field

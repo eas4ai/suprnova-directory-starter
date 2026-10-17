@@ -22,7 +22,7 @@ async fn authorize() -> Result<(), FrameworkError> {
         .await?
         .ok_or(FrameworkError::Unauthorized)?;
     if !user.has_permission_to(billing::ADMIN_PERMISSION).await?
-        || user.has_permission_to(billing::BILLING_PERMISSION).await?
+        || !user.has_permission_to(billing::BILLING_PERMISSION).await?
     {
         return Err(
             suprnova::AppError::forbidden("Billing configuration permission is required.").into(),

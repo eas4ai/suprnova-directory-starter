@@ -45,7 +45,7 @@ impl Page {
             number: parse(number, 1)?,
             size: parse(size, 24)?,
         };
-        if page.number == 0 || page.number > 1_000_000 || page.size == 0 || page.size > 100 {
+        if page.number == 0 || page.number > 1_000_000 || page.size == 0 || page.size > 1000 {
             return Err(invalid(
                 "page",
                 "Page size must be between 1 and 100; page must be between 1 and 1000000.",

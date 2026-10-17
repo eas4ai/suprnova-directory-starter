@@ -1,6 +1,7 @@
 # Glossary
 
 Status: Agreed 2026-09-08
+Prefix: GLS
 
 | Term | Meaning in this project |
 | --- | --- |

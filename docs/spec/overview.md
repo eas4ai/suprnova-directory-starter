@@ -1,6 +1,7 @@
 # Suprnova directory starter
 
 Status: Agreed 2026-09-09
+Prefix: OVW
 
 This is a free MIT-licensed starter for developers operating directories. Operators can charge for listings. The first delivery includes directory discovery, owner submissions, moderation, paid publishing through Stripe and Paddle, articles, taxonomy, RSS, SEO, administration, accounts, notifications, storage, demo data and adoption documentation.
 
@@ -12,17 +13,18 @@ Review occurs before payment. Payment eligibility and moderation approval are se
 
 ## Spec map
 
-| Domain | Record | Prefix and depth |
+| File | Prefix | Domain |
 | --- | --- | --- |
-| Build, accounts and UI foundation | foundation.md | FND; first commitment requirements |
-| Provider configuration and paid publication | payments.md | PAY; provider administration and paid lifecycle |
-| Directory discovery, ownership and moderation | directory.md | DIR; paid-directory requirements |
-| Editorial, taxonomy, RSS and SEO | content.md | CNT; complete-starter requirements |
-| Delegated administration and audit | administration.md | ADM; complete-starter requirements |
-| Notifications, media and starter adoption | adoption.md | KIT; complete-starter requirements |
-| Optional color presets and visitor appearance | appearance.md | UI; site-appearance requirements |
-| Actual admin overview and navigation | admin-overview.md | OVR; admin-overview requirements |
-| Metadata controls and public Markdown | seo-controls.md | SEO; seo-controls requirements |
-| Traffic, revenue and engagement reports | traffic-reporting.md | TRF; traffic-reporting requirements |
+| foundation.md | FND | Build, accounts and UI foundation |
+| payments.md | PAY | Provider configuration and paid publication |
+| directory.md | DIR | Directory discovery, ownership and moderation |
+| content.md | CNT | Editorial, taxonomy, RSS and SEO |
+| administration.md | ADM | Delegated administration and audit |
+| adoption.md | KIT | Notifications, media and starter adoption |
+| appearance.md | UI | Optional color presets and visitor appearance |
+| admin-overview.md | OVR | Actual admin overview and navigation |
+| seo-controls.md | SEO | Metadata controls and public Markdown |
+| traffic-reporting.md | TRF | Traffic, revenue and engagement reports |
+| upgrade-guidance.md | UPG | Operator upgrade and recovery guidance |
 
 Read glossary.md, foundation.md, payments.md, directory.md, content.md, administration.md, adoption.md, appearance.md, admin-overview.md, seo-controls.md, traffic-reporting.md and roadmap.md after this overview. Paths in the map are repository-relative except sibling spec filenames, which are relative to docs/spec. Existing implementation evidence and unverified findings remain in docs/recon.md and docs/pulsar-assessment.md.

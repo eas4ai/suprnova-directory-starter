@@ -70,3 +70,404 @@ Follow-up after the developer created the GitHub origin on 2026-09-08:
 - Complete: record target recon and proposed feature scope.
 - In progress: settle the first commitment's scope and acceptance checks with the developer.
 - Pending: write requirements and their falsifiers, obtain agreement, then prepare the commitment and its mechanisms.
+
+
+## Cairn mechanism archive — 2026-10-17
+
+Documented: these declarations are copied verbatim from commit `3d568ec154d1f6bcd1015225e9546450249d66ba` before migration. They preserve the commands, declared inputs and requirement mapping; they are not fresh Sudus evidence.
+
+### admin-overview
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/admin-overview`.
+
+```yaml
+command: node scripts/verify-complete-starter.mjs overview
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - OVR-001
+  - OVR-002
+  - OVR-003
+```
+
+### delegated-administration
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/delegated-administration`.
+
+```yaml
+command: node scripts/verify-complete-starter.mjs administration
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - ADM-001
+  - ADM-002
+  - ADM-003
+```
+
+### directory-workflows
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/directory-workflows`.
+
+```yaml
+command: node scripts/verify-paid-directory.mjs directory
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - DIR-001
+  - DIR-002
+  - DIR-003
+  - DIR-004
+  - DIR-005
+  - DIR-006
+  - DIR-007
+```
+
+### editorial-publication
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/editorial-publication`.
+
+```yaml
+command: node scripts/verify-complete-starter.mjs editorial
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - CNT-001
+  - CNT-002
+  - CNT-003
+  - CNT-004
+  - CNT-005
+  - CNT-006
+```
+
+### foundation-accounts
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/foundation-accounts`.
+
+```yaml
+command: node scripts/verify-foundation.mjs accounts
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - FND-003
+```
+
+### foundation-build
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/foundation-build`.
+
+```yaml
+command: node scripts/verify-foundation.mjs build
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - .env.example
+requirements:
+  - FND-001
+reviewed:
+  - FND-001 sha256:cab1d772d0a6216adaec8e1b1fa93bc3e8c9d2199843736579fda8969d488ab2
+  - FND-001 sha256:6b895667a44f2b9e4492727a51f67211445bb32d91c43b6f3dfd914b5478a67c
+  - FND-001 sha256:736d84250da2c2b6d70a8aadcc8038ee6fdcc1be05f1d4ecf77f62413cbf3c43
+```
+
+### foundation-database
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/foundation-database`.
+
+```yaml
+command: node scripts/verify-foundation.mjs database
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - .env.example
+requirements:
+  - FND-002
+```
+
+### foundation-setup
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/foundation-setup`.
+
+```yaml
+command: node scripts/verify-foundation.mjs setup
+results: per-requirement
+inputs:
+  - .gitignore
+  - handoff.md
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - .env.example
+requirements:
+  - FND-005
+```
+
+### foundation-ui
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/foundation-ui`.
+
+```yaml
+command: node scripts/verify-foundation.mjs ui
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - FND-004
+```
+
+### paid-lifecycle
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/paid-lifecycle`.
+
+```yaml
+command: node scripts/verify-paid-directory.mjs payments
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - DIR-008
+  - PAY-002
+  - PAY-003
+  - PAY-009
+  - PAY-010
+  - PAY-011
+  - PAY-012
+  - PAY-013
+  - PAY-014
+  - PAY-015
+  - PAY-016
+```
+
+### provider-administration
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/provider-administration`.
+
+```yaml
+command: node scripts/verify-provider-administration.mjs
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - PAY-001
+  - PAY-004
+  - PAY-005
+  - PAY-006
+  - PAY-007
+  - PAY-008
+reviewed:
+  - PAY-001 sha256:88cb0a671a89e6443adcb96e5edf94ec2351a9cdf32a2536dec94a3925e302c3
+  - PAY-001 sha256:1af61b53911c61f25abcfe20021aa6c54ac13c2dc77e580db1e54d0a2d404d19
+  - PAY-001 sha256:47a350feb1d4eef45f36d3a14e93696635fef8dcb4b62909edcb9088ba9e51e4
+```
+
+### seo-controls
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/seo-controls`.
+
+```yaml
+command: node scripts/verify-complete-starter.mjs seo
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - SEO-001
+  - SEO-002
+  - SEO-003
+  - SEO-004
+  - SEO-005
+  - SEO-006
+reviewed:
+  - SEO-001 sha256:7805abeb592222e448f738704c52b7305c14bbae1918ea2a8ce9f81f2baa182a
+```
+
+### site-appearance
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/site-appearance`.
+
+```yaml
+command: node scripts/verify-appearance.mjs
+results: per-requirement
+inputs:
+  - Cargo.toml
+  - Cargo.lock
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+  - README.md
+requirements:
+  - UI-001
+  - UI-002
+```
+
+### starter-adoption
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/starter-adoption`.
+
+```yaml
+command: node scripts/verify-complete-starter.mjs adoption
+results: per-requirement
+inputs:
+  - .gitignore
+  - Cargo.toml
+  - Cargo.lock
+  - lang/
+  - README.md
+  - handoff.md
+  - LICENSE
+  - THIRD_PARTY_NOTICES.md
+  - src/
+  - cmd/
+  - frontend/
+  - scripts/
+  - tests/
+  - .env.example
+requirements:
+  - KIT-001
+  - KIT-002
+  - KIT-003
+  - KIT-004
+  - KIT-005
+```
+
+### upgrade-guidance
+
+Source: `3d568ec154d1f6bcd1015225e9546450249d66ba:.cairn/mechanisms/upgrade-guidance`.
+
+```yaml
+command: node .cairn/checks/verify-upgrade-guide.mjs
+results: per-requirement
+inputs:
+  - UPGRADE.md
+  - Cargo.toml
+  - Cargo.lock
+  - frontend/package.json
+  - README.md
+  - .cairn/checks/verify-upgrade-guide.mjs
+requirements:
+  - UPG-001
+```

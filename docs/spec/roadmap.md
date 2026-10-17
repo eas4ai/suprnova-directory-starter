@@ -1,6 +1,7 @@
 # Roadmap
 
 Status: Agreed 2026-09-10
+Prefix: MAP
 Current: upgrade-guidance
 
 ## First starter delivery
@@ -37,14 +38,14 @@ seo-controls. External analytics and Search Console data imports remain separate
 
 ## Framework workstream
 
-NOWPayments adapter for the next Suprnova release: docs/commitments/nowpayments-framework-adapter.md. This is a separate framework workstream, not the next Current value in this repository.
+NOWPayments adapter for the next Suprnova release: `3d568ec154d1f6bcd1015225e9546450249d66ba:docs/commitments/nowpayments-framework-adapter.md` (historical Git record). This is a separate framework workstream, not the next Current value in this repository.
 
 ## Framework 3.2.1 maintenance release
 
-On 2026-10-05 the developer requested upgrading this starter after Pulsar and Nebula, including the same verified commit, push and release-tag workflow. That completed maintenance commitment is recorded in docs/commitments/suprnova-3-2-1.md. Traffic reporting remains planned.
+On 2026-10-05 the developer requested upgrading this starter after Pulsar and Nebula, including the same verified commit, push and release-tag workflow. That completed maintenance commitment is recorded in `3d568ec154d1f6bcd1015225e9546450249d66ba:docs/commitments/suprnova-3-2-1.md` (historical Git record). Traffic reporting remains planned.
 
 The Markdown prerequisite for Suprnova 3.2.1 is verified and published at `565c2205b1d1d77aa05a29247f3a2416abc60791`.
 
 ## Upgrade documentation
 
-The developer requested and confirmed an upgrade guide for each upgraded repository. Current is docs/commitments/upgrade-guidance.md; the starter guide is [UPGRADE.md](../../UPGRADE.md). The completed Suprnova 3.2.1 implementation and its 54 acceptance requirements remain unchanged.
+The developer requested and confirmed an upgrade guide for each upgraded repository. Current is `3d568ec154d1f6bcd1015225e9546450249d66ba:docs/commitments/upgrade-guidance.md` (historical Git record); the starter guide is [UPGRADE.md](../../UPGRADE.md). The completed Suprnova 3.2.1 implementation and its 54 acceptance requirements remain unchanged.

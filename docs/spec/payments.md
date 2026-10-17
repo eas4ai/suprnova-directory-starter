@@ -7,40 +7,42 @@ The developer confirmed all requirements, falsifiers and operating rules on 2026
 
 [PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters at revision `2bd4bd53d04fa4581fdbb152ebd70cfb682b342c`.
 Falsifier: Either provider requires application source edits, saved configuration disappears after restart, or a guest or account without the permission can read or change billing configuration through a direct request.
-Mechanism: Proposed provider-administration-access HTTP tests and provider-administration-browser journeys, including both providers, restart persistence, denied actors and invalid CSRF tokens.
+Mechanism: provider-administration
 Status: Agreed 2026-09-09
 
 [PAY-002] The starter MUST restrict paid-listing checkout to approved submissions.
 Falsifier: An owner can create a payable checkout for a draft, pending or rejected submission.
-Mechanism: Proposed checkout lifecycle tests across moderation states for both providers.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-003] The starter MUST require verified payment eligibility before publishing an approved paid listing.
 Falsifier: Approval alone or browser-return parameters publish an unpaid listing.
-Mechanism: Proposed payment-forgery and publication visibility tests across search, category, detail and sitemap.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-004] The starter MUST provide an operator command to grant or revoke administrative access for an existing verified account through Suprnova RBAC.
 Falsifier: The documented command cannot provision the first administrator, repeated grants create duplicate access, revocation leaves protected requests authorized, an unknown or unverified account receives access, or public registration can grant administrative permissions.
-Mechanism: Proposed provider-administration-provisioning command and HTTP tests on a disposable database, including an existing session after revocation.
+Mechanism: provider-administration
 Status: Agreed 2026-09-09
 
 [PAY-005] The starter MUST store provider API and webhook secrets encrypted under the operator-provided application key and accept replacements without returning stored secrets to the browser.
 Falsifier: Stored database values, response bodies, validation errors or application logs contain submitted secret markers; an unrelated save erases an existing secret; or missing, default, incorrect or corrupt encryption material permits configuration use or silently overwrites unreadable values.
-Mechanism: Proposed provider-administration-secrets tests with unique secret markers, captured responses and logs, database inspection, replacement and unrelated updates, and missing-key and corrupt-ciphertext cases.
+Mechanism: provider-administration
 Status: Agreed 2026-09-09
 
 [PAY-006] The starter MUST keep separate test and live provider profiles with explicit enablement and at most one enabled default provider for each mode.
 Falsifier: Selecting one mode uses credentials from the other, an incomplete profile can be enabled, a disabled provider remains the default, or a failed or stale concurrent update partially changes saved configuration.
-Mechanism: Proposed provider-administration-state tests for both modes and providers, transactional failures, conflicting updates and adapter selection.
+Mechanism: provider-administration
 Status: Agreed 2026-09-09
 
 [PAY-007] The starter MUST let a billing administrator map a local plan identifier to one provider price identifier per provider and mode.
 Falsifier: A saved mapping cannot be edited or removed, duplicate entries for the same plan/provider/mode coexist, or resolving a missing mapping falls back to another provider or mode.
-Mechanism: Proposed provider-administration-mappings persistence and browser tests covering duplicates, missing mappings, changes and removal.
+Mechanism: provider-administration
 Status: Agreed 2026-09-09
 
 [PAY-008] The starter MUST reject locally invalid provider configuration with actionable errors before constructing an adapter.
 Falsifier: Blank required values, invalid header characters or detectable key/mode mismatches cause a panic or a saved enabled profile; constructor failure alters the previous configuration; or the UI describes local validation as successful authentication or price verification with the external provider.
-Mechanism: Proposed provider-administration-validation boundary tests and browser error journeys, with actual adapter construction for valid fixtures and controlled constructor failure.
+Mechanism: provider-administration
 Status: Agreed 2026-09-09
 
 ## Agreed operating rules
@@ -63,35 +65,43 @@ the agreed paid-directory commitment.
 
 [PAY-009] The starter MUST let a billing administrator manage local free, one-time and recurring publishing plans without altering existing purchase terms.
 Falsifier: A non-billing actor can change plans, an invalid or disabled plan can start checkout, or editing a plan changes a previously created purchase's price reference, currency or entitlement policy.
-Mechanism: Proposed paid-plans HTTP, persistence and immutable-purchase-snapshot tests.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-010] The starter MUST create checkout attempts from server-owned listing, plan, provider and mode data with retry-safe correlation.
 Falsifier: Browser price/currency/customer/return-URL overrides are trusted, another owner can start or inspect checkout, a disabled or unmapped provider is offered, or repeating an ambiguous request creates an unrelated payable session.
-Mechanism: Proposed paid-checkout tests with capturing provider fakes, concurrent requests, network failures and real adapter boundary fixtures.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-011] The starter MUST authenticate and correlate payment evidence before granting a listing entitlement.
 Falsifier: A bad signature, unsettled invoice, unknown purchase, wrong provider/mode/customer/price/currency, or a browser return parameter grants or extends publication eligibility.
-Mechanism: Proposed signed Stripe/Paddle webhook fixtures and payment-evidence tests, including Paddle billed-but-unsettled events and forged return pages.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-012] The starter MUST apply payment events and entitlement changes idempotently despite duplicate delivery, reordering and interrupted processing.
 Falsifier: Replaying an event grants a second entitlement or extends a period twice, an older event reverses a newer authoritative state, or an interruption permanently loses fulfillment after recording the event.
-Mechanism: Proposed paid-fulfillment transaction, replay, concurrency and controlled-crash tests with recovery runs.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-013] The starter MUST enforce the agreed renewal, cancellation, refund and dispute policy on publication eligibility.
 Falsifier: An unpaid renewal extends access, scheduled cancellation removes an already paid period early, a full refund or open dispute leaves the affected entitlement usable, or partial-refund and reinstatement outcomes differ from the policy below.
-Mechanism: Proposed paid-lifecycle state matrix for both providers with controlled time and reordered event fixtures.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-014] The starter MUST provide a bounded operator reconciliation command that repairs recoverable payment state without creating new charges.
 Falsifier: A missed event cannot be recovered from available authoritative provider state, a replayed reconciliation duplicates fulfillment, an unavailable provider destroys prior evidence, or the command creates a new payment session or charge.
-Mechanism: Proposed paid-reconciliation command tests with missed events, retained webhook replay, provider failures and a second corrected run.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-015] The starter MUST preserve recovery for existing purchases when new checkout is disabled or provider configuration changes.
 Falsifier: Disabling checkout rejects valid events for an existing purchase, clearing credentials silently strands an unresolved purchase, or a replacement signing key makes retained events unusable without an explicit recovery path.
-Mechanism: Proposed paid-provider-lifecycle tests for disabled providers, credential replacement/clearing and pending purchase recovery.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 [PAY-016] The starter MUST use payment adapters whose observable checkout and recovery behavior meets the declared application contract.
 Falsifier: An adapter silently drops required purchase correlation, claims an unsupported retry guarantee, cannot recover a recorded checkout's authoritative state, or fails to encode the configured price in a valid provider request.
-Mechanism: Proposed adapter wire-contract tests with a local HTTP fixture server and signed webhook fixtures, including timeouts and unsupported operations.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 ## Agreed paid-directory operating rules
 

@@ -8,35 +8,43 @@ is owned by payments.md. The operating rules below were confirmed for the remain
 
 [DIR-001] The starter MUST let a verified owner create, save, edit and archive their own listing drafts through the owner UI.
 Falsifier: A valid draft cannot be reopened after restart, another owner can read a private draft or mutate it by direct request, or an unverified account can submit a mutation.
-Mechanism: Proposed directory-ownership HTTP and browser journeys with two owners, a guest and an unverified account.
+Mechanism: directory-workflows
+Status: Agreed 2026-09-09
 
 [DIR-002] The starter MUST validate listing content and media before committing a revision.
 Falsifier: Invalid fields or unsafe media are accepted, a failed submission leaves a partial revision, unapproved media is publicly accessible, or rendered content executes injected script.
-Mechanism: Proposed directory-content boundary tests, media fixtures and browser injection checks.
+Mechanism: directory-workflows
+Status: Agreed 2026-09-09
 
 [DIR-003] The starter MUST let an authorized moderator approve or reject a submitted revision with a recorded decision.
 Falsifier: A draft can be approved without submission, a non-moderator can decide through a direct request, a rejection lacks an owner-visible reason, or a stale decision overwrites a newer revision.
-Mechanism: Proposed directory-moderation state, permission and concurrent-decision tests plus review-queue browser journeys.
+Mechanism: directory-workflows
+Status: Agreed 2026-09-09
 
 [DIR-004] The starter MUST retain the last approved public revision while an owner's proposed changes await review.
 Falsifier: Unreviewed changes appear on any public surface, rejecting an edit removes the previously eligible revision, or approval publishes content other than the revision reviewed.
-Mechanism: Proposed directory-revisions tests across edit, submit, reject, approve and competing edits.
+Mechanism: directory-workflows
+Status: Agreed 2026-09-09
 
 [DIR-005] The starter MUST restrict every public listing surface to the same current publication eligibility rules.
 Falsifier: A draft, rejected initial submission, archived or suspended listing, expired paid listing, or test-mode purchase appears in search, category, detail, metadata, feeds, media or sitemap output.
-Mechanism: Proposed directory-visibility matrix over public HTTP routes with a controllable clock and payment fixtures.
+Mechanism: directory-workflows
+Status: Agreed 2026-09-09
 
 [DIR-006] The starter MUST provide bounded public search, category filtering and pagination with stable listing URLs.
 Falsifier: Results ignore the requested query/category, pagination repeats or skips unchanged records, an unbounded result request succeeds, or renaming a listing breaks its previously published URL without a redirect.
-Mechanism: Proposed directory-discovery database/HTTP tests and desktop/mobile browser journeys.
+Mechanism: directory-workflows
+Status: Agreed 2026-09-09
 
 [DIR-007] The starter MUST let an authorized moderator suspend and reinstate a listing without granting payment eligibility.
 Falsifier: Suspension leaves a public surface visible, a non-moderator can suspend a listing, reinstatement publishes an unpaid or expired listing, or the action lacks an audit reason and actor.
-Mechanism: Proposed directory-suspension permission and visibility tests across paid, free and expired listings.
+Mechanism: directory-workflows
+Status: Agreed 2026-09-09
 
 [DIR-008] The starter MUST show owners their listing's moderation, payment and publication status with the available next action.
 Falsifier: An owner cannot distinguish pending review from awaiting payment, an approved unpaid listing has no checkout action, a rejected revision hides its reason, or another owner's status is disclosed.
-Mechanism: Proposed directory-owner-dashboard HTTP and keyboard/browser journeys through the complete lifecycle.
+Mechanism: paid-lifecycle
+Status: Agreed 2026-09-09
 
 ## Agreed operating rules
 

@@ -1,14 +1,9 @@
 use sea_orm::EntityTrait;
-use std::sync::{
-    Arc,
-    atomic::{AtomicBool, Ordering},
-};
+use std::sync::Arc;
 use suprnova::{FrameworkError, HttpResponse, Middleware, Next, Request, Response, async_trait};
 use suprnova_markdown::{MarkdownMiddleware, MarkdownSource};
 
-struct PublishedSource {
-    failed: Arc<AtomicBool>,
-}
+struct PublishedSource;
 
 async fn content(path: &str) -> Result<Option<String>, FrameworkError> {
     let db = suprnova::DB::connection()?;
@@ -53,17 +48,8 @@ async fn content(path: &str) -> Result<Option<String>, FrameworkError> {
 
 #[async_trait]
 impl MarkdownSource for PublishedSource {
-    async fn markdown(&self, path: &str) -> Option<String> {
-        match content(path).await {
-            Ok(content) => content,
-            Err(error) => {
-                let response = HttpResponse::from(error);
-                if response.status_code() != 404 {
-                    self.failed.store(true, Ordering::Relaxed);
-                }
-                None
-            }
-        }
+    async fn markdown(&self, path: &str) -> Result<Option<String>, FrameworkError> {
+        content(path).await
     }
 }
 
@@ -92,22 +78,10 @@ impl Middleware for PublicMarkdown {
                 .status(404)
                 .header("Cache-Control", "no-store"));
         }
-        let failed = Arc::new(AtomicBool::new(false));
-        let middleware = MarkdownMiddleware::new(PublishedSource {
-            failed: failed.clone(),
-        })
-        .max_age(0);
+        let middleware = MarkdownMiddleware::new(PublishedSource).max_age(0);
         let fallback: Next =
             Arc::new(|_| Box::pin(async { Err(HttpResponse::text("404 Not Found").status(404)) }));
         let result = middleware.handle(request, fallback).await;
-        if failed.load(Ordering::Relaxed) {
-            tracing::error!("Public Markdown source failed");
-            return Err(
-                HttpResponse::text("The public content could not be loaded.")
-                    .status(500)
-                    .header("Cache-Control", "no-store"),
-            );
-        }
         let response = match result {
             Ok(response) | Err(response) => response,
         };

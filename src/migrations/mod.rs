@@ -1,4 +1,5 @@
 pub use sea_orm_migration::prelude::*;
+use suprnova::session::migrations::{CreateSessionsTable, SessionUserKey};
 
 mod m20240101_000001_create_users_table;
 mod m20240101_000002_create_sessions_table;
@@ -29,6 +30,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20240101_000003_create_remember_tokens_table::Migration),
             Box::new(m20240101_000004_create_auth_flow_tokens_table::Migration),
             Box::new(suprnova::rbac::migrations::CreateRbacTables),
+            Box::new(suprnova::rbac::migrations::RbacToSpatieLayout),
             Box::new(m20260909_000005_create_billing_settings::Migration),
             Box::new(m20260909_000006_create_directory::Migration),
             Box::new(m20260909_000007_create_publishing::Migration),
@@ -38,6 +40,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260909_000011_create_owner_notifications::Migration),
             Box::new(m20260909_000012_create_demo_seed::Migration),
             Box::new(m20260910_000013_create_seo_controls::Migration),
+            Box::new(CreateSessionsTable::new(SessionUserKey::Integer)),
         ]
     }
 }

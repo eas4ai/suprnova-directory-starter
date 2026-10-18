@@ -139,7 +139,9 @@ try {
   await visitor.getByLabel('Search listings', { exact: true }).fill('Pagination');
   await visitor.getByRole('button', { name: 'Search', exact: true }).click();
   await expect(visitor.locator('.directory-card')).toHaveCount(2);
-  await expect(visitor).toHaveURL(origin + '/listings?q=Pagination&category=');
+  await expect(visitor).toHaveURL(url => url.origin === origin
+    && url.pathname === '/listings' && url.searchParams.size === 2
+    && url.searchParams.get('q') === 'Pagination' && url.searchParams.get('category') === '');
   await expect(visitor.getByRole('button', { name: 'Compact', exact: true })).toBeEnabled();
   await visitor.getByRole('button', { name: 'Compact', exact: true }).focus();
   await visitor.keyboard.press('Enter');

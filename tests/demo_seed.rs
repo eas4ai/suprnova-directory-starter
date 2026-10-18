@@ -187,8 +187,8 @@ async fn console_seed_is_repeatable_and_preserves_operator_and_demo_credentials(
     for table in [
         "publishing_purchases",
         "owner_notifications",
-        "model_roles",
-        "model_permissions",
+        "model_has_roles",
+        "model_has_permissions",
     ] {
         assert_eq!(
             install

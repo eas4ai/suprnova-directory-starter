@@ -1,16 +1,16 @@
 # Upgrade Guide
 
-## Suprnova 3.2.1 → 4.2.0
+## Suprnova 3.2.1 → 4.3.0 (also from 4.2.0)
 
 This is the current, unreleased framework upgrade. Rust and frontend package
 versions are 1.0.1; no new starter release tag is implied. The existing `v1.0.1`
 tag still identifies the earlier Suprnova 3.2.1 release. Select a reviewed commit
 containing this upgrade, or a later explicitly published starter release, rather
-than fetching that old tag expecting the 4.2 code.
+than fetching that old tag expecting the 4.3 code.
 
-The framework, Stripe and Paddle adapters select tag `v4.2.0`, locked to
-`6f6f83feae1dfde97d614d083625872987407780`. Markdown v0.4.0 is pinned to
-`6f27ecae53babc0fd637c23b41bc5b244543c78e` and selects the same framework identity.
+The framework, Stripe and Paddle adapters select tag `v4.3.0`, locked to
+`2e0c5227b9090c47894169c0d545b40eb27c3641`. Markdown v0.5.0 is pinned to
+`c80dafb5f05e6de633472f73beec4d5101883389` and selects the same framework identity.
 The Inertia Vue, core and Vite packages are pinned to 3.8.0. Keep both dependency
 locks to reproduce the build; do not substitute a local framework checkout.
 
@@ -33,9 +33,9 @@ Configure a fork's `upstream` once to
 reviewed starter commit or release tag, then:
 
 ```bash
-: "${UPGRADE_REF:?Set UPGRADE_REF to the reviewed Suprnova 4.2 starter commit or release tag}"
+: "${UPGRADE_REF:?Set UPGRADE_REF to the reviewed Suprnova 4.3 starter commit or release tag}"
 git fetch upstream "$UPGRADE_REF"
-git switch -c upgrade/suprnova-4.2.0
+git switch -c upgrade/suprnova-4.3.0
 git merge --no-ff FETCH_HEAD
 ```
 
@@ -65,12 +65,23 @@ database with its existing key:
 ./target/release/directory migrate
 ```
 
-The upgrade registers `RbacToSpatieLayout` after the framework RBAC creation
+The migration chain retains `RbacToSpatieLayout` after the framework RBAC creation
 migration, and `CreateSessionsTable::new(SessionUserKey::Integer)` after the
-application migrations. They reshape existing grants and database sessions; do
-not rename tables manually or recreate the database. Disposable checks cover both
-empty databases and populated 3.2.1 data, signed account IDs, role-derived and
-direct permissions, content/payment records, session payloads and a repeat run.
+application migrations. When upgrading from 3.2.1, these reshape existing grants
+and database sessions. They are already applied on 4.2.0. Do not rename tables
+manually or recreate the database. Disposable checks cover empty databases and
+populated 3.2.1 and 4.2.0 data, signed account IDs, role-derived and direct
+permissions, content/payment records, session payloads and a repeat run. The
+4.2.0 baseline was captured with the previous application and framework; this
+upgrade preserves its schema and records.
+
+Suprnova 4.3 adds `search_source_versions` for registered searchable models and
+new recommendation graph tables. This starter uses its own SQL discovery and
+does not register framework searchable models or enable recommendations, so
+those migrations and services are not added. A customized installation using
+those features must follow the framework 4.3 upgrade guide and register their
+migrations before accepting writes. New media embeddings and graph
+recommendations remain opt-in.
 
 The session migration preserves stored IDs, payloads and CSRF tokens. Old browser
 cookie continuity is not guaranteed by the starter's acceptance checks: plan for

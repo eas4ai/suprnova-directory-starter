@@ -26,8 +26,8 @@ See [the roadmap](docs/spec/roadmap.md) for the current verification status.
 
 ## Prerequisites
 
-Framework and payment adapters select Suprnova tag `v4.2.0` at release commit
-`6f6f83feae1dfde97d614d083625872987407780`. See [UPGRADE.md](UPGRADE.md)
+Framework and payment adapters select Suprnova tag `v4.3.0` at release commit
+`2e0c5227b9090c47894169c0d545b40eb27c3641`. See [UPGRADE.md](UPGRADE.md)
 when updating an existing installation.
 
 - Rust 1.95 and Cargo for the verified setup; the package declares a 1.94 minimum.
@@ -281,7 +281,7 @@ Unpublishing, suspension, expiry or revoked eligibility removes the twin immedia
 for subsequent requests. GET and HEAD are supported; responses use UTF-8
 `text/markdown`, `X-Robots-Tag: noindex`, `nosniff` and `Cache-Control: no-store`.
 HTML remains canonical. Noindex content stays publicly readable in both formats.
-The dependency is pinned to `6f27ecae53babc0fd637c23b41bc5b244543c78e` and shares the
+The dependency is pinned to `c80dafb5f05e6de633472f73beec4d5101883389` and shares the
 starter's framework revision; do not update one without checking the other.
 
 Run `node scripts/verify-complete-starter.mjs seo` for disposable HTTP, SSR and
@@ -560,7 +560,7 @@ before deployment. Set `APP_ENV=production`, `APP_DEBUG=false`, an explicit stab
 `SESSION_COOKIE_PREFIX=__Host-`. Use an absolute writable `DATABASE_URL` and private
 `DIRECTORY_MEDIA_ROOT`; retain them outside replaceable release directories.
 Configure authenticated encrypted SMTP and a real sender; the example local
-unencrypted capture server is not a production relay. Suprnova 4.2.0 rejects
+unencrypted capture server is not a production relay. Suprnova 4.3.0 rejects
 non-delivering mail drivers in production. Configure `RATE_LIMIT_DRIVER=redis`
 and `RATE_LIMIT_REDIS_URL=redis://your-private-redis:6379/0` for shared production
 rate limits. A deployment with exactly one application process may explicitly set

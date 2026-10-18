@@ -26,10 +26,10 @@ name = "console"
 path = "src/bin/console.rs"
 
 [dependencies]
-suprnova-markdown = { git = "https://github.com/eas4ai/suprnova-markdown.git", rev = "6f27ecae53babc0fd637c23b41bc5b244543c78e" }
-suprnova = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.2.0" }
-suprnova-payments-stripe = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.2.0" }
-suprnova-payments-paddle = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.2.0" }
+suprnova-markdown = { git = "https://github.com/eas4ai/suprnova-markdown.git", rev = "c80dafb5f05e6de633472f73beec4d5101883389" }
+suprnova = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.3.0" }
+suprnova-payments-stripe = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.3.0" }
+suprnova-payments-paddle = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.3.0" }
 tokio = { version = "1", features = ["full"] }
 sea-orm-migration = { version = "2.0", features = ["sqlx-sqlite", "sqlx-postgres", "runtime-tokio-native-tls"] }
 sea-orm = { version = "2.0", features = ["sqlx-sqlite", "sqlx-postgres", "runtime-tokio-native-tls", "macros", "with-chrono", "postgres-use-serial-pk"] }

@@ -56,6 +56,8 @@ try {
     'QUEUE_DRIVER=redis', 'QUEUE_REDIS_URL', 'QUEUE_REDIS_STREAM', 'QUEUE_REDIS_GROUP',
     'QUEUE_VISIBILITY_TIMEOUT_SECS=120', 'Leave `--tries` unset',
     'Suprnova::RevokeUserCredentials', 'Redis persistence', 'pending/delayed backlog',
+    'populated 3.2.1 and 4.2.0 data', 'search_source_versions',
+    'does not register framework searchable models or enable recommendations',
     'do not let old workers consume new framework jobs', 'all 55 inherited requirements',
     'They do not establish PostgreSQL behavior', 'live charges',
     'src/app.css', 'private, no-store', 'ignores `public/hot`',

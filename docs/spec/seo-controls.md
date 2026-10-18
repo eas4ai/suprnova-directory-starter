@@ -1,6 +1,6 @@
 # SEO controls and Markdown publication
 
-Status: Agreed 2026-10-17
+Status: Agreed 2026-10-18
 Prefix: SEO
 
 [SEO-001] Authorized operators MUST manage site metadata defaults and search-engine verification values. Authorized content editors MUST manage optional search titles, descriptions, social images and indexability for listings, articles and taxonomy.
@@ -46,9 +46,9 @@ real visible content. HTML remains canonical; Markdown is non-indexable by
 default. Apply publication checks within MarkdownSource, and do not accept the
 plugin's default one-hour public cache for eligibility-sensitive content.
 
-Use the verified plugin commit 6f27ecae53babc0fd637c23b41bc5b244543c78e from
-https://github.com/eas4ai/suprnova-markdown.git. This is plugin v0.4.0 and selects the starter's framework
-tag `v4.2.0`. Preserve one framework dependency identity. The plugin supplies routing
+Use the verified plugin commit c80dafb5f05e6de633472f73beec4d5101883389 from
+https://github.com/eas4ai/suprnova-markdown.git. This is plugin v0.5.0 and selects the starter's framework
+tag `v4.3.0`. Preserve one framework dependency identity. The plugin supplies routing
 and response metadata; the starter supplies approved content.
 
 Search Console verification/setup is included. OAuth imports of search queries or

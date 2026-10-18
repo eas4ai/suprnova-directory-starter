@@ -2,7 +2,7 @@
 
 Status: Agreed 2026-09-10
 Prefix: MAP
-Current: suprnova-4-2
+Current: suprnova-4-3
 
 ## First starter delivery
 
@@ -61,6 +61,25 @@ Deliver the Suprnova 4.2 compatibility upgrade defined in framework-upgrade.md,
 using the published Markdown v0.4.0 prerequisite and preserving all 55 delivered
 requirements. Traffic reporting remains planned. The developer confirmed this
 scope on 2026-10-17.
+
+Done when every named requirement passes its declared mechanism, the upgrade
+guide matches the final build and migration behavior, and production and
+independent reviews have no unresolved findings.
+
+
+## suprnova-4-3
+
+Status: Agreed 2026-10-18
+
+Requirements: ADM-001, ADM-002, ADM-003, CNT-001, CNT-002, CNT-003, CNT-004, CNT-005, CNT-006, DIR-001, DIR-002, DIR-003, DIR-004, DIR-005, DIR-006, DIR-007, DIR-008, FND-001, FND-002, FND-003, FND-004, FND-005, FWU-001, FWU-002, FWU-003, FWU-004, FWU-005, FWU-006, KIT-001, KIT-002, KIT-003, KIT-004, KIT-005, OVR-001, OVR-002, OVR-003, PAY-001, PAY-002, PAY-003, PAY-004, PAY-005, PAY-006, PAY-007, PAY-008, PAY-009, PAY-010, PAY-011, PAY-012, PAY-013, PAY-014, PAY-015, PAY-016, SEO-001, SEO-002, SEO-003, SEO-004, SEO-005, SEO-006, UI-001, UI-002, UPG-001
+
+The developer requested Suprnova 4.3.0 immediately after the completed 4.2
+upgrade. Deliver the compatibility upgrade in framework-upgrade.md with the
+published Markdown v0.5.0 prerequisite. Preserve all delivered behavior and
+verify migration from both the older 3.2.1 fixture and a populated 4.2.0 baseline.
+Traffic reporting and optional framework search/recommendations remain outside
+this commitment. The waiting licensing/admin-provisioning item follows this
+commitment under the recorded developer priority.
 
 Done when every named requirement passes its declared mechanism, the upgrade
 guide matches the final build and migration behavior, and production and

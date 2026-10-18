@@ -5,10 +5,10 @@ Prefix: PAY
 
 The developer confirmed all requirements, falsifiers and operating rules on 2026-09-09. The repaired framework revision and Larafast directory reference were confirmed before implementation resumed.
 
-[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters selected by tag `v4.2.0` at revision `6f6f83feae1dfde97d614d083625872987407780`.
+[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters selected by tag `v4.3.0` at revision `2e0c5227b9090c47894169c0d545b40eb27c3641`.
 Falsifier: Either provider requires application source edits, saved configuration disappears after restart, or a guest or account without the permission can read or change billing configuration through a direct request.
 Mechanism: provider-administration
-Status: Agreed 2026-10-17
+Status: Agreed 2026-10-18
 
 [PAY-002] The starter MUST restrict paid-listing checkout to approved submissions.
 Falsifier: An owner can create a payable checkout for a draft, pending or rejected submission.
@@ -158,7 +158,7 @@ Status: Agreed 2026-09-09
 - The developer selected and completed framework adapter repairs in Suprnova.
   On 2026-10-05 the developer requested moving the integration to Suprnova 3.2.1.
   Pin the framework and its adapters to the exact release commit
-  `6f6f83feae1dfde97d614d083625872987407780`, which includes those repairs.
+  `2e0c5227b9090c47894169c0d545b40eb27c3641`, which includes those repairs.
   This replaces the previous pre-release pin in FND-001 and PAY-001;
   implementation and verification establish when the starter actually uses it.
   Never invent a provider idempotency feature: when unsupported, retain an

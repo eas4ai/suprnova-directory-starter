@@ -53,8 +53,8 @@ try {
   // These cheap prerequisite checks identify the old configuration before an
   // expensive run. They supplement, never replace, the behavioral checks below.
   if (task === 'build') {
-    assert.match(read('Cargo.toml'), /suprnova = .*tag = "v4\.2\.0"/, 'FWU-001: framework must select v4.2.0');
-    assert.match(read('Cargo.toml'), /suprnova-markdown = .*rev = "6f27ecae53babc0fd637c23b41bc5b244543c78e"/, 'FWU-001: use the published compatible Markdown revision');
+    assert.match(read('Cargo.toml'), /suprnova = .*tag = "v4\.3\.0"/, 'FWU-001: framework must select v4.3.0');
+    assert.match(read('Cargo.toml'), /suprnova-markdown = .*rev = "c80dafb5f05e6de633472f73beec4d5101883389"/, 'FWU-001: use the published compatible Markdown revision');
     run('node', ['scripts/verify-foundation.mjs', 'build']);
   } else if (task === 'migration') {
     assert.match(read('src/migrations/mod.rs'), /RbacToSpatieLayout/, 'FWU-002: existing RBAC data needs the framework compatibility migration');
@@ -96,7 +96,7 @@ try {
     run(binary, ['admin:access', '--not-a-real-option'], working, env, 1);
     run(binary, ['compat:exit'], working, { ...env, APP_ENV: 'test', DATABASE_URL: 'sqlite::memory:' }, 23);
   } else {
-    assert.match(read('UPGRADE.md'), /Suprnova.*4\.2\.0/, 'FWU-006: document the new framework release');
+    assert.match(read('UPGRADE.md'), /Suprnova.*4\.3\.0/, 'FWU-006: document the new framework release');
     assert.match(read('UPGRADE.md'), /revocation/i, 'FWU-006: document durable auth-revocation retry operation');
     const commands = [
       ['scripts/verify-foundation.mjs', 'build'], ['scripts/verify-foundation.mjs', 'database'],

@@ -36,8 +36,8 @@ function verifyPin(root) {
   });
   const packages = JSON.parse(metadata).packages;
   const app = packages.find(pkg => pkg.name === 'directory');
-  const revision = '6f6f83feae1dfde97d614d083625872987407780';
-  const selectedSource = `git+https://github.com/eas4ai/suprnova.git?tag=v4.2.0`;
+  const revision = '2e0c5227b9090c47894169c0d545b40eb27c3641';
+  const selectedSource = `git+https://github.com/eas4ai/suprnova.git?tag=v4.3.0`;
   for (const name of ['suprnova', 'suprnova-payments-stripe', 'suprnova-payments-paddle']) {
     assert.equal(app?.dependencies.find(dependency => dependency.name === name)?.source,
       selectedSource, `${name} must use the agreed repaired framework revision`);
@@ -47,7 +47,7 @@ function verifyPin(root) {
       `${name} must resolve the published framework source without a local override`);
   }
   const markdown = packages.filter(pkg => pkg.name === 'suprnova-markdown');
-  const markdownRevision = '6f27ecae53babc0fd637c23b41bc5b244543c78e';
+  const markdownRevision = 'c80dafb5f05e6de633472f73beec4d5101883389';
   assert.equal(markdown.length, 1, 'Markdown must have exactly one dependency identity');
   assert.equal(markdown[0].source,
     `git+https://github.com/eas4ai/suprnova-markdown.git?rev=${markdownRevision}#${markdownRevision}`,

@@ -53,6 +53,25 @@ impl Client {
         self.cookies.remove("suprnova_session");
     }
 
+    #[allow(dead_code)] // Upgrade tests replay tokens across authentication rotation.
+    pub fn csrf_token(&self) -> String {
+        self.cookies.get("XSRF-TOKEN").expect("CSRF cookie").clone()
+    }
+
+    #[allow(dead_code)]
+    pub async fn post_with_csrf_token(&mut self, path: &str, body: Value, token: &str) -> Response {
+        self.exchange_bytes(
+            "POST",
+            path,
+            body.to_string().into_bytes(),
+            "application/json",
+            false,
+            false,
+            &[("X-XSRF-TOKEN", token)],
+        )
+        .await
+    }
+
     pub async fn get(&mut self, path: &str) -> Response {
         self.request("GET", path, None, true).await
     }

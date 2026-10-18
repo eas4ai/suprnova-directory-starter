@@ -32,7 +32,22 @@ async fn account_journey_uses_real_sessions_and_mail_links() {
         denied.body
     );
     assert_eq!(client.get("/register").await.status, 200);
-    assert_eq!(client.post("/register", json!({"name": "A", "email": "invalid", "password": "short", "password_confirmation": "different"})).await.status, 422);
+    let invalid_registration = client.post("/register", json!({"name": "A", "email": "invalid", "password": "short", "password_confirmation": "different"})).await;
+    assert_eq!(invalid_registration.status, 302);
+    assert_eq!(invalid_registration.location.as_deref(), Some("/register"));
+    let registration_page = client.inertia_get("/register").await;
+    assert_eq!(registration_page.status, 200);
+    let registration_page: suprnova::serde_json::Value =
+        suprnova::serde_json::from_str(&registration_page.body).unwrap();
+    assert!(registration_page["props"]["errors"]["email"].is_string());
+    assert!(registration_page["props"]["errors"]["password"].is_string());
+    assert!(
+        directory::models::user::User::find_by_email("invalid")
+            .await
+            .unwrap()
+            .is_none()
+    );
+    assert!(mail.captured().is_empty());
     let registered = client
         .post(
             "/register",
@@ -82,7 +97,7 @@ async fn account_journey_uses_real_sessions_and_mail_links() {
             .get(&format!("/verify-email/verify?token={token}"))
             .await
             .status,
-        400,
+        403,
         "Another account cannot consume the verification token"
     );
     assert!(
@@ -247,7 +262,19 @@ async fn account_journey_uses_real_sessions_and_mail_links() {
     ] {
         assert_eq!(recovery.post("/reset-password", json!({"token": token, "password": "next-password-456", "password_confirmation": "next-password-456"})).await.status, 422);
     }
-    assert_eq!(recovery.post("/reset-password", json!({"token": reset, "password": "next-password-456", "password_confirmation": "different"})).await.status, 422);
+    let mismatched_reset = recovery.inertia_post("/reset-password", json!({"token": reset, "password": "next-password-456", "password_confirmation": "different"})).await;
+    assert_eq!(mismatched_reset.status, 303);
+    assert_eq!(
+        mismatched_reset.location.as_deref(),
+        Some("/reset-password")
+    );
+    let reset_page = recovery
+        .inertia_get(&format!("/reset-password?token={reset}"))
+        .await;
+    assert_eq!(reset_page.status, 200);
+    let reset_page: suprnova::serde_json::Value =
+        suprnova::serde_json::from_str(&reset_page.body).unwrap();
+    assert!(reset_page["props"]["errors"]["password_confirmation"].is_string());
     let reset_result = recovery.post("/reset-password", json!({"token": reset, "password": "next-password-456", "password_confirmation": "next-password-456"})).await;
     assert_eq!(
         reset_result.location.as_deref(),

@@ -15,6 +15,7 @@ frontend/bootstrap/ssr
 
 # Build outputs
 /public/assets
+/public/hot
 
 # IDE
 .idea

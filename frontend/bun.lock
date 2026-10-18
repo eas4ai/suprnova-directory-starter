@@ -6,11 +6,13 @@
       "name": "directory-frontend",
       "dependencies": {
         "@fluent/bundle": "^0.19.1",
-        "@inertiajs/vue3": "^3.6.1",
+        "@inertiajs/core": "3.8.0",
+        "@inertiajs/vue3": "3.8.0",
         "@vuetify/v0": "1.0.1",
         "vue": "^3.5.40",
       },
       "devDependencies": {
+        "@inertiajs/vite": "3.8.0",
         "@playwright/test": "^1.63.0",
         "@tailwindcss/forms": "^0.5.11",
         "@tailwindcss/typography": "^0.5.20",
@@ -35,9 +37,11 @@
 
     "@fluent/bundle": ["@fluent/bundle@0.19.1", "", {}, "sha512-SWJLZrPamDPsJlFFOW1nkgN0j0rbPbmSdmK0XAoXlyqKieLtMVl4vzng3aR5pwKoUx0scug8+YY2oct3fdfy9A=="],
 
-    "@inertiajs/core": ["@inertiajs/core@3.7.0", "", { "dependencies": { "@jridgewell/trace-mapping": "^0.3.31", "es-toolkit": "^1.33.0", "laravel-precognition": "^2.0.0" }, "peerDependencies": { "axios": "^1.15.2" }, "optionalPeers": ["axios"] }, "sha512-JzysXTPsOpKcnR7ohwpgKE+UWBrKwW7z23DydWHSxjfQ02tJAKmNnZJAxnX7zH3zUSTqbtPge6QC8XhvfjNXmw=="],
+    "@inertiajs/core": ["@inertiajs/core@3.8.0", "", { "dependencies": { "@jridgewell/trace-mapping": "^0.3.31", "es-toolkit": "^1.33.0", "laravel-precognition": "^2.1.0" }, "peerDependencies": { "axios": "^1.15.2" }, "optionalPeers": ["axios"] }, "sha512-jTNnVtyGzyS016GH2WpAzgT0ZygWAZMe+J2QaY80zQaNBrOBR0KNOVVbQm5XwiF9oG5Eaqp0gpQwmGixnZjoCA=="],
 
-    "@inertiajs/vue3": ["@inertiajs/vue3@3.7.0", "", { "dependencies": { "@inertiajs/core": "3.7.0", "es-toolkit": "^1.33.0", "laravel-precognition": "^2.0.0" }, "peerDependencies": { "vue": "^3.0.0" } }, "sha512-RB3RPz0srHnsfo2CBXWF1Ox/l/ArKUIkVpwXwEZJ+U0xzlGfDTy+fFfocwLFsPoWSYfG+MHssTBMPZx82STkyw=="],
+    "@inertiajs/vite": ["@inertiajs/vite@3.8.0", "", { "dependencies": { "@inertiajs/core": "3.8.0", "tinyglobby": "^0.2.15" }, "peerDependencies": { "vite": "^7.0.0 || ^8.0.0" } }, "sha512-Tq1q5PnJWwGppHeWMnPsI1dgc59f0MoTDOyYdhh2tMoKfrfd5HojwEJ6K+Z/SLq1RfDfY9o4Olr7melXpD1FtA=="],
+
+    "@inertiajs/vue3": ["@inertiajs/vue3@3.8.0", "", { "dependencies": { "@inertiajs/core": "3.8.0", "es-toolkit": "^1.33.0", "laravel-precognition": "^2.1.0" }, "peerDependencies": { "vue": "^3.0.0" } }, "sha512-XCL7yYDUW5V6C677bqjCrd/WYNA3TC3GJtcmdvAwpy5bMTTfArAeQbXvoDtiSNN17/By3z8gUCe0LmoepU3kkA=="],
 
     "@jridgewell/gen-mapping": ["@jridgewell/gen-mapping@0.3.13", "", { "dependencies": { "@jridgewell/sourcemap-codec": "^1.5.0", "@jridgewell/trace-mapping": "^0.3.24" } }, "sha512-2kkt/7niJ6MgEPxF0bYdQ6etZaA+fQvDcLKckhy1yIQOzaoKjBBjSj63/aLVjYE3qhRt5dvM+uUyfCg6UKCBbA=="],
 
@@ -175,7 +179,7 @@
 
     "jiti": ["jiti@2.7.0", "", { "bin": { "jiti": "lib/jiti-cli.mjs" } }, "sha512-AC/7JofJvZGrrneWNaEnJeOLUx+JlGt7tNa0wZiRPT4MY1wmfKjt2+6O2p2uz2+skll8OZZmJMNqeke7kKbNgQ=="],
 
-    "laravel-precognition": ["laravel-precognition@2.0.0", "", { "dependencies": { "es-toolkit": "^1.32.0" }, "peerDependencies": { "axios": "^1.4.0" }, "optionalPeers": ["axios"] }, "sha512-dmA4HGc9m+TsVNsJs9/XQBI8u6j7coilN+qKkBuhuXQzH3HypwS/c5dFQ4UqUGjBbcxIM7zdk91kM/SRZwIvWQ=="],
+    "laravel-precognition": ["laravel-precognition@2.1.1", "", { "dependencies": { "es-toolkit": "^1.32.0" }, "peerDependencies": { "axios": "^1.4.0" }, "optionalPeers": ["axios"] }, "sha512-Wg05+puJ5qiNsE8rdO5JmSiqQ2xcEf7442AIZiDhZg1JyPOePv5SSCu0fO7z7LqmJcPMxNNuOIcZd6UatEmYug=="],
 
     "lightningcss": ["lightningcss@1.33.0", "", { "dependencies": { "detect-libc": "^2.0.3" }, "optionalDependencies": { "lightningcss-android-arm64": "1.33.0", "lightningcss-darwin-arm64": "1.33.0", "lightningcss-darwin-x64": "1.33.0", "lightningcss-freebsd-x64": "1.33.0", "lightningcss-linux-arm-gnueabihf": "1.33.0", "lightningcss-linux-arm64-gnu": "1.33.0", "lightningcss-linux-arm64-musl": "1.33.0", "lightningcss-linux-x64-gnu": "1.33.0", "lightningcss-linux-x64-musl": "1.33.0", "lightningcss-win32-arm64-msvc": "1.33.0", "lightningcss-win32-x64-msvc": "1.33.0" } }, "sha512-WkUDrojuJs0xkgGf2udWxa3yGBRxPtxUkB79i6aCZLRgc7PM8fZe9TosfPDcvEpQZbuFASnHYmRLBLUbmLOIIA=="],
 

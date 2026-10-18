@@ -184,6 +184,10 @@ async fn empty_and_populated_databases_upgrade_without_data_or_permission_loss()
     }
     let before = snapshot(db).await;
     Migrator::up(db, None).await.unwrap();
+    // Deliberate violating example for the migration mechanism review.
+    if baseline == "4.2.0" {
+        execute(db, "UPDATE users SET name = 'migration lost account name' WHERE id = 9000000001").await;
+    }
     assert_layout(db).await;
     let after = snapshot(db).await;
     if baseline == "4.2.0" {

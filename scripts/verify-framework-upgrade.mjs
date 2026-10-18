@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { randomBytes } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
-import { readFileSync, rmSync } from 'node:fs';
+import { appendFileSync, readFileSync, rmSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { snapshot } from './verification-workspace.mjs';
@@ -79,6 +79,9 @@ try {
   } else if (task === 'console') {
     assert.match(read('src/bin/console.rs'), /ExitCode::from\([^)]*\.exit_code\(\)/, 'FWU-005: preserve the command exit code');
     const env = isolated();
+    // Compile a fixture command into the disposable binary, retaining its real
+    // main/dispatcher. No fixture command enters the distributed application.
+    appendFileSync(join(working, 'src/bin/console.rs'), '\ninclude!(concat!(env!("CARGO_MANIFEST_DIR"), "/tests/fixtures/console_exit.rs"));\n');
     run('cargo', ['build', '--locked', '--bin', 'console'], working, env);
     // No .env or assets exist in the copy. An unusable database URL catches an
     // accidental bootstrap on help, version, or invalid command arguments.
@@ -87,8 +90,11 @@ try {
     const binary = join(env.CARGO_TARGET_DIR, 'debug/console');
     run(binary, ['--help'], working, env);
     assert.match(run(binary, ['--version'], working, env), /\d+\.\d+\.\d+/);
-    run(binary, ['not-a-real-command'], working, env, 2);
-    run(binary, ['admin:access', '--not-a-real-option'], working, env, 2);
+    // Suprnova 4.2 handle_clap_error returns FrameworkError::silent(), whose
+    // exit_code is 1 (also pinned by its console/laravel_testing_gaps.rs).
+    run(binary, ['not-a-real-command'], working, env, 1);
+    run(binary, ['admin:access', '--not-a-real-option'], working, env, 1);
+    run(binary, ['compat:exit'], working, { ...env, APP_ENV: 'test', DATABASE_URL: 'sqlite::memory:' }, 23);
   } else {
     assert.match(read('UPGRADE.md'), /Suprnova.*4\.2\.0/, 'FWU-006: document the new framework release');
     assert.match(read('UPGRADE.md'), /revocation/i, 'FWU-006: document durable auth-revocation retry operation');

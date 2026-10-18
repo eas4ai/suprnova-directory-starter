@@ -4,6 +4,7 @@
 
 pub mod authenticate;
 mod logging;
+pub mod private_pages;
 
 pub use logging::LoggingMiddleware;
 pub mod auth_share;

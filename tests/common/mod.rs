@@ -41,8 +41,13 @@ pub struct Response {
 
 impl Client {
     pub fn new() -> Self {
+        Self::with_router(directory::routes::register())
+    }
+
+    #[allow(dead_code)] // Compatibility fixtures can add routes without production endpoints.
+    pub fn with_router(router: Router) -> Self {
         Self {
-            router: Arc::new(directory::routes::register()),
+            router: Arc::new(router),
             middleware: Arc::new(MiddlewareRegistry::from_global()),
             cookies: HashMap::new(),
         }

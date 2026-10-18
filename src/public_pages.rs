@@ -277,6 +277,7 @@ pub fn config() -> Result<InertiaConfig, FrameworkError> {
     }
     let config = InertiaConfig::new()
         .frontend(Frontend::Vue)
+        .entry_points(["src/app.css"])
         .ssr(url)
         .ssr_timeout(std::time::Duration::from_secs(3))
         .ssr_throw_on_error(true)

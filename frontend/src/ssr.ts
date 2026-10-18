@@ -8,7 +8,9 @@ import { resolvePage } from './resolve'
 import process from 'node:process'
 
 // `suprnova ssr:start` runs this bundle under Node - `npm run build:ssr`
-// (`vite build --ssr src/ssr.ts`) produces it. `createServer` (from
+// (`vite build --ssr src/ssr.ts`) produces it. The Inertia Vite plugin also
+// exports this render callback at `/__inertia_ssr` during development and
+// starts the standalone worker only in the production bundle. `createServer` (from
 // `@inertiajs/vue3/server`, re-exporting `@inertiajs/core/server`) opens
 // the HTTP worker the framework's `SsrConfig` posts `POST /render` to,
 // and answers `GET /health` itself - no extra code needed here for

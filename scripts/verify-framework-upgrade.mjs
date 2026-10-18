@@ -74,6 +74,7 @@ try {
     run('bun', ['run', '--cwd', 'frontend', 'build'], working, env);
     run('bun', ['run', '--cwd', 'frontend', 'build:ssr'], working, env);
     run('cargo', ['build', '--locked', '--bins'], working, env);
+    run('cargo', ['test', '--locked', '--test', 'framework_upgrade_cache', '--', '--nocapture'], working, { ...env, DATABASE_URL: 'sqlite::memory:' });
     run('node', ['scripts/with-ssr.mjs', 'node', 'frontend/tests/framework-upgrade.mjs'], working, env);
   } else if (task === 'console') {
     assert.match(read('src/bin/console.rs'), /ExitCode::from\([^)]*\.exit_code\(\)/, 'FWU-005: preserve the command exit code');

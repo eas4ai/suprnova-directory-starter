@@ -86,6 +86,8 @@ pub async fn register() {
 /// stale client), locale and CSRF after the session they both depend on.
 pub fn register_http_stack() {
     // Global middleware (runs on every request in registration order)
+    // Run outside sessions so the policy also sees their final cookie headers.
+    global_middleware!(middleware::private_pages::PrivatePages);
     global_middleware!(middleware::LoggingMiddleware);
     global_middleware!(crate::seo::middleware::SeoRoutes);
     global_middleware!(crate::seo::markdown::PublicMarkdown);
@@ -140,8 +142,12 @@ pub fn register_http_stack() {
     //
     // Everything set on this config reaches every page: `Inertia::install`
     // retains it as the default each `InertiaResponse` starts from.
-    Inertia::install(&InertiaConfig::new().frontend(Frontend::Vue))
-        .expect("Inertia install failed (production needs a built frontend manifest)");
+    Inertia::install(
+        &InertiaConfig::new()
+            .frontend(Frontend::Vue)
+            .entry_points(["src/app.css"]),
+    )
+    .expect("Inertia install failed (production needs a built frontend manifest)");
 
     // Locale detection - registered after SessionMiddleware, since its
     // detection chain checks the session first (then cookie, then

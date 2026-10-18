@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import tailwindcss from '@tailwindcss/vite'
+import inertia from '@inertiajs/vite'
 
 export default defineConfig(({ isSsrBuild }) => ({
-  plugins: [tailwindcss(), vue()],
+  plugins: [inertia({ ssr: { entry: 'src/ssr.ts', sourcemap: false } }), tailwindcss(), vue()],
   server: {
     // `suprnova serve` sets VITE_PORT to the port it resolved (the
     // distinctive 5765 default, or a scanned free port). Falling back to
@@ -32,7 +33,7 @@ export default defineConfig(({ isSsrBuild }) => ({
         outDir: '../public/assets',
         manifest: true,
         rollupOptions: {
-          input: 'src/main.ts',
+          input: ['src/main.ts', 'src/app.css'],
         },
       },
 }))

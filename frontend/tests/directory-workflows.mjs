@@ -95,6 +95,7 @@ try {
   await save.click();
   await expect(owner.getByRole('status')).toContainText('Draft saved.');
   await owner.getByRole('button', { name: 'Submit for review', exact: true }).click();
+  await expect(owner.getByText('This revision is awaiting review.', { exact: false })).toBeVisible();
   await admin.reload();
   await admin.getByRole('radio', { name: 'Approve revision', exact: true }).check();
   await admin.getByRole('button', { name: 'Record decision', exact: true }).click();

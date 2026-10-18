@@ -5,10 +5,10 @@ Prefix: FND
 
 These foundation requirements remain acceptance obligations for maintenance upgrades. FND-001 selects the framework revision approved for the current upgrade.
 
-[FND-001] The starter MUST build both Rust binaries against Suprnova tag `v4.2.0` at revision `6f6f83feae1dfde97d614d083625872987407780` from committed dependency locks.
+[FND-001] The starter MUST build both Rust binaries against Suprnova tag `v4.3.0` at revision `2e0c5227b9090c47894169c0d545b40eb27c3641` from committed dependency locks.
 Falsifier: A clean dependency install changes the lockfile, resolves another Suprnova revision, or fails to build either binary.
 Mechanism: foundation-build
-Status: Agreed 2026-10-17
+Status: Agreed 2026-10-18
 
 [FND-002] The starter MUST initialize its account schema on a disposable database using the documented migration command.
 Falsifier: The documented command fails on an empty test database, or repeating it fails or changes the completed schema unexpectedly.

@@ -66,6 +66,16 @@ impl UserProvider for AccountUserProvider {
         self.inner.dummy_verify().await
     }
 
+    async fn rehash_password_if_required(
+        &self,
+        user: &dyn Authenticatable,
+        credentials: &Value,
+    ) -> Result<(), FrameworkError> {
+        self.inner
+            .rehash_password_if_required(user, credentials)
+            .await
+    }
+
     // Suspension limits sign-in and protected actions. Recovery and verification
     // keep their framework-owned token and verified-email requirements.
     async fn retrieve_by_email(&self, email: &str) -> Result<Option<AuthFlowUser>, FrameworkError> {

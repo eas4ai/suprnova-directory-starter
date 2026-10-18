@@ -12,7 +12,7 @@ use std::collections::HashMap;
 use suprnova::{DB, FrameworkError};
 
 // This is the same explicit web-guard permission relationship used by Suprnova RBAC.
-const EFFECTIVE: &str = "((EXISTS (SELECT 1 FROM model_permissions mp WHERE mp.permission_id = p.id AND mp.model_type = 'directory.user' AND mp.model_id = CAST(users.id AS TEXT))) OR (EXISTS (SELECT 1 FROM model_roles mr JOIN roles r ON r.id = mr.role_id JOIN role_permissions rp ON rp.role_id = r.id WHERE rp.permission_id = p.id AND r.guard_name = 'web' AND mr.model_type = 'directory.user' AND mr.model_id = CAST(users.id AS TEXT))))";
+const EFFECTIVE: &str = "((EXISTS (SELECT 1 FROM model_has_permissions mp WHERE mp.permission_id = p.id AND mp.model_type = 'directory.user' AND mp.model_id = users.id)) OR (EXISTS (SELECT 1 FROM model_has_roles mr JOIN roles r ON r.id = mr.role_id JOIN role_has_permissions rp ON rp.role_id = r.id WHERE rp.permission_id = p.id AND r.guard_name = 'web' AND mr.model_type = 'directory.user' AND mr.model_id = users.id)))";
 fn statement<C: ConnectionTrait>(db: &C, sql: String, values: Vec<Value>) -> Statement {
     // Supported install target is SQLite. Also bind native numbered placeholders on PostgreSQL.
     let sql = if db.get_database_backend() == sea_orm::DbBackend::Postgres {
@@ -89,26 +89,24 @@ async fn rows(
         .collect();
     let placeholders = vec!["?"; ids.len()].join(",");
     let sql = format!(
-        "SELECT mr.model_id, r.name FROM model_roles mr JOIN roles r ON r.id = mr.role_id WHERE mr.model_type = 'directory.user' AND r.guard_name = 'web' AND r.name IN ('administrator', 'moderator', 'editor') AND mr.model_id IN ({placeholders}) ORDER BY r.name"
+        "SELECT mr.model_id, r.name FROM model_has_roles mr JOIN roles r ON r.id = mr.role_id WHERE mr.model_type = 'directory.user' AND r.guard_name = 'web' AND r.name IN ('administrator', 'moderator', 'editor') AND mr.model_id IN ({placeholders}) ORDER BY r.name"
     );
     let role_rows = db
         .inner()
         .query_all_raw(statement(
             db.inner(),
             sql,
-            ids.iter().map(|id| id.to_string().into()).collect(),
+            ids.iter().copied().map(Into::into).collect(),
         ))
         .await
         .map_err(database_error)?;
     let mut roles: HashMap<i64, Vec<String>> = HashMap::new();
     for row in role_rows {
-        let id: String = row.try_get("", "model_id").map_err(database_error)?;
-        if let Ok(id) = id.parse::<i64>() {
-            roles
-                .entry(id)
-                .or_default()
-                .push(row.try_get("", "name").map_err(database_error)?);
-        }
+        let id: i64 = row.try_get("", "model_id").map_err(database_error)?;
+        roles
+            .entry(id)
+            .or_default()
+            .push(row.try_get("", "name").map_err(database_error)?);
     }
     Ok(users
         .into_iter()

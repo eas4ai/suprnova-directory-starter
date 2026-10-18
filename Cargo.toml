@@ -40,7 +40,9 @@ chrono = { version = "0.4", features = ["serde"] }
 validator = { version = "0.20", features = ["derive"] }
 tracing = "0.1"
 rustls = { version = "0.23", default-features = false, features = ["std", "ring", "tls12"] }
-image = { version = "0.25", default-features = false, features = ["jpeg", "png", "webp"] }
+image = { version = "0.25", default-features = false, features = ["png", "webp"] }
+# Match Suprnova's JPEG decoder; image's JPEG feature excludes this prerelease.
+zune-jpeg = { version = "=0.5.16-rc2", features = ["arith"] }
 uuid = { version = "1", features = ["v4"] }
 url = "2"
 http = "1"

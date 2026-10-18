@@ -174,6 +174,27 @@ fn reencode(bytes: &[u8]) -> Result<(Vec<u8>, u32, u32), MediaError> {
     ) {
         return Err(MediaError::InvalidImage);
     }
+    let pixels = if format == ImageFormat::Jpeg {
+        decode_jpeg(bytes)?
+    } else {
+        decode_raster(bytes, format)?
+    };
+    let (width, height) = pixels.dimensions();
+    // Construct a fresh pixel buffer: metadata from the decoder is never passed
+    // to an encoder. Normalize 16-bit inputs to RGBA8 to bound stored size.
+    let mut output = CappedOutput(Vec::new());
+    image::codecs::png::PngEncoder::new(&mut output)
+        .write_image(
+            pixels.as_raw(),
+            width,
+            height,
+            image::ExtendedColorType::Rgba8,
+        )
+        .map_err(|_| MediaError::InvalidImage)?;
+    Ok((output.0, width, height))
+}
+
+fn decode_raster(bytes: &[u8], format: ImageFormat) -> Result<image::RgbaImage, MediaError> {
     let (width, height) = ImageReader::with_format(Cursor::new(bytes), format)
         .into_dimensions()
         .map_err(|_| MediaError::InvalidImage)?;
@@ -187,19 +208,45 @@ fn reencode(bytes: &[u8]) -> Result<(Vec<u8>, u32, u32), MediaError> {
     limits.max_alloc = Some(128 * 1024 * 1024);
     reader.limits(limits);
     let decoded = reader.decode().map_err(|_| MediaError::InvalidImage)?;
-    // Construct a fresh pixel buffer: metadata from the decoder is never passed
-    // to an encoder. Normalize 16-bit inputs to RGBA8 to bound stored size.
-    let pixels = decoded.to_rgba8();
-    let mut output = CappedOutput(Vec::new());
-    image::codecs::png::PngEncoder::new(&mut output)
-        .write_image(
-            pixels.as_raw(),
-            width,
-            height,
-            image::ExtendedColorType::Rgba8,
-        )
+    Ok(decoded.to_rgba8())
+}
+
+fn decode_jpeg(bytes: &[u8]) -> Result<image::RgbaImage, MediaError> {
+    use zune_jpeg::zune_core::{
+        bytestream::ZCursor, colorspace::ColorSpace, options::DecoderOptions,
+    };
+    let options = DecoderOptions::default()
+        .set_strict_mode(false)
+        .set_max_width(u16::MAX as usize)
+        .set_max_height(u16::MAX as usize)
+        // CMYK-to-RGBA in this decoder release writes three-byte pixels. Use
+        // its RGB conversion, then let image add the opaque alpha channel.
+        .jpeg_set_out_colorspace(ColorSpace::RGB);
+    let mut decoder = zune_jpeg::JpegDecoder::new_with_options(ZCursor::new(bytes), options);
+    decoder
+        .decode_headers()
         .map_err(|_| MediaError::InvalidImage)?;
-    Ok((output.0, width, height))
+    let (width, height) = decoder.dimensions().ok_or(MediaError::InvalidImage)?;
+    if width == 0
+        || height == 0
+        || width > MAX_DIMENSION as usize
+        || height > MAX_DIMENSION as usize
+    {
+        return Err(MediaError::TooLarge);
+    }
+    decoder.set_options(
+        options
+            .set_max_width(MAX_DIMENSION as usize)
+            .set_max_height(MAX_DIMENSION as usize),
+    );
+    // RGB plus normalized RGBA stays below the existing 128 MiB pixel budget.
+    let mut pixels = vec![0; width * height * 3];
+    decoder
+        .decode_into(&mut pixels)
+        .map_err(|_| MediaError::InvalidImage)?;
+    let pixels = image::RgbImage::from_raw(width as u32, height as u32, pixels)
+        .ok_or(MediaError::InvalidImage)?;
+    Ok(image::DynamicImage::ImageRgb8(pixels).to_rgba8())
 }
 
 struct CappedOutput(Vec<u8>);
@@ -255,6 +302,10 @@ mod tests {
     use super::*;
 
     fn fixture(format: ImageFormat, width: u32, height: u32) -> Vec<u8> {
+        if format == ImageFormat::Jpeg {
+            assert_eq!((width, height), (2, 3));
+            return include_bytes!("../../tests/fixtures/listing-image.jpg").to_vec();
+        }
         let pixels = image::DynamicImage::new_rgb8(width, height);
         let mut output = Cursor::new(Vec::new());
         pixels.write_to(&mut output, format).unwrap();
@@ -289,20 +340,72 @@ mod tests {
 
     #[test]
     fn reencoding_discards_jpeg_comment_metadata() {
-        let source = fixture(ImageFormat::Jpeg, 2, 2);
+        let source = fixture(ImageFormat::Jpeg, 2, 3);
         let comment = b"private location marker";
         let mut tagged = source[..2].to_vec();
         tagged.extend_from_slice(&[0xff, 0xfe]);
         tagged.extend_from_slice(&((comment.len() + 2) as u16).to_be_bytes());
         tagged.extend_from_slice(comment);
         tagged.extend_from_slice(&source[2..]);
-        assert!(image::load_from_memory(&tagged).is_ok());
         let (encoded, _, _) = reencode(&tagged).unwrap();
         assert!(
             !encoded
                 .windows(comment.len())
                 .any(|window| window == comment)
         );
+    }
+
+    #[test]
+    fn jpeg_pixels_and_dimension_limit_are_preserved() {
+        // Synthetic RGB fixture: solid (200, 40, 80), 2 by 3 pixels.
+        let mut source = fixture(ImageFormat::Jpeg, 2, 3);
+        let (encoded, width, height) = reencode(&source).unwrap();
+        assert_eq!((width, height), (2, 3));
+        let decoded = image::load_from_memory(&encoded).unwrap().to_rgba8();
+        for pixel in decoded.pixels() {
+            for (actual, expected) in pixel.0.into_iter().zip([200_u8, 40, 80, 255]) {
+                assert!(actual.abs_diff(expected) <= 2);
+            }
+        }
+        // Change the baseline JPEG's width in its frame header, without allocating
+        // a large raster. Reject it before the decoder allocates pixel storage.
+        let frame = source
+            .windows(2)
+            .position(|bytes| bytes == [0xff, 0xc0])
+            .unwrap();
+        source[frame + 7..frame + 9].copy_from_slice(&4097_u16.to_be_bytes());
+        assert!(matches!(reencode(&source), Err(MediaError::TooLarge)));
+    }
+
+    #[test]
+    fn jpeg_color_spaces_and_progressive_scans_decode() {
+        let cases: &[(&[u8], [u8; 4])] = &[
+            (
+                include_bytes!("../../tests/fixtures/listing-grayscale.jpg"),
+                [80, 80, 80, 255],
+            ),
+            (
+                include_bytes!("../../tests/fixtures/listing-cmyk.jpg"),
+                [255, 0, 0, 255],
+            ),
+            (
+                include_bytes!("../../tests/fixtures/listing-progressive.jpg"),
+                [200, 40, 80, 255],
+            ),
+        ];
+        for (case, (source, expected)) in cases.iter().enumerate() {
+            let (encoded, width, height) = reencode(source).unwrap();
+            assert_eq!((width, height), (2, 3));
+            let decoded = image::load_from_memory(&encoded).unwrap().to_rgba8();
+            for pixel in decoded.pixels() {
+                for (actual, expected) in pixel.0.iter().zip(expected) {
+                    assert!(
+                        actual.abs_diff(*expected) <= 2,
+                        "case {case}: {pixel:?} != {expected:?}"
+                    );
+                }
+            }
+        }
     }
 
     #[test]

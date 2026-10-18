@@ -1,7 +1,8 @@
 //! Explicit permissions, using only the framework-owned RBAC schema.
 use crate::commands::admin_access::ADMIN_PERMISSIONS;
 use sea_orm::{
-    ColumnTrait, ConnectionTrait, EntityTrait, QueryFilter, QuerySelect, Set, sea_query::OnConflict,
+    ColumnTrait, ConnectionTrait, EntityTrait, QueryFilter, Set,
+    sea_query::{Alias, Expr, ExprTrait, OnConflict, Query},
 };
 use suprnova::rbac::entity::*;
 pub const PREDEFINED: [&str; 3] = ["administrator", "moderator", "editor"];
@@ -11,10 +12,9 @@ pub async fn seed<C: ConnectionTrait>(db: &C) -> Result<Vec<i64>, sea_orm::DbErr
         let now = chrono::Utc::now();
         PermissionEntity::insert(PermissionActiveModel {
             name: Set(name.to_owned()),
-            display_name: Set(Some(name.to_owned())),
             guard_name: Set("web".to_owned()),
-            created_at: Set(now),
-            updated_at: Set(now),
+            created_at: Set(Some(now.into())),
+            updated_at: Set(Some(now.into())),
             ..Default::default()
         })
         .on_conflict(
@@ -33,17 +33,20 @@ pub async fn seed<C: ConnectionTrait>(db: &C) -> Result<Vec<i64>, sea_orm::DbErr
             .ok_or_else(|| {
                 sea_orm::DbErr::Custom("The administrative permission could not be created.".into())
             })?;
-        permissions.push(permission.id);
+        permissions.push(i64::try_from(u64::from(permission.id)).map_err(|_| {
+            sea_orm::DbErr::Custom(
+                "Permission identifier exceeds the supported integer range".into(),
+            )
+        })?);
     }
 
     for name in PREDEFINED {
         let now = chrono::Utc::now();
         RoleEntity::insert(RoleActiveModel {
             name: Set(name.into()),
-            display_name: Set(Some(name.into())),
             guard_name: Set("web".into()),
-            created_at: Set(now),
-            updated_at: Set(now),
+            created_at: Set(Some(now.into())),
+            updated_at: Set(Some(now.into())),
             ..Default::default()
         })
         .on_conflict(
@@ -67,22 +70,23 @@ pub async fn seed<C: ConnectionTrait>(db: &C) -> Result<Vec<i64>, sea_orm::DbErr
         };
         for (permission_name, permission_id) in ADMIN_PERMISSIONS.iter().zip(permissions.iter()) {
             if names.contains(permission_name) {
-                RolePermissionEntity::insert(RolePermissionActiveModel {
-                    role_id: Set(role.id),
-                    permission_id: Set(*permission_id),
-                    ..Default::default()
-                })
-                .on_conflict(
-                    OnConflict::columns([
-                        RolePermissionColumn::RoleId,
-                        RolePermissionColumn::PermissionId,
-                    ])
-                    .do_nothing()
-                    .to_owned(),
-                )
-                .try_insert()
-                .exec(db)
-                .await?;
+                let role_id = i64::try_from(u64::from(role.id)).map_err(|_| {
+                    sea_orm::DbErr::Custom(
+                        "Role identifier exceeds the supported integer range".into(),
+                    )
+                })?;
+                let insert = Query::insert()
+                    .into_table(Alias::new("role_has_permissions"))
+                    .columns([Alias::new("role_id"), Alias::new("permission_id")])
+                    .values_panic([role_id.into(), (*permission_id).into()])
+                    .on_conflict(
+                        OnConflict::columns([Alias::new("role_id"), Alias::new("permission_id")])
+                            .do_nothing()
+                            .to_owned(),
+                    )
+                    .to_owned();
+                db.execute_raw(db.get_database_backend().build(&insert))
+                    .await?;
             }
         }
     }
@@ -94,28 +98,27 @@ pub async fn clear<C: ConnectionTrait>(
     id: i64,
     permissions: &[i64],
 ) -> Result<(), sea_orm::DbErr> {
-    let model_id = id.to_string();
-    ModelPermissionEntity::delete_many()
-        .filter(ModelPermissionColumn::ModelType.eq("directory.user"))
-        .filter(ModelPermissionColumn::ModelId.eq(&model_id))
-        .filter(ModelPermissionColumn::PermissionId.is_in(permissions.to_vec()))
-        .exec(db)
+    let direct = Query::delete()
+        .from_table(Alias::new("model_has_permissions"))
+        .and_where(Expr::col(Alias::new("model_type")).eq("directory.user"))
+        .and_where(Expr::col(Alias::new("model_id")).eq(id))
+        .and_where(Expr::col(Alias::new("permission_id")).is_in(permissions.iter().copied()))
+        .to_owned();
+    db.execute_raw(db.get_database_backend().build(&direct))
         .await?;
-    let role_ids: Vec<i64> = RolePermissionEntity::find()
-        .select_only()
-        .column(RolePermissionColumn::RoleId)
-        .filter(RolePermissionColumn::PermissionId.is_in(permissions.to_vec()))
-        .into_tuple()
-        .all(db)
+    let roles = Query::select()
+        .column(Alias::new("role_id"))
+        .from(Alias::new("role_has_permissions"))
+        .and_where(Expr::col(Alias::new("permission_id")).is_in(permissions.iter().copied()))
+        .to_owned();
+    let inherited = Query::delete()
+        .from_table(Alias::new("model_has_roles"))
+        .and_where(Expr::col(Alias::new("model_type")).eq("directory.user"))
+        .and_where(Expr::col(Alias::new("model_id")).eq(id))
+        .and_where(Expr::col(Alias::new("role_id")).in_subquery(roles))
+        .to_owned();
+    db.execute_raw(db.get_database_backend().build(&inherited))
         .await?;
-    if !role_ids.is_empty() {
-        ModelRoleEntity::delete_many()
-            .filter(ModelRoleColumn::ModelType.eq("directory.user"))
-            .filter(ModelRoleColumn::ModelId.eq(&model_id))
-            .filter(ModelRoleColumn::RoleId.is_in(role_ids))
-            .exec(db)
-            .await?;
-    }
     Ok(())
 }
 
@@ -131,24 +134,29 @@ pub async fn assign<C: ConnectionTrait>(
             .one(db)
             .await?
             .ok_or_else(|| sea_orm::DbErr::Custom("Missing starter role".into()))?;
-        ModelRoleEntity::insert(ModelRoleActiveModel {
-            model_type: Set("directory.user".into()),
-            model_id: Set(id.to_string()),
-            role_id: Set(role.id),
-            ..Default::default()
-        })
-        .on_conflict(
-            OnConflict::columns([
-                ModelRoleColumn::ModelType,
-                ModelRoleColumn::ModelId,
-                ModelRoleColumn::RoleId,
+        let role_id = i64::try_from(u64::from(role.id)).map_err(|_| {
+            sea_orm::DbErr::Custom("Role identifier exceeds the supported integer range".into())
+        })?;
+        let insert = Query::insert()
+            .into_table(Alias::new("model_has_roles"))
+            .columns([
+                Alias::new("model_type"),
+                Alias::new("model_id"),
+                Alias::new("role_id"),
             ])
-            .do_nothing()
-            .to_owned(),
-        )
-        .try_insert()
-        .exec(db)
-        .await?;
+            .values_panic(["directory.user".into(), id.into(), role_id.into()])
+            .on_conflict(
+                OnConflict::columns([
+                    Alias::new("model_type"),
+                    Alias::new("model_id"),
+                    Alias::new("role_id"),
+                ])
+                .do_nothing()
+                .to_owned(),
+            )
+            .to_owned();
+        db.execute_raw(db.get_database_backend().build(&insert))
+            .await?;
     }
     Ok(())
 }

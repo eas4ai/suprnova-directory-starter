@@ -19,9 +19,9 @@ an escalation or Done.
 
 ## Dependency and migration boundaries
 
-Framework, Stripe and Paddle select tag `v4.2.0` at
-`6f6f83feae1dfde97d614d083625872987407780`. Markdown v0.4.0 is pinned to
-`6f27ecae53babc0fd637c23b41bc5b244543c78e` and shares that framework identity.
+Framework, Stripe and Paddle select tag `v4.3.0` at
+`2e0c5227b9090c47894169c0d545b40eb27c3641`. Markdown v0.5.0 is pinned to
+`c80dafb5f05e6de633472f73beec4d5101883389` and shares that framework identity.
 Inertia Vue, core and Vite are pinned to 3.8.0; Vuetify 0 remains 1.0.1.
 Cargo and Bun locks are committed. Application package versions remain 1.0.1;
 the old starter `v1.0.1` tag still identifies its earlier 3.2.1 release.

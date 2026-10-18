@@ -1,7 +1,8 @@
 mod common;
 use common::Client;
 use directory::models::user::User;
-use sea_orm::{ColumnTrait, EntityTrait, QueryFilter};
+use sea_orm::sea_query::{Alias, Expr, ExprTrait, Query};
+use sea_orm::{ColumnTrait, ConnectionTrait, EntityTrait, QueryFilter};
 use suprnova::serde_json::json;
 
 #[tokio::test]
@@ -43,9 +44,7 @@ async fn administration_requires_an_explicit_permission() {
     );
     // The starter now seeds this role with explicit permissions. Strip those in
     // this disposable fixture so the same name-only denial remains meaningful.
-    use suprnova::rbac::entity::{
-        RoleColumn, RoleEntity, RolePermissionColumn, RolePermissionEntity,
-    };
+    use suprnova::rbac::entity::{RoleColumn, RoleEntity};
     let role = RoleEntity::find()
         .filter(RoleColumn::Name.eq("administrator"))
         .filter(RoleColumn::GuardName.eq("web"))
@@ -53,9 +52,13 @@ async fn administration_requires_an_explicit_permission() {
         .await
         .unwrap()
         .unwrap();
-    RolePermissionEntity::delete_many()
-        .filter(RolePermissionColumn::RoleId.eq(role.id))
-        .exec(suprnova::DB::connection().unwrap().inner())
+    let connection = suprnova::DB::connection().unwrap();
+    let db = connection.inner();
+    let remove_permissions = Query::delete()
+        .from_table(Alias::new("role_has_permissions"))
+        .and_where(Expr::col(Alias::new("role_id")).eq(u64::from(role.id)))
+        .to_owned();
+    db.execute_raw(db.get_database_backend().build(&remove_permissions))
         .await
         .unwrap();
     // A role name alone grants nothing; only the explicit permission does.

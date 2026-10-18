@@ -64,18 +64,20 @@ try {
   assert.equal(schema.status, 0, `README database schema is incomplete: ${schema.stderr}`);
 
   env.SERVER_PORT = String(await freePort());
-    env.VITE_PORT = String(await freePort());
-    env.SSR_PORT = String(await freePort());
-    env.SSR_URL = `http://127.0.0.1:${env.SSR_PORT}`;
+  env.VITE_PORT = String(await freePort());
+  env.SSR_PORT = String(await freePort());
+  env.SSR_URL = `http://127.0.0.1:${env.SSR_PORT}`;
   env.APP_URL = `http://localhost:${env.SERVER_PORT}`;
   const vite = start('vite');
-    await ready(`http://localhost:${env.VITE_PORT}/@vite/client`, vite);
-    const ssr = start('ssr');
-    await ready(`${env.SSR_URL}/health`, ssr);
+  await ready(`http://127.0.0.1:${env.VITE_PORT}/@vite/client`, vite);
   const app = start('serve');
   await ready(`${env.APP_URL}/_suprnova/health`, app);
 
   const { chromium, expect } = await import('@playwright/test');
+  await expect.poll(async () => {
+    const response = await fetch(env.APP_URL, { signal: AbortSignal.timeout(10000) });
+    return response.ok && (await response.text()).includes('data-shell="public"');
+  }, { timeout: 30000, message: 'Vite must render public HTML after warming up' }).toBe(true);
   browser = await chromium.launch();
   const page = await browser.newPage();
   page.setDefaultTimeout(10000);
@@ -92,7 +94,18 @@ try {
   await expect(page.getByRole('alert')).toBeVisible();
   await expect(page).toHaveURL(`${env.APP_URL}/login`);
   expect(errors).toEqual([]);
-  console.log('README install, example migration, Vite, application and browser form checks passed.');
+  signalGroup(vite, 'SIGTERM');
+  await expect.poll(() => existsSync('public/hot'), { timeout: 5000 }).toBe(false);
+  const ssr = start('ssr');
+  await ready(`${env.SSR_URL}/health`, ssr);
+  const noJs = await browser.newPage({ javaScriptEnabled: false });
+  await noJs.goto(env.APP_URL);
+  await expect(noJs.getByRole('heading', { name: 'A place for good discoveries.' })).toBeVisible();
+  assert.equal(await noJs.locator('body').evaluate(el => getComputedStyle(el).backgroundColor), 'rgb(255, 255, 255)');
+  assert.ok(await noJs.locator('script[src]').evaluateAll((scripts, vitePort) =>
+    scripts.every(script => new URL(script.src).port !== vitePort), env.VITE_PORT),
+  'Built preview must not request the stopped Vite server');
+  console.log('README installation, migration, hot Vite SSR, browser forms and standalone built SSR preview passed.');
 } catch (error) {
   console.error(logs);
   throw error;

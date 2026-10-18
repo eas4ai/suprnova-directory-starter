@@ -140,7 +140,7 @@ async fn assert_layout(db: &DatabaseConnection) {
 }
 
 #[tokio::test]
-async fn empty_and_populated_3_2_1_databases_upgrade_without_data_or_permission_loss() {
+async fn empty_and_populated_databases_upgrade_without_data_or_permission_loss() {
     assert_eq!(std::env::var("APP_ENV").as_deref(), Ok("test"));
     directory::config::register_all();
     directory::bootstrap::register().await;
@@ -155,24 +155,40 @@ async fn empty_and_populated_3_2_1_databases_upgrade_without_data_or_permission_
     Migrator::up(&fresh, None).await.unwrap();
     assert_eq!(first, snapshot(&fresh).await);
 
-    LegacyMigrator::up(db, None).await.unwrap();
-    assert!(
-        SchemaManager::new(db)
-            .has_column("roles", "display_name")
-            .await
-            .unwrap()
-    );
-    assert!(
-        SchemaManager::new(db)
-            .has_column("sessions", "csrf_token")
-            .await
-            .unwrap()
-    );
-    execute(db, include_str!("fixtures/upgrade_3_2_1.sql")).await;
+    let baseline =
+        std::env::var("DIRECTORY_MIGRATION_BASELINE").unwrap_or_else(|_| "3.2.1".to_owned());
+    match baseline.as_str() {
+        "3.2.1" => {
+            LegacyMigrator::up(db, None).await.unwrap();
+            assert!(
+                SchemaManager::new(db)
+                    .has_column("roles", "display_name")
+                    .await
+                    .unwrap()
+            );
+            assert!(
+                SchemaManager::new(db)
+                    .has_column("sessions", "csrf_token")
+                    .await
+                    .unwrap()
+            );
+            execute(db, include_str!("fixtures/upgrade_3_2_1.sql")).await;
+        }
+        "4.2.0" => {
+            // Captured by the actual 4.2.0 application before its dependencies
+            // changed. Do not recreate this baseline with the current Migrator.
+            execute(db, include_str!("fixtures/upgrade_4_2_0.sql")).await;
+            assert_layout(db).await;
+        }
+        other => panic!("unsupported migration baseline: {other}"),
+    }
     let before = snapshot(db).await;
     Migrator::up(db, None).await.unwrap();
     assert_layout(db).await;
     let after = snapshot(db).await;
+    if baseline == "4.2.0" {
+        assert_eq!(before, after, "4.3 changed the existing 4.2 schema or data");
+    }
     for table in [
         "users",
         "listings",

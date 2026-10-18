@@ -42,10 +42,12 @@ function isolated() {
   return env;
 }
 
-function integration(suite) {
-  const env = isolated();
+function integration(suite, overrides = {}) {
+  const env = { ...isolated(), ...overrides };
   const output = run('cargo', ['test', '--locked', '--test', suite, '--', '--nocapture'], working, env);
   assert.match(output, /test result: ok\. [1-9][0-9]* passed; 0 failed/, 'The compatibility suite must execute tests');
+  rmSync(working, { recursive: true, force: true });
+  working = undefined;
 }
 
 try {
@@ -60,6 +62,7 @@ try {
     assert.match(read('src/migrations/mod.rs'), /RbacToSpatieLayout/, 'FWU-002: existing RBAC data needs the framework compatibility migration');
     assert.match(read('src/migrations/mod.rs'), /SessionUserKey::Integer/, 'FWU-002: preserve the existing signed account key');
     integration('framework_upgrade_migration');
+    integration('framework_upgrade_migration', { DIRECTORY_MIGRATION_BASELINE: '4.2.0' });
     run('node', ['scripts/verify-foundation.mjs', 'database']);
   } else if (task === 'auth') {
     assert.match(read('src/accounts/provider.rs'), /rehash_password_if_required/, 'FWU-003: the account wrapper must forward credential rehash');

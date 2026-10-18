@@ -5,10 +5,10 @@ Prefix: PAY
 
 The developer confirmed all requirements, falsifiers and operating rules on 2026-09-09. The repaired framework revision and Larafast directory reference were confirmed before implementation resumed.
 
-[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters at revision `2bd4bd53d04fa4581fdbb152ebd70cfb682b342c`.
+[PAY-001] The starter MUST allow an administrator with billing configuration permission to save and edit Stripe and Paddle configuration through the administration UI using Suprnova adapters selected by tag `v4.2.0` at revision `6f6f83feae1dfde97d614d083625872987407780`.
 Falsifier: Either provider requires application source edits, saved configuration disappears after restart, or a guest or account without the permission can read or change billing configuration through a direct request.
 Mechanism: provider-administration
-Status: Agreed 2026-09-09
+Status: Agreed 2026-10-17
 
 [PAY-002] The starter MUST restrict paid-listing checkout to approved submissions.
 Falsifier: An owner can create a payable checkout for a draft, pending or rejected submission.
@@ -56,7 +56,7 @@ These details belong to PAY-001 and PAY-004 through PAY-008 and were confirmed w
 - Plan identifiers and price identifiers are entered manually. Mapping does not establish provider-side price existence, currency, recurrence or entitlement duration. Those policies belong to paid-directory. No purchase is offered by this commitment.
 - Adapter resolution reads committed configuration by provider and mode. It does not mutate process environment variables or rely on an old process-global registration after a save. No production network call is needed to save configuration.
 
-PAY-001 and PAY-004 through PAY-008 form the provider-administration commitment. PAY-002 and PAY-003 belong to the agreed paid-directory commitment. NOWPayments work is recorded in docs/commitments/nowpayments-framework-adapter.md.
+PAY-001 and PAY-004 through PAY-008 form the provider-administration commitment. PAY-002 and PAY-003 belong to the agreed paid-directory commitment. NOWPayments work remains a separate historical framework workstream recorded in the roadmap.
 
 ## Remaining payment lifecycle
 
@@ -158,7 +158,7 @@ Status: Agreed 2026-09-09
 - The developer selected and completed framework adapter repairs in Suprnova.
   On 2026-10-05 the developer requested moving the integration to Suprnova 3.2.1.
   Pin the framework and its adapters to the exact release commit
-  `2bd4bd53d04fa4581fdbb152ebd70cfb682b342c`, which includes those repairs.
+  `6f6f83feae1dfde97d614d083625872987407780`, which includes those repairs.
   This replaces the previous pre-release pin in FND-001 and PAY-001;
   implementation and verification establish when the starter actually uses it.
   Never invent a provider idempotency feature: when unsupported, retain an

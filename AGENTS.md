@@ -1,158 +1,51 @@
 # Working agreement
 
-This repository runs under Cairn. The specification in docs/spec/ is
-the contract, the roadmap names the current commitment, and the
-referee, `cairn`, reads the repository and names the next action. This
-file says what each party does when it is their turn.
-
-Cairn is a discipline tool, not a security boundary. It checks recorded
-results and freshness; it cannot judge whether a review is thorough or a
-mechanism proves its requirements. A command that always succeeds can
-produce passes without testing anything. The developer must challenge
-unsound mechanisms, and the agent must demonstrate what makes them fail.
+This repository runs under Sudus. `docs/spec/` is the contract, the roadmap names the current commitment, and `sudus` reads the repository and names the next action. This file states the move for each verdict and action. The kernel does not parse it; it is protected and changes only between commitments, by developer authorization.
 
 ## The agent
 
-Wake. Before anything else, run `cairn wake`. Read the glossary, the
-keystone, the roadmap, the current commitment, and the decision records
-for what it names. Nothing you remember from an earlier session counts; the
-repository does.
+Run `sudus wake` first, every session, and act on the verdict only. With hooks the verdict is printed before every turn; this agreement holds without them.
 
-Act on the verdict, and only on it.
+- Resolvable: do the one action named until its predicate holds, leave the required trace (branch commit, snapshot or log record), then run `sudus wake` again.
+- Waiting: an escalation is unanswered and wake printed its five fields verbatim. Add nothing to the work. Put the escalation to the developer as "The developer" below says, ending with `ok | instead | ask`, and when they answer, record it yourself with `sudus answer`. Never hand them a command to run.
+- Done: a done record exists and nothing waits. Report it and stop. Backlog waiting: wake names `promote` instead. When the developer ranks a new feature above the waiting items, escalate with `--commitment <the finished slug> --concern wait:<item sha>` per item; the developer's `ok` lets wake say Done while they wait until the next Done.
 
-- Resolvable: do the one action named. Then run `cairn wake` again.
-  Do not stop while the verdict is Resolvable.
-- Escalate: present the escalation file to the developer, in its own
-  words, and stop. Do nothing else until it is answered.
-- Done: the commitment is complete. Report it, and stop. The next
-  commitment is the developer's to name.
+Before changing a declared input: `sudus begin <action> <target>` (`--touch <path>` declares a new file that no input of the leased mechanism covers); it prints the lease sha. After the commit: `sudus end --lease <sha>` with that sha, so a stale end never closes another session's lease. Commit before `sudus check`; an uncommitted declared input makes wake name `commit` or `record` before anything else. Push with `sudus push`: it pushes the branch and both durable refs atomically where the remote allows and in the safe order otherwise. Never push `refs/sudus/*` with plain `git push`.
 
-When wake says `reply <slug>`, read the developer's question and append
-your explanation with `cairn answer <slug> "<explanation>"`. Run wake again
-to return the decision to the developer. An `ask` answer authorizes only
-an explanation; it does not authorize implementation.
+The move for each action wake can name:
 
-Before you change code, write `.cairn/in-progress`:
+- `repair PATH`: make the hand-written file read under its grammar; change no unrelated byte.
+- `recover TRANSACTION`: run `sudus recover <transaction>`.
+- `reconcile ACTION`: finish the leased action and `sudus end`, or abandon it with `sudus end --abandon`; a lease left by a dead session needs no `--lease`.
+- `scope PATH`: restore the path to its allowed base and run `sudus scope <breach> restore`, or ask the developer to keep it with `sudus escalate` and, after `ok`, `sudus scope <breach> keep`; several breaches take one escalation, one `--concern breach:<sha>` each, and one `sudus scope <breach>... keep`.
+- `fix ITEM`: write a test that fails, make it pass, commit, check, then `sudus fix <item>`.
+- `record PATH` and `commit PATH`: PATH is a declared input with uncommitted changes. Lease the action that changes it (`sudus begin <action> <target>`, with `--touch PATH` when PATH is new; `record` is a verdict, not a begin action), then commit; or revert it. An untracked build artifact under a declared input (a Python cache, a build output) is gitignored instead.
+- A tool that rewrites `AGENTS.md` or `docs/spec/` on its own (an indexer that keeps a block in `AGENTS.md`, for example GitNexus) breaks the protected contract mid-commitment and shows up as a scope breach on that file. Run such tools with their skip option (`gitnexus analyze --skip-agents-md`, or `--index-only`) while a commitment is open, or restore the file; a tool-managed block never belongs in the working agreement.
+- `docs/decisions.jsonl` is appended by `sudus decide`, `sudus answer`, `sudus realize` and `sudus decisions --read` and is not committed by them: commit it with your next commit (`git add -f` when `docs/` is ignored). A declaration does not go through while a path it would cover has uncommitted changes: commit that path or lease it with `sudus begin <action> <target> --touch <path>` first.
+- `declare REQ`: `sudus declare` a mechanism naming REQ; show it fail on a violating example before trusting it.
+- `run REQ`: `sudus check REQ`.
+- `implement REQ`: read the latest receipt and its output, change the code under a lease, commit, `sudus end`, `sudus check REQ`.
+- `escalate REQ`: three attempts failed; `sudus escalate` with the five fields before any fourth attempt.
+- `review mechanism REQ`: `sudus review mechanism REQ <fail-receipt>` after checking the failure was the stated violation.
+- `capture ITEM`: `sudus outside <item> --reason "<why it is not this commitment's work>"`, or escalate.
+- `review SLUG`: `sudus review SLUG --file <path>` naming a file that answers Q1 to Q6 for every target with observed commands, paths or outputs.
+- `report SLUG`: `sudus brief SLUG`; start one fresh subagent as its `start:` line says, with none of your conversation and the brief file as its entire prompt; it reads only and starts no subagents; wait; `sudus report SLUG --file <its report>`. The adversary runs once per commitment, here. When its report stopped on a Sudus bug, decide what to do with the bug (the report-sudus-issue skill below), then brief again when the bug no longer blocks the review.
+- `resolve SLUG N`: finding N is yours to decide. Fix it as its own work, commit, then `sudus resolve SLUG N "<how>"`. If that fix changes later, run `sudus resolve SLUG N "<how>"` again before Done; the latest resolution is the one the developer reads. Or decline it with its reason: `sudus decline SLUG N "<why>"`. A finding of any severity may be declined; the reason is what the developer reads.
+- `build DECISION`: build what the decision says, commit, then `sudus realize <id> --subject "<what was built>"`.
+- `backlog DECISION`: the decision belongs to a commitment the developer set aside, and this one rests on none of its requirements. `sudus item --backlog --decision <id>` moves it to the backlog; do not build it here.
+- `done SLUG`: `sudus done SLUG`. It prints the review report: every finding, its severity and what you did with it. Show the developer that report as printed before you promote a backlog item or start the next feature.
+- `fold ITEM`: `sudus fold`. It appends to the log the items another clone captured into its inbox while the commitment was open.
+- `promote`: choose one backlog item by judgment; `sudus promote <item>`. Promotion never Agrees text. When other work already delivered the item, escalate with `--commitment <the finished slug> --concern retire:<item sha>` instead; the developer's `ok` retires it. To let the next feature go first, escalate with `--concern wait:<item sha>` per item instead; `ok` lets Done stand while they wait until the next Done.
+- `reply SLUG`: `sudus reply SLUG "<explanation>"`; an `ask` answer authorizes an explanation only.
 
-    action: implement | build-decision | run-mechanism | review
-    target: <requirement, decision slug, or commitment slug>
-    base: <commit identifier>
-    started: <iso timestamp>
+When Sudus itself is wrong -- a command crashes, a message contradicts the manual, or wake keeps naming an action whose predicate already holds -- follow the report-sudus-issue skill: it drafts an issue for eas4ai/sudus, files it only after the developer's `ok`, and updates the plugin when the fix is released.
 
-Remove it when the change is committed. On wake, an existing record is
-reconciled before any new work: finish or abandon the action it names.
+Out of scope is captured, never built: `sudus item --backlog`, `--next-feature`, or `--defect --from <REQ>`. Capture a next-feature item only for a change the developer asked for or one a real bug needs; never capture an edge case or a ceremony step. When the developer drops backlog or next-feature items in conversation, record their words once: `sudus retire <item>... --quote "<their words>"`. A defect against this commitment's requirement is worked here, not captured.
 
-Check execution has a separate working-tree lock. When wake names
-`cairn-check.lock`, wait for a live owner. If the owner is dead or the
-record is incomplete, inspect the command and any surviving children;
-remove the named lock only after execution has stopped. Keep the agent's
-in-progress record until its own action is finished or abandoned.
+Decide by level: Routine and Judged leave no record; Blocking is `sudus escalate` and stops.
 
-Commit before you check. `cairn check` records evidence only against a
-committed tree and refuses a dirty declared input. Your own test runs
-while editing are how you work; they are not evidence. Commit the new
-evidence receipts and their output files after each check. Evidence
-history is tracked; only .cairn/in-progress stays ignored.
-
-Keep the candidate stable throughout a check. Cairn compares it with the
-commit before execution and validates it again before recording evidence.
-A changed candidate keeps its diagnostic output but gets no receipt.
-Missing or damaged captured output needs a new check, never an edited
-historical receipt.
-
-When wake says `run <REQ>`, use `cairn check <REQ>`; Cairn selects its
-mechanism for you. Declare every file that can affect the result, including
-shared dependencies. Broad directories are easier to maintain but rerun
-checks for unrelated edits. Narrow paths reduce reruns but need updating
-when dependencies change. Do not omit a dependency just to shorten a run.
-
-When wake says `review mechanism <REQ>`, compare the check with the
-revised requirement and falsifier without changing code. Record what you
-examined and any mismatch in the existing commitment review. Fix a
-mismatch as a separate implementation action. Try a safe violating example
-and the corrected case; record the results, or why that demonstration is
-impractical. Add the exact `REQ sha256:...` entry wake prints to
-the declaration's `reviewed:` list only after that review. Commit before
-check. Copying the digest alone does not establish that the check works.
-Apply the same failure demonstration when building a new check.
-
-Decide by level. Routine: decide, no record. Judged and above: record
-it with `cairn decide` before you build it. Blocking: `cairn escalate`,
-then stop. Three attempts at a requirement without new passing evidence
-make the next decision about it Blocking. An attempt is one distinct
-digest of the mechanism's declared inputs among the failing checks
-since the last pass; reruns, documentation changes, and a return to a
-digest already tried add nothing, and the first check of a
-requirement is its baseline, never an attempt. A failure no change
-inside the footprint can address is not an attempt at all: it is an
-escalation, and the wake names DEC-019 when it sees three runs at one
-digest. A failing requirement every commitment inherits is repaired
-under the current commitment; its mechanism's inputs are already in
-the footprint, and a fix outside them means the declaration was
-incomplete: declare, then fix.
-
-Out of scope is captured, never built. An idea outside the current
-commitment goes to `cairn backlog --title ... --body ... --from <REQ>`.
-It enters a commitment only when the developer writes it into the
-specification and names it there.
-
-Review before Done. When every requirement passes, examine the work for
-what the mechanisms would miss, record what you attacked and what you
-found in `.cairn/reviews/<slug>.md`, and change no code while you look.
-A finding is resolved as its own work, after the review is recorded.
-
-## Writing for the developer
-
-Write so the developer can understand the choice and its consequences
-after one reading. Apply this to questions, specifications, records,
-and progress reports.
-
-- Name who does what and what changes for the user or system. Use
-  familiar words, concrete examples, and short sentences.
-- Match the explanation to the developer's knowledge. Explain an
-  unfamiliar technical term when it matters to the decision. Keep
-  technical detail that changes the answer; remove jargon that only
-  makes the sentence sound authoritative.
-- When asking for a decision, state the actual choice, your
-  recommendation, why it helps, and what the alternative changes.
-  Explain costs or risks in terms of what could happen. For an
-  escalation, put this information in the existing fields.
-- With a decision or agreement prompt, say: "If this isn't clear, ask
-  me to explain it another way before you decide." For an escalation,
-  put the invitation after the options on the existing Reply line.
-- Distinguish what you observed from what you assume or do not know.
-  Keep important limits visible when shortening an explanation.
-- Before sending, ask whether the developer can tell what their answer
-  would authorize without decoding internal names or abstract labels.
-  Rewrite any sentence that hides that choice.
-- If a reply shows a misunderstanding, explain the choice again before
-  treating the reply as agreement. Silence alone is not confirmation.
-
-For example: "Should the app save unfinished drafts so users can reopen
-them later?" names the behavior the developer is deciding about.
+A Consequential decision -- one with real options and a recommendation, tied to this commitment's requirements -- takes one more step first: `sudus measure` with the same fields `sudus decide`/`sudus escalate` would take (`--commitment`, `--concern`, `--question`, `--recommendation`, `--because`, `--if-wrong`, `--instead`, `--option`, `--path`, `--decision`); give each choice its own `--option`, and make `--recommendation` repeat one of them word for word, or `measure` stops and names the options. It prints five scored dimensions (evidence, reach, contract fit, new surface, ambiguity), a composite, and `suggested: agent` or `suggested: developer`. The suggestion is information, not consent: read it and the five numbers, then either `sudus decide --consequential --commitment ...` (the same flags, continuing) or `sudus escalate --consequential --commitment ...` (the same flags, stopping) -- your own judgment, whatever the suggestion says. Two things bypass your judgment entirely and are always `sudus escalate --consequential`: the measurement's own floor (a draft that would change an Agreed requirement's text or falsifier, the working agreement, or data that cannot be regenerated) and its veto (an option that reaches too far, changes the contract, or opens too much new surface) -- `sudus decide --consequential` rejects either one and names the measurement that caught it. Put your real evidence in `--because`: a command, a file, quoted output, or the failing test and the falsifier it maps to.
 
 ## The developer
 
-An escalation awaits you in `.cairn/escalations/<slug>.md`. Answer it:
-
-    cairn answer <slug> ok | instead <what> | ask <question>
-
-Use `ask <question>` whenever the explanation is unclear. The agent will
-reply in the same file, then the decision returns to you. Answer `ok`,
-`instead <what>`, or ask another question. Only `ok` or `instead` closes it.
-
-A queued decision awaits you in `.cairn/queue/<slug>`; its record is in
-docs/decisions/. The agent did not wait for you. Reading it and
-removing the queue entry in a commit is the review; the commit's author
-and date are the mark. To reverse it, have the agent supersede the
-record with the cause named.
-
-The next commitment is yours. Write the requirement into the
-specification with its falsifier, name it in a commitment file, and
-move the roadmap's Current: line.
-
-Merge other branches with `git merge --no-ff` so their commits stay off
-this loop's first-parent history. Cairn checks each of this loop's own
-commits; reverting a change does not erase a footprint breach. Declare a
-missing input when it belongs to the commitment. Otherwise capture the
-work in the backlog and ask the developer to resolve its scope.
+The developer is never asked to run a command. When an escalation waits, the prompt is the escalation itself in plain prose, in this order: the problem (its question and because); `ok`, what the recommendation does, naming every finding on wake's `ok closes:` line; `instead`, what it costs if the recommendation is wrong and the alternative; `ask`, if the developer does not understand or wants to discuss it further. End with `ok | instead | ask` and wait. Record the answer in the developer's own words: `sudus answer <slug> ok | instead | ask --quote "<their words>"`. Read the queue with `sudus decisions`; after the developer has read a decision with you, record it with `sudus decisions --read <id> --quote "<their words>"`. After changing `docs/spec/`, `AGENTS.md` or `.sudus/settings.json` between commitments, state what changed and what would be bound, end with `ok | instead | ask`, and on ok run `sudus authorize --quote "<their words>"`; a change request or a question is `sudus authorize instead | ask --quote "<their words>"`, which binds nothing. Never use a choice widget for these questions; the prose and `ok | instead | ask` is the prompt. After Done, open the next work with `/next-feature`.

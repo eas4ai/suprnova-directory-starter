@@ -10,4 +10,4 @@ Status: Agreed 2026-10-05
 
 ## Scope
 
-The developer confirmed creating upgrade guides for Pulsar, Nebula, this starter and the Markdown plugin. This repository's commitment covers its root UPGRADE.md and the documentation verification/records necessary under Cairn. Runtime source, dependency pins, lockfiles, deployment and operator data remain unchanged. Keep the previously completed application's acceptance evidence current. Publish the guide on main after verification; existing release tags identify their original code.
+The developer confirmed creating upgrade guides for Pulsar, Nebula, this starter and the Markdown plugin. The original documentation-only commitment covered root UPGRADE.md and its verification. UPG-001 remains an acceptance obligation for the current framework upgrade: update the guide to match its final pins and operation. Deployment and operator data are outside this commitment. Existing release tags continue to identify their original code.

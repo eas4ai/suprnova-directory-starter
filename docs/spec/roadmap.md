@@ -2,7 +2,7 @@
 
 Status: Agreed 2026-09-10
 Prefix: MAP
-Current: upgrade-guidance
+Current: suprnova-4-2
 
 ## First starter delivery
 
@@ -48,4 +48,20 @@ The Markdown prerequisite for Suprnova 3.2.1 is verified and published at `565c2
 
 ## Upgrade documentation
 
-The developer requested and confirmed an upgrade guide for each upgraded repository. Current is `3d568ec154d1f6bcd1015225e9546450249d66ba:docs/commitments/upgrade-guidance.md` (historical Git record); the starter guide is [UPGRADE.md](../../UPGRADE.md). The completed Suprnova 3.2.1 implementation and its 54 acceptance requirements remain unchanged.
+The developer requested and confirmed an upgrade guide for each upgraded repository. That completed commitment is `3d568ec154d1f6bcd1015225e9546450249d66ba:docs/commitments/upgrade-guidance.md` (historical Git record); the starter guide is [UPGRADE.md](../../UPGRADE.md). The completed Suprnova 3.2.1 implementation and its 54 acceptance requirements remain unchanged.
+
+
+## suprnova-4-2
+
+Status: Agreed 2026-10-17
+
+Requirements: ADM-001, ADM-002, ADM-003, CNT-001, CNT-002, CNT-003, CNT-004, CNT-005, CNT-006, DIR-001, DIR-002, DIR-003, DIR-004, DIR-005, DIR-006, DIR-007, DIR-008, FND-001, FND-002, FND-003, FND-004, FND-005, FWU-001, FWU-002, FWU-003, FWU-004, FWU-005, FWU-006, KIT-001, KIT-002, KIT-003, KIT-004, KIT-005, OVR-001, OVR-002, OVR-003, PAY-001, PAY-002, PAY-003, PAY-004, PAY-005, PAY-006, PAY-007, PAY-008, PAY-009, PAY-010, PAY-011, PAY-012, PAY-013, PAY-014, PAY-015, PAY-016, SEO-001, SEO-002, SEO-003, SEO-004, SEO-005, SEO-006, UI-001, UI-002, UPG-001
+
+Deliver the Suprnova 4.2 compatibility upgrade defined in framework-upgrade.md,
+using the published Markdown v0.4.0 prerequisite and preserving all 55 delivered
+requirements. Traffic reporting remains planned. The developer confirmed this
+scope on 2026-10-17.
+
+Done when every named requirement passes its declared mechanism, the upgrade
+guide matches the final build and migration behavior, and production and
+independent reviews have no unresolved findings.

@@ -47,6 +47,6 @@ async fn main() -> ExitCode {
 
     match result {
         Ok(()) => ExitCode::SUCCESS,
-        Err(_) => ExitCode::FAILURE,
+        Err(error) => ExitCode::from(error.exit_code()),
     }
 }

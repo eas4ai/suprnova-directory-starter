@@ -7,7 +7,8 @@ import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const revision = '2bd4bd53d04fa4581fdbb152ebd70cfb682b342c';
+const revision = '6f6f83feae1dfde97d614d083625872987407780';
+const tag = 'v4.2.0';
 const source = resolve(process.argv[2] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const cargoHome = resolve(process.env.CARGO_HOME ?? join(homedir(), '.cargo'));
 const environment = Object.fromEntries(['PATH', 'HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
@@ -113,9 +114,9 @@ try {
   const lockfile = readFileSync(join(source, 'Cargo.lock'), 'utf8');
   for (const name of ['suprnova', ...Object.keys(required)]) {
     const line = manifest.split('\n').find(line => line.startsWith(`${name} =`));
-    assert.ok(line?.includes(`rev = "${revision}"`) && line.includes('https://github.com/eas4ai/suprnova.git'), `${name} must use the recorded checkout revision.`);
+    assert.ok(line?.includes(`tag = "${tag}"`) && line.includes('https://github.com/eas4ai/suprnova.git'), `${name} must use the recorded checkout tag.`);
     const block = lockfile.split('[[package]]').find(block => block.includes(`\nname = "${name}"\n`));
-    assert.ok(block?.includes(`git+https://github.com/eas4ai/suprnova.git?rev=${revision}#${revision}`), `${name} lockfile source must match the recorded revision.`);
+    assert.ok(block?.includes(`git+https://github.com/eas4ai/suprnova.git?tag=${tag}#${revision}`), `${name} lockfile source must match the recorded revision.`);
   }
   const checkout = await findCheckout();
   const scratch = resolve(process.env.FOUNDATION_SCRATCH_DIR ?? join(source, '../scratchpads'));

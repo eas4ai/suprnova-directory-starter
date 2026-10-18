@@ -26,11 +26,12 @@ See [the roadmap](docs/spec/roadmap.md) for the current verification status.
 
 ## Prerequisites
 
-Framework and payment adapters target Suprnova 3.2.1 at release commit
-`2bd4bd53d04fa4581fdbb152ebd70cfb682b342c`.
+Framework and payment adapters select Suprnova tag `v4.2.0` at release commit
+`6f6f83feae1dfde97d614d083625872987407780`. See [UPGRADE.md](UPGRADE.md)
+when updating an existing installation.
 
-- Rust 1.94 or newer and Cargo; this checkout is verified with Rust 1.95.
-- Bun 1.4.1 for frontend packages and database inspection.
+- Rust 1.95 and Cargo for the verified setup; the package declares a 1.94 minimum.
+- Bun 1.4.3 for frontend packages and database inspection.
 - Node 24 for local key generation and verification. Cairn is needed only for
   specification lint and evidence recording, not to run the application.
 - A C/C++ toolchain, pkg-config and OpenSSL development headers for native dependencies.
@@ -63,46 +64,56 @@ It is Suprnova's application migration entry point; the developer CLI's
 
 ## Run locally
 
-Start Vite in one terminal, from the repository root:
+Start Vite in one terminal, from the repository root. The hot file tells the
+application to use Vite for assets and SSR; the subshell removes it on exit:
 
 <!-- foundation:vite -->
 ```sh
-cd frontend
-bun run dev
+(
+  cd frontend
+  trap 'rm -f ../public/hot' EXIT
+  trap 'exit 0' INT TERM
+  printf '%s\n' "http://127.0.0.1:${VITE_PORT:-5765}" > ../public/hot
+  bun run dev --host 127.0.0.1
+)
 ```
 
-In a second terminal, run the public-page renderer from the repository root:
-
-<!-- foundation:ssr -->
-```sh
-node --env-file=.env frontend/bootstrap/ssr/ssr.js
-```
-
-In a third terminal, from the repository root:
+In a second terminal, from the repository root:
 
 <!-- foundation:serve -->
 ```sh
 cargo run --locked --bin directory -- serve --no-migrate
 ```
 
-Open `http://localhost:8765`. The public directory and account forms should render.
-Keep all three terminals running; stop each with Ctrl+C. Local mode loads modules from
-Vite on port 5765. `bun run build` checks production assets but does not replace
-Vite in local mode. The guide uses the application binaries directly, so the
-separately installed Suprnova developer CLI is not required.
+Open `http://localhost:8765` after Vite reports that its SSR module graph has
+warmed up. The Inertia Vite plugin renders public content and metadata from source
+at its private `/__inertia_ssr` endpoint. Changes to Vue pages appear without
+rebuilding the standalone renderer. Stop the Vite subshell with Ctrl+C; if it was
+forcibly killed, remove its stale `public/hot` before using built assets.
 
-Public content and metadata are rendered in the initial HTML by the Vue SSR worker.
-The worker binds to loopback port 13714. A stopped worker produces an explicit page
-error instead of a blank public shell. Private account and administration forms
-remain available. After changing Vue pages, run `bun run --cwd frontend build:ssr`
-and restart the renderer. Supervise this worker alongside the application in production.
+To preview the built client/SSR bundles locally, stop Vite, rebuild both bundles
+with `bun run --cwd frontend build` and `bun run --cwd frontend build:ssr`, then
+start the standalone renderer from the repository root while the application
+continues running:
 
-If either port is occupied, export `SERVER_PORT`, `VITE_PORT`, and `APP_URL` with
-matching free ports in the relevant terminals before running the commands. The backend
-reads these before `.env`, and Vite reads `VITE_PORT` from the terminal environment.
-The setup verifier uses this documented override with ephemeral local ports.
-If the renderer port is occupied, also export matching `SSR_PORT` and `SSR_URL`
-in the renderer and application terminals. Keep the renderer on a private interface.
+<!-- foundation:ssr -->
+```sh
+node --env-file=.env frontend/bootstrap/ssr/ssr.js
+```
+
+Without a hot file, the application reads the built manifest and public pages use
+the SSR worker at loopback port 13714. A missing renderer produces an explicit
+public-page error. Private forms retain their client-rendering fallback. Restart
+the renderer after rebuilding its bundle. Production always uses the built assets
+and standalone renderer, ignores `public/hot`, and must supervise both processes.
+The separately installed Suprnova developer CLI is not required for these commands.
+
+If a port is occupied, export `SERVER_PORT`, `VITE_PORT`, and `APP_URL` with
+matching free ports in the relevant terminals before running the commands. The
+backend reads these before `.env`; Vite and the hot-file command use the terminal's
+`VITE_PORT`. For built previews, export matching `SSR_PORT` and `SSR_URL` in the
+renderer and application terminals. Keep Vite and SSR on private interfaces. The
+setup verifier exercises both documented modes with ephemeral local ports.
 
 ## Account mail
 
@@ -270,7 +281,7 @@ Unpublishing, suspension, expiry or revoked eligibility removes the twin immedia
 for subsequent requests. GET and HEAD are supported; responses use UTF-8
 `text/markdown`, `X-Robots-Tag: noindex`, `nosniff` and `Cache-Control: no-store`.
 HTML remains canonical. Noindex content stays publicly readable in both formats.
-The dependency is pinned to `565c2205b1d1d77aa05a29247f3a2416abc60791` and shares the
+The dependency is pinned to `6f27ecae53babc0fd637c23b41bc5b244543c78e` and shares the
 starter's framework revision; do not update one without checking the other.
 
 Run `node scripts/verify-complete-starter.mjs seo` for disposable HTTP, SSR and
@@ -549,7 +560,7 @@ before deployment. Set `APP_ENV=production`, `APP_DEBUG=false`, an explicit stab
 `SESSION_COOKIE_PREFIX=__Host-`. Use an absolute writable `DATABASE_URL` and private
 `DIRECTORY_MEDIA_ROOT`; retain them outside replaceable release directories.
 Configure authenticated encrypted SMTP and a real sender; the example local
-unencrypted capture server is not a production relay. Suprnova 3.2.1 rejects
+unencrypted capture server is not a production relay. Suprnova 4.2.0 rejects
 non-delivering mail drivers in production. Configure `RATE_LIMIT_DRIVER=redis`
 and `RATE_LIMIT_REDIS_URL=redis://your-private-redis:6379/0` for shared production
 rate limits. A deployment with exactly one application process may explicitly set
@@ -570,8 +581,38 @@ with restart-on-failure and bounded logs. The application command is
 may run its compiled `directory serve --no-migrate` directly. Run migrations once
 before starting the new release. Schedule the two bounded processing commands in
 `adoption:operations` every minute and inspect their status commands during recovery.
-These commands process persisted work; no separate undocumented queue daemon is
-required. Run all processes as the dedicated application OS user.
+These commands process the application's payment and notification records. They
+do not drain the framework queue used for credential-revocation retries. Run all
+processes as the dedicated application OS user.
+
+### Credential-revocation retry worker
+
+A password change can commit before session or remember-token cleanup fails.
+Suprnova queues `Suprnova::RevokeUserCredentials` to retry that cleanup. Configure
+`QUEUE_DRIVER=redis` and `QUEUE_REDIS_URL` on both the web process and queue worker.
+Use a private Redis service with persistence enabled and backups; memory, sync and
+null queues do not provide durable retry storage. Choose a distinct
+`QUEUE_REDIS_STREAM` for each installation, keep the same `QUEUE_REDIS_GROUP` on
+its web/worker processes, and leave `QUEUE_REDIS_CONSUMER` unset so each process
+gets a distinct consumer identity. The queue and rate limiter use separate URL
+settings even when they share a Redis service.
+
+Set `QUEUE_VISIBILITY_TIMEOUT_SECS=120` and supervise this additional process:
+
+```sh
+./target/release/directory queue:work --queue default --visibility-timeout 120
+```
+
+Leave `--tries` unset. The revocation job retries without an attempt limit, backs
+off from about 10 seconds to at most one hour, and has a 60-second timeout per try.
+Monitor worker errors and the Redis pending/delayed backlog; restart the worker
+with each deployment. This starter does not configure a Redis failed-job store,
+so `queue:failed` is not a substitute for that monitoring. If enqueueing also
+fails, the password may already have changed: investigate and complete credential
+revocation after restoring the services instead of assuming the old reset link
+can be replayed. Keep the existing payment/notification schedules running too.
+Redis persistence and outage recovery require an operator smoke test; local
+SQLite/provider-fixture acceptance does not establish them.
 
 The implemented media store is local private storage. Suprnova offers other storage
 adapters, but switching this starter to one requires an application integration and
@@ -580,8 +621,10 @@ Keep read/write access limited to the application user and backup operator.
 
 ## Backup, restore and permission recovery
 
-Stop the web process, notification/reconciliation schedules and any other database
-writers before this procedure. Set `BACKUP_DIR` to a new private directory on
+Stop the web process, credential-revocation queue worker,
+notification/reconciliation schedules and any other database writers before this
+procedure. Preserve the Redis queue and its recovery logs separately; the SQLite
+recipe below does not back up Redis. Set `BACKUP_DIR` to a new private directory on
 protected backup storage. The following SQLite recipe uses Python's online backup
 API, includes the media tree, and saves the matching key separately with mode 0600.
 It assumes `DATABASE_URL` is a plain `sqlite://` file URL without query options;

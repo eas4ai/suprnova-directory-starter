@@ -9,6 +9,7 @@ const read = path => readFileSync(join(root, path), 'utf8');
 
 try {
   const guide = read('UPGRADE.md');
+  const prose = guide.replace(/\s+/g, ' ');
   const manifest = read('Cargo.toml');
   const lock = read('Cargo.lock');
   const version = manifest.match(/^version = "([^"]+)"$/m)?.[1];
@@ -16,21 +17,30 @@ try {
   const application = lock.split('[[package]]').find(block => block.includes('\nname = "directory"\n'));
   assert.ok(application?.includes(`\nversion = "${version}"\n`), 'Locked application version differs');
   assert.equal(JSON.parse(read('frontend/package.json')).version, version, 'Frontend version differs');
-  assert.ok(guide.includes(`Release \`v${version}\``), 'Guide release differs from the package');
-  assert.ok(guide.includes(`versions are ${version}`), 'Guide package versions differ');
+  assert.ok(prose.includes(`package versions are ${version}`), 'Guide package versions differ');
+  assert.ok(prose.includes('no new starter release tag is implied'), 'Do not relabel the existing starter release');
 
-  const frameworkRevision = '2bd4bd53d04fa4581fdbb152ebd70cfb682b342c';
-  const markdownRevision = '565c2205b1d1d77aa05a29247f3a2416abc60791';
+  const frameworkRevision = '6f6f83feae1dfde97d614d083625872987407780';
+  const markdownRevision = '6f27ecae53babc0fd637c23b41bc5b244543c78e';
   for (const name of ['suprnova', 'suprnova-payments-stripe', 'suprnova-payments-paddle', 'suprnova-markdown']) {
     const revision = name === 'suprnova-markdown' ? markdownRevision : frameworkRevision;
     const dependency = manifest.split('\n').find(line => line.startsWith(`${name} = `));
-    assert.ok(dependency?.includes(`rev = "${revision}"`), `${name} revision differs`);
+    const isMarkdown = name === 'suprnova-markdown';
+    const selector = isMarkdown ? `rev = "${revision}"` : 'tag = "v4.2.0"';
+    assert.ok(dependency?.includes(selector), `${name} source selector differs`);
     const locked = lock.split('[[package]]').find(block => block.includes(`\nname = "${name}"\n`));
-    assert.ok(locked?.includes(`?rev=${revision}#${revision}`), `${name} lock revision differs`);
+    const lockedSelector = isMarkdown ? `rev=${revision}` : 'tag=v4.2.0';
+    assert.ok(locked?.includes(`?${lockedSelector}#${revision}`), `${name} lock revision differs`);
     assert.ok(guide.includes(`\`${revision}\``), `Guide omits ${name} revision`);
-    if (name === 'suprnova') assert.ok(locked.includes('\nversion = "3.2.1"\n'), 'Framework version differs');
+    if (name === 'suprnova') assert.ok(locked.includes('\nversion = "4.2.0"\n'), 'Framework version differs');
   }
-  assert.ok(guide.includes('Suprnova from 2.0.0 to 3.2.1'), 'Framework upgrade is missing');
+  assert.ok(guide.includes('Suprnova 3.2.1 → 4.2.0'), 'Framework upgrade is missing');
+  assert.ok(guide.includes('Markdown v0.4.0'), 'Markdown release is missing');
+  const frontend = JSON.parse(read('frontend/package.json'));
+  for (const name of ['@inertiajs/core', '@inertiajs/vue3', '@inertiajs/vite']) {
+    assert.equal(frontend.dependencies?.[name] ?? frontend.devDependencies?.[name], '3.8.0', `${name} version differs`);
+  }
+  assert.ok(prose.includes('Inertia Vue, core and Vite packages are pinned to 3.8.0'), 'Guide omits Inertia versions');
 
   for (const boundary of [
     'APP_KEY', 'DATABASE_URL', 'DIRECTORY_MEDIA_ROOT', 'matching encryption key',
@@ -41,7 +51,15 @@ try {
     'MAIL_SMTP_ENCRYPTION=starttls', 'plaintext SMTP', 'port private',
     'Restore the previous application', 'matching database, media and key backup',
     'do not replay payment events blindly',
-  ]) assert.ok(guide.includes(boundary), `Guide omits operating boundary: ${boundary}`);
+    'RbacToSpatieLayout', 'CreateSessionsTable::new(SessionUserKey::Integer)',
+    'signed application user IDs', 'sign in again', 'Old browser',
+    'QUEUE_DRIVER=redis', 'QUEUE_REDIS_URL', 'QUEUE_REDIS_STREAM', 'QUEUE_REDIS_GROUP',
+    'QUEUE_VISIBILITY_TIMEOUT_SECS=120', 'Leave `--tries` unset',
+    'Suprnova::RevokeUserCredentials', 'Redis persistence', 'pending/delayed backlog',
+    'do not let old workers consume new framework jobs', 'all 55 inherited requirements',
+    'They do not establish PostgreSQL behavior', 'live charges',
+    'src/app.css', 'private, no-store', 'ignores `public/hot`',
+  ]) assert.ok(prose.includes(boundary), `Guide omits operating boundary: ${boundary}`);
 
   assert.ok(guide.includes('(README.md#production-operation)'), 'Backup procedure link is missing');
   assert.ok(read('README.md').includes('## Production operation'), 'Backup link target is missing');
@@ -56,14 +74,15 @@ try {
   }
   const commands = blocks.join('\n');
   for (const command of [
-    `git fetch upstream refs/tags/v${version}`, 'git merge --no-ff FETCH_HEAD',
+    'git fetch upstream "$UPGRADE_REF"', 'git merge --no-ff FETCH_HEAD',
     'bun install --frozen-lockfile', 'bun run build:ssr', 'cargo build --locked --release --bins',
     './target/release/directory migrate', './target/release/directory serve --no-migrate',
     'node --env-file=.env frontend/bootstrap/ssr/ssr.js',
     './target/release/console billing:reconcile --status --limit 100',
     './target/release/console notifications:deliver --status --limit 100',
+    './target/release/directory queue:work --queue default --visibility-timeout 120',
   ]) assert.ok(commands.includes(command), `Guide omits command: ${command}`);
-  console.log('Release pins, operating boundaries, backup link and shell syntax verified.');
+  console.log('Dependency pins, migration/worker boundaries, backup link and shell syntax verified.');
   console.log('cairn: UPG-001: pass');
 } catch (error) {
   console.error(error.stack ?? error.message);

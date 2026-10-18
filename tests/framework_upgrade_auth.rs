@@ -4,11 +4,135 @@ mod common;
 use common::Client;
 use directory::{accounts, accounts::provider::AccountUserProvider, models::user::User};
 use sea_orm::{ConnectionTrait, EntityTrait, PaginatorTrait, TransactionTrait};
+use std::sync::{
+    Arc,
+    atomic::{AtomicBool, Ordering},
+};
 use suprnova::{
     DB, LaravelDatabase, auth::UserProvider, eloquent::Model, hashing, serde_json::json,
 };
 
 const PASSWORD: &str = "upgrade-password-123";
+
+#[derive(Clone)]
+struct ChangeMailboxAfterRead {
+    id: i64,
+    writer: sea_orm::DatabaseConnection,
+    attempted: Arc<AtomicBool>,
+    committed: Arc<AtomicBool>,
+}
+
+#[async_trait::async_trait]
+impl suprnova::eloquent::observers::Observer<User> for ChangeMailboxAfterRead {
+    async fn retrieved(&self, user: &User) -> Result<(), suprnova::FrameworkError> {
+        if user.id != self.id || self.attempted.swap(true, Ordering::SeqCst) {
+            return Ok(());
+        }
+        // The model has been read but verification has not been stamped. This
+        // independent connection deterministically attempts the competing write.
+        let result = self
+            .writer
+            .execute_raw(sea_orm::Statement::from_sql_and_values(
+                sea_orm::DbBackend::Sqlite,
+                "UPDATE users SET email = ?, email_verified_at = NULL WHERE id = ?",
+                ["unproven-mailbox@example.test".into(), self.id.into()],
+            ))
+            .await;
+        match result {
+            Ok(result) => {
+                assert_eq!(result.rows_affected(), 1);
+                self.committed.store(true, Ordering::SeqCst);
+            }
+            Err(error) => {
+                let message = error.to_string().to_ascii_lowercase();
+                assert!(
+                    message.contains("locked") || message.contains("busy"),
+                    "unexpected competing-writer failure: {error}"
+                );
+            }
+        }
+        Ok(())
+    }
+}
+
+async fn mailbox_verification_preserves_the_atomic_provider_boundary() {
+    let user = User::create("Mailbox fixture", "proven-mailbox@example.test", PASSWORD)
+        .await
+        .unwrap();
+    let provider = AccountUserProvider::new();
+    let id = user.id.to_string();
+    assert!(
+        !provider
+            .mark_email_verified_for(&id, "wrong@example.test")
+            .await
+            .unwrap()
+    );
+    assert!(
+        !provider
+            .mark_email_verified_for("9223372036854775807", &user.email)
+            .await
+            .unwrap()
+    );
+    assert!(!provider.is_email_verified(&id).await.unwrap());
+
+    let mut options = sea_orm::ConnectOptions::new(std::env::var("DATABASE_URL").unwrap());
+    options.max_connections(1);
+    let writer = sea_orm::Database::connect(options).await.unwrap();
+    writer
+        .execute_unprepared("PRAGMA busy_timeout = 100")
+        .await
+        .unwrap();
+    let attempted = Arc::new(AtomicBool::new(false));
+    let committed = Arc::new(AtomicBool::new(false));
+    User::observe(ChangeMailboxAfterRead {
+        id: user.id,
+        writer,
+        attempted: attempted.clone(),
+        committed: committed.clone(),
+    })
+    .await;
+    let outcome = provider.mark_email_verified_for(&id, &user.email).await;
+    assert!(attempted.load(Ordering::SeqCst), "the race hook must run");
+    let stored = directory::models::user::Entity::find_by_id(user.id)
+        .one(DB::connection().unwrap().inner())
+        .await
+        .unwrap()
+        .unwrap();
+    if committed.load(Ordering::SeqCst) {
+        assert_eq!(stored.email, "unproven-mailbox@example.test");
+        assert!(
+            stored.email_verified_at.is_none(),
+            "the old mailbox must not verify the replacement: {outcome:?}"
+        );
+        assert!(!matches!(outcome, Ok(true)));
+    } else {
+        // SQLite may serialize the competing writer, or allow its WAL write
+        // and reject the stale verification transaction. Both outcomes are safe.
+        assert_eq!(stored.email, user.email);
+        assert!(stored.email_verified_at.is_some());
+        assert!(outcome.unwrap());
+    }
+
+    let normal = User::create(
+        "Normal verification",
+        "normal-mailbox@example.test",
+        PASSWORD,
+    )
+    .await
+    .unwrap();
+    assert!(
+        provider
+            .mark_email_verified_for(&normal.id.to_string(), &normal.email)
+            .await
+            .unwrap()
+    );
+    assert!(
+        provider
+            .is_email_verified(&normal.id.to_string())
+            .await
+            .unwrap()
+    );
+}
 
 async fn account(email: &str) -> User {
     let mut user = User::create("Upgrade account", email, PASSWORD)
@@ -193,6 +317,7 @@ async fn suspension_blocks_existing_and_new_sign_ins() {
 #[tokio::test]
 async fn upgrade_preserves_authentication_boundaries() {
     common::setup().await;
+    mailbox_verification_preserves_the_atomic_provider_boundary().await;
     required_rehash_is_forwarded().await;
     csrf_rotation_rejects_old_tokens().await;
     password_change_rejects_existing_sessions().await;

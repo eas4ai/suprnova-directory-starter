@@ -103,6 +103,10 @@ impl UserProvider for AccountUserProvider {
         self.inner.mark_email_verified(id).await
     }
 
+    async fn mark_email_verified_for(&self, id: &str, email: &str) -> Result<bool, FrameworkError> {
+        self.inner.mark_email_verified_for(id, email).await
+    }
+
     async fn set_password(&self, id: &str, hashed: &str) -> Result<(), FrameworkError> {
         self.inner.set_password(id, hashed).await
     }

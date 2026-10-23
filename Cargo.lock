@@ -90,12 +90,12 @@ checksum = "683d7910e743518b0e34f1186f92494becacb047c7b6bf616c96772180fef923"
 
 [[package]]
 name = "ammonia"
-version = "4.1.4"
+version = "4.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc6d763210e2eb7670d1a5183a08bebefa3f97db2a738a684f2ce00bd49f681d"
+checksum = "1f45dfa685e1ec33b1bf1a3b93b8047cbdbef41b6040deebbe6bea7720a45574"
 dependencies = [
- "cssparser 0.37.0",
- "html5ever 0.39.0",
+ "cssparser",
+ "html5ever 0.40.1",
  "maplit",
  "url",
 ]
@@ -1594,17 +1594,6 @@ dependencies = [
 
 [[package]]
 name = "cssparser"
-version = "0.37.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8c9cdaae01d5ed7882b04d795e7f752f46ff52d2fa3b50a20d28c464510bba98"
-dependencies = [
- "dtoa-short",
- "itoa",
- "smallvec",
-]
-
-[[package]]
-name = "cssparser"
 version = "0.38.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "11119743ad110e8c1bdccd930d7f5c30c99e5fc76a7b63ec9807e84eef0c5f59"
@@ -1623,7 +1612,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d045de693cb712d0b22c6a64be5b953f67b3ce00ab5ad3dd5d8b441886ab8e1a"
 dependencies = [
  "quote",
- "syn 3.0.5",
+ "syn 2.0.119",
 ]
 
 [[package]]
@@ -1965,7 +1954,7 @@ dependencies = [
 
 [[package]]
 name = "directory"
-version = "1.0.1"
+version = "1.1.0"
 dependencies = [
  "async-stripe",
  "async-stripe-client-core",
@@ -5385,9 +5374,9 @@ dependencies = [
 
 [[package]]
 name = "quinn-proto"
-version = "0.11.17"
+version = "0.11.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04759210543be93709136e28212294a659ef5001836ff4eab4d663e4529bba83"
+checksum = "0e750cca55fe4f0439a15d0bb529da9651e79993e8e72c61a899a36d462befbe"
 dependencies = [
  "aws-lc-rs",
  "bytes",
@@ -5900,9 +5889,9 @@ dependencies = [
 
 [[package]]
 name = "rustls"
-version = "0.23.44"
+version = "0.23.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6725596c3f2c3a0aef021139e145d4eafe314a6623e4680ca83852b2c67ab2ba"
+checksum = "48e13bd8c0e9365c43cfa5c9e8f9ad49d3c8444926c9aac819e0e4dc503c8fdf"
 dependencies = [
  "aws-lc-rs",
  "log",
@@ -5965,9 +5954,9 @@ checksum = "f87165f0995f63a9fbeea62b64d10b4d9d8e78ec6d7d51fb2125fda7bb36788f"
 
 [[package]]
 name = "rustls-webpki"
-version = "0.103.15"
+version = "0.103.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3c3cf1d8b1e7d4927e2d154c3fcb02979afb9939629c62cd9048d4f07b60ac2"
+checksum = "4443b1b6d39d7c663139942cc4558262562d2c84123bb6282ef177009ca8b281"
 dependencies = [
  "aws-lc-rs",
  "ring",
@@ -7031,8 +7020,8 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "suprnova"
-version = "4.6.0"
-source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.0#cdf953217bfdae4d4a90d845ca78d14d02b54d53"
+version = "4.6.1"
+source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.1#5112862367b76a2ea3875d0135ca4ca1ec602c32"
 dependencies = [
  "aes-gcm",
  "ammonia",
@@ -7054,7 +7043,7 @@ dependencies = [
  "compcol",
  "comrak",
  "crypto_secretbox",
- "cssparser 0.38.0",
+ "cssparser",
  "dashmap",
  "deunicode",
  "dialoguer",
@@ -7167,8 +7156,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-live"
-version = "4.6.0"
-source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.0#cdf953217bfdae4d4a90d845ca78d14d02b54d53"
+version = "4.6.1"
+source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.1#5112862367b76a2ea3875d0135ca4ca1ec602c32"
 dependencies = [
  "askama",
  "askama_parser",
@@ -7194,8 +7183,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-macros"
-version = "4.6.0"
-source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.0#cdf953217bfdae4d4a90d845ca78d14d02b54d53"
+version = "4.6.1"
+source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.1#5112862367b76a2ea3875d0135ca4ca1ec602c32"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -7206,8 +7195,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-magnetar"
-version = "4.6.0"
-source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.0#cdf953217bfdae4d4a90d845ca78d14d02b54d53"
+version = "4.6.1"
+source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.1#5112862367b76a2ea3875d0135ca4ca1ec602c32"
 dependencies = [
  "aes-gcm",
  "apple",
@@ -7238,8 +7227,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-markdown"
-version = "0.5.4"
-source = "git+https://github.com/eas4ai/suprnova-markdown.git?tag=v0.5.4#dd25f8561897a6b218c65370ee108510b1f1f3a5"
+version = "0.5.5"
+source = "git+https://github.com/eas4ai/suprnova-markdown.git?tag=v0.5.5#1d2650a315a1f424931f2362355fc8ad9dd28b45"
 dependencies = [
  "async-trait",
  "suprnova",
@@ -7248,8 +7237,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-payments-paddle"
-version = "4.6.0"
-source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.0#cdf953217bfdae4d4a90d845ca78d14d02b54d53"
+version = "4.6.1"
+source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.1#5112862367b76a2ea3875d0135ca4ca1ec602c32"
 dependencies = [
  "async-trait",
  "chrono",
@@ -7265,8 +7254,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-payments-stripe"
-version = "4.6.0"
-source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.0#cdf953217bfdae4d4a90d845ca78d14d02b54d53"
+version = "4.6.1"
+source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.1#5112862367b76a2ea3875d0135ca4ca1ec602c32"
 dependencies = [
  "async-stripe",
  "async-stripe-client-core",
@@ -7289,8 +7278,8 @@ dependencies = [
 
 [[package]]
 name = "suprnova-web-push"
-version = "4.6.0"
-source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.0#cdf953217bfdae4d4a90d845ca78d14d02b54d53"
+version = "4.6.1"
+source = "git+https://github.com/eas4ai/suprnova.git?tag=v4.6.1#5112862367b76a2ea3875d0135ca4ca1ec602c32"
 dependencies = [
  "base64 0.22.1",
  "chrono",
@@ -7410,7 +7399,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.4.3",
+ "getrandom 0.3.4",
  "once_cell",
  "rustix",
  "windows-sys 0.61.2",
@@ -8450,18 +8439,18 @@ dependencies = [
 
 [[package]]
 name = "webpki-root-certs"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b96554aa2acc8ccdb7e1c9a58a7a68dd5d13bccc69cd124cb09406db612a1c9b"
+checksum = "58ec80e73fd8baf57bf0d9615554c75348bda990d6d5bbeab964dd068319fecb"
 dependencies = [
  "rustls-pki-types",
 ]
 
 [[package]]
 name = "webpki-roots"
-version = "1.0.9"
+version = "1.0.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7dcd9d09a39985f5344844e66b0c530a33843579125f23e21e9f0f220850f22a"
+checksum = "1c1c8e20c8a38fc7d65abfe74eb7280e4aa667e8eec8bc84996d2874810748d9"
 dependencies = [
  "rustls-pki-types",
 ]

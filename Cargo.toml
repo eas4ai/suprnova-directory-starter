@@ -1,6 +1,6 @@
 [package]
 name = "directory"
-version = "1.0.1"
+version = "1.1.0"
 edition = "2024"
 rust-version = "1.94.0"
 description = "A directory starter kit by Suprnova"
@@ -26,10 +26,10 @@ name = "console"
 path = "src/bin/console.rs"
 
 [dependencies]
-suprnova-markdown = { git = "https://github.com/eas4ai/suprnova-markdown.git", tag = "v0.5.4" }
-suprnova = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.6.0" }
-suprnova-payments-stripe = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.6.0" }
-suprnova-payments-paddle = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.6.0" }
+suprnova-markdown = { git = "https://github.com/eas4ai/suprnova-markdown.git", tag = "v0.5.5" }
+suprnova = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.6.1" }
+suprnova-payments-stripe = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.6.1" }
+suprnova-payments-paddle = { git = "https://github.com/eas4ai/suprnova.git", tag = "v4.6.1" }
 tokio = { version = "1", features = ["full"] }
 sea-orm-migration = { version = "2.0", features = ["sqlx-sqlite", "sqlx-postgres", "runtime-tokio-native-tls"] }
 sea-orm = { version = "2.0", features = ["sqlx-sqlite", "sqlx-postgres", "runtime-tokio-native-tls", "macros", "with-chrono", "postgres-use-serial-pk"] }

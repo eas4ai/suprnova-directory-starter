@@ -1,4 +1,4 @@
-![Suprnova Directory Starter Kit — build and ship a directory with Rust](assets/card.jpg)
+![Suprnova Directory Starter Kit - build and ship a directory with Rust](assets/card.jpg)
 
 # Suprnova directory starter
 
@@ -26,12 +26,12 @@ See [the roadmap](docs/spec/roadmap.md) for the current verification status.
 
 ## Prerequisites
 
-Framework and payment adapters select Suprnova tag `v4.3.0` at release commit
-`2e0c5227b9090c47894169c0d545b40eb27c3641`. See [UPGRADE.md](UPGRADE.md)
-when updating an existing installation.
+Starter version 1.1.0 selects Suprnova and payment adapter tag `v4.6.1` at release
+commit `5112862367b76a2ea3875d0135ca4ca1ec602c32`, with Markdown tag `v0.5.5`.
+See [UPGRADE.md](UPGRADE.md) when updating an existing installation.
 
 - Rust 1.95 and Cargo for the verified setup; the package declares a 1.94 minimum.
-- Bun 1.4.3 for frontend packages and database inspection.
+- Bun 1.4 for frontend packages and database inspection.
 - Node 24 for local key generation and verification. Cairn is needed only for
   specification lint and evidence recording, not to run the application.
 - A C/C++ toolchain, pkg-config and OpenSSL development headers for native dependencies.
@@ -338,7 +338,7 @@ This starter does not provide an automatic key-rotation command.
 
 Map each local plan identifier to a Stripe `price_…` and/or Paddle `pri_…` identifier.
 Mappings are separate by mode; a blank price has no fallback. The limit is 100
-plans per mode. Plan identifiers use 1–64 lowercase letters, digits, hyphens or
+plans per mode. Plan identifiers use 1-64 lowercase letters, digits, hyphens or
 underscores; credential and price fields are bounded to 512 characters.
 Remove a mapping row and save to delete it. Saving a stale form reports a conflict;
 reload the saved settings before applying your changes again.

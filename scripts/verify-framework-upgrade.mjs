@@ -55,8 +55,8 @@ try {
   // These cheap prerequisite checks identify the old configuration before an
   // expensive run. They supplement, never replace, the behavioral checks below.
   if (task === 'build') {
-    assert.match(read('Cargo.toml'), /suprnova = .*tag = "v4\.6\.0"/, 'FWU-001: framework must select v4.6.0');
-    assert.match(read('Cargo.toml'), /suprnova-markdown = .*tag = "v0.5.4"/, 'FWU-001: use the published compatible Markdown revision');
+    assert.match(read('Cargo.toml'), /suprnova = .*tag = "v4\.6\.1"/, 'FWU-001: framework must select v4.6.1');
+    assert.match(read('Cargo.toml'), /suprnova-markdown = .*tag = "v0.5.5"/, 'FWU-001: use the published compatible Markdown revision');
     run('node', ['scripts/verify-foundation.mjs', 'build']);
   } else if (task === 'migration') {
     assert.match(read('src/migrations/mod.rs'), /RbacToSpatieLayout/, 'FWU-002: existing RBAC data needs the framework compatibility migration');

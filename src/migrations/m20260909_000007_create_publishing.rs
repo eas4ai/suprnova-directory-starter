@@ -202,7 +202,7 @@ impl MigrationTrait for Migration {
                     .col(text("provider_event_id"))
                     .col(text("event_type"))
                     .col(
-                        &mut ColumnDef::new(Alias::new("raw_body"))
+                        ColumnDef::new(Alias::new("raw_body"))
                             .binary()
                             .not_null()
                             .to_owned(),

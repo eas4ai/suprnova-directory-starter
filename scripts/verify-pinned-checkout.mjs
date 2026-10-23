@@ -7,8 +7,8 @@ import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const revision = 'cdf953217bfdae4d4a90d845ca78d14d02b54d53';
-const tag = 'v4.6.0';
+const revision = '5112862367b76a2ea3875d0135ca4ca1ec602c32';
+const tag = 'v4.6.1';
 const source = resolve(process.argv[2] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const cargoHome = resolve(process.env.CARGO_HOME ?? join(homedir(), '.cargo'));
 const environment = Object.fromEntries(['PATH', 'HOME', 'RUSTUP_HOME', 'RUST_TEST_THREADS', 'RUST_MIN_STACK', 'FOUNDATION_SCRATCH_DIR', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));

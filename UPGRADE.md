@@ -1,12 +1,154 @@
 # Upgrade Guide
 
+## Suprnova 4.3.0 → 4.6.1
+
+Release `v1.1.0` moves the starter from Suprnova 4.3.0, released as `v1.0.2`,
+to 4.6.1. Rust and frontend package versions are 1.1.0. Merge the `v1.1.0` tag,
+not a branch.
+
+The framework, Stripe and Paddle adapters select tag `v4.6.1`, locked to
+`5112862367b76a2ea3875d0135ca4ca1ec602c32`. Markdown v0.5.5 selects tag
+`v0.5.5`, locked to `1d2650a315a1f424931f2362355fc8ad9dd28b45`, with the
+same framework identity. The Inertia Vue, core and Vite packages use the kit's
+`^3.8.0` ranges; `frontend/bun.lock` records their exact versions. Keep both
+lockfiles. Do not replace these dependencies with local checkouts.
+
+The targeted security refresh clears all 14 vulnerabilities reported by the old
+lock. `cargo audit` now exits zero with five maintenance warnings in transitive
+dependencies. They have no compatible newer release in the current graph; the
+[verification report](docs/upgrade-4.6.1-verification.md) records each warning,
+its dependency path and the final audit output. No vulnerability is ignored.
+
+Suprnova 4.6.1 includes the Live action debug-stack fix and the corrected kit
+page budget router and gate registration. It needs no additional application
+migration beyond the 4.4 through 4.6 changes described below.
+
+### Prepare and merge
+
+Preserve the existing environment, `APP_KEY`, `DATABASE_URL`,
+`DIRECTORY_MEDIA_ROOT`, provider credentials and price mappings. Stop web writers,
+scheduled payment/notification workers and queue workers. Retain the previous
+binaries and matching frontend/SSR artifacts. Take a consistent database, media
+and key backup using [the production procedure](README.md#production-operation).
+Do not copy a running SQLite database without its WAL, rotate the key, seed demo
+data or run fresh-install commands during an upgrade.
+
+```bash
+: "${UPGRADE_REF:?Set UPGRADE_REF to the reviewed 1.1.0 commit or published release tag}"
+git fetch upstream "$UPGRADE_REF"
+git switch -c upgrade/suprnova-4.6.1
+git merge --no-ff FETCH_HEAD
+```
+
+Keep your application's directory, billing and editorial changes when resolving
+conflicts. The Vue kit files now include the Live root document in
+`templates/app.html`, the router wrappers in `cmd/main.rs`, the shared frontend
+helpers, and named, same-origin login return paths. Include the new template in source deployments and
+build images; Askama compiles it into the binaries. The page resolver loads each page on
+demand, with shared Vue/Inertia code split from the entry to meet the page budget.
+
+### Build and migrate
+
+Use the repository's Rust toolchain, Node 24, Bun and Suprnova CLI 4.6.1.
+Upgrade an older CLI with
+`cargo install --force --git https://github.com/eas4ai/suprnova.git --tag v4.6.1 suprnova-cli`. From the repository
+root:
+
+```bash
+(cd frontend && bun install --frozen-lockfile && bun run check && bun run build && bun run build:ssr)
+cargo build --locked --release --bins
+./target/release/directory migrate
+```
+
+Deploy both binaries, `public/assets/` and `frontend/bootstrap/ssr/` together. The existing migrations still preserve signed application user
+IDs and old RBAC grants. Two appended migrations add the case-insensitive email
+index and RenderCache's generation ledger. Before migrating, check for addresses
+that differ only in case and merge those accounts deliberately; the index refuses
+duplicates. Do not discard an account to force a migration through.
+
+Magnetar also creates its eight agent-auth tables and adds
+`auth_tokens.address_digest` on first boot. On SQLite and PostgreSQL its widening
+change needs no operator step. On MySQL or MariaDB, the first 4.4-or-later boot
+widens five authentication tables and can block writes while copying them. Give
+one instance enough time to finish before starting the rest. Resolve any warning
+about a custom index leaving a column narrow before resuming sign-ins. Email
+lookups now require the exact normalized address, including accents, on those
+backends. This starter's supported verification backends remain SQLite and
+PostgreSQL; a MySQL deployment needs its own driver and migration validation.
+
+The account provider forwards 4.5's atomic `rehash_password_for_sign_in` hook, so
+sign-in can upgrade a hash without reviving credentials changed by a concurrent
+reset. Login, registration and recovery normalize email before validation, bound
+email to 254 characters and registration names to 255. Login return paths accept
+only same-origin paths. Test customized account forms against these boundaries.
+
+The router now installs Live and RenderCache after the HTTP stack, as the Vue kit
+does. `live::authorize()` owns the reserved notes-topic rule, and both bootstrap
+and the page budget test call it before installing Live routes. This directory
+starter does not add the kit's sample notes screens or expose directory/billing
+actions as tools. `/mcp` has no tools or identity resolvers; OAuth consent and
+agent-account registration remain disabled and need no new signing key.
+
+No route currently declares an Inertia cache policy. If your fork has a cacheable
+route, replace opaque shared-data providers/hooks with named shares before
+registering `Inertia::cache_page`. Classify every shared prop as public or
+per-request, including `auth`, `appearance`, `site`, `lang`, `errors` and `flash`.
+Boot now refuses a cacheable route whose shares it cannot enumerate. Do not mark
+visitor-specific values public to bypass that check.
+
+Vite-fingerprinted files now use
+`public, max-age=31536000, immutable`; other static files use
+`public, max-age=3600` unless configured otherwise. Deploy new hashed filenames
+with each build and retain old assets while old pages can reference them. Static
+asset responses no longer issue session/XSRF cookies without a session mutation.
+The default JPEG/lossy WebP quality rises from 70 to 85; existing stored media stays
+unchanged and new encodes can be larger. The CloudFront feature is enabled by the
+framework defaults but serves no publication until configured.
+
+Regenerate the client declarations after merging custom forms:
+
+```bash
+suprnova generate-types
+```
+
+Commit the generated Inertia props and tool schemas with the application. This
+starter does not register searchable framework models or recommendations, so it
+needs no search reindex, recommendation generation or ranking-digest migration.
+Its SQL directory/article search keeps its existing behavior. Custom search,
+recommendation or graph integrations must follow the 4.4 and 4.5 upgrade chapters
+before being enabled. Static publication and event sourcing remain opt-in.
+
+### Verify and roll back
+
+Start the SSR worker and web server with the existing production configuration:
+
+```bash
+node --env-file=.env frontend/bootstrap/ssr/ssr.js
+./target/release/directory serve --no-migrate
+```
+
+Keep the SSR port private. Retain the Redis, mail, queue and payment-worker
+configuration described below for the 4.3 upgrade. Verify health, existing account
+sign-in and recovery, grants and suspension, listings, articles, Markdown,
+protected media, payment reconciliation and real asset loading before reopening
+traffic. Run `tests/page_budget.rs` with built assets and the SSR worker; it audits
+the production router over the public entry pages, including Live assets.
+`scripts/verify-framework-upgrade.mjs` covers build, migration, auth, HTTP, console
+and regression behavior. Local checks cannot establish live charges, external
+SMTP/Redis, cloud storage or your production database and TLS configuration.
+
+If verification fails, stop all writers and workers. Restore the previous
+application with its matching frontend/SSR artifacts and configuration, plus the
+matching database, media and key backup. Do not pair old binaries with a migrated
+database or assume down migrations restore removed data. Preserve Redis work and
+logs; do not let old workers consume new framework jobs or replay payment events
+blindly.
+
 ## Suprnova 3.2.1 → 4.3.0 (also from 4.2.0)
 
-This is the current, unreleased framework upgrade. Rust and frontend package
-versions are 1.0.1; no new starter release tag is implied. The existing `v1.0.1`
-tag still identifies the earlier Suprnova 3.2.1 release. Select a reviewed commit
-containing this upgrade, or a later explicitly published starter release, rather
-than fetching that old tag expecting the 4.3 code.
+This upgrade was released as `v1.0.2`; its Rust and frontend package versions
+were 1.0.1. The `v1.0.1` tag holds the earlier Suprnova 3.2.1 release, so fetch
+`v1.0.2` for the 4.3 code.
 
 The framework, Stripe and Paddle adapters select tag `v4.3.0`, locked to
 `2e0c5227b9090c47894169c0d545b40eb27c3641`. Markdown v0.5.0 is pinned to

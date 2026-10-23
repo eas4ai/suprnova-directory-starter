@@ -27,7 +27,9 @@ impl MigratorTrait for LegacyMigrator {
             .into_iter()
             .filter_map(|migration| match migration.name() {
                 "m20261005_000007_rbac_spatie_layout"
-                | "m20261005_000004_create_sessions_table" => None,
+                | "m20261005_000004_create_sessions_table"
+                | "m20261019_000003_users_email_unique_ignoring_case_5"
+                | "m20260903_000000_create_render_cache_tables" => None,
                 "m20260610_000001_create_rbac_tables" => {
                     Some(Box::new(old_rbac::Migration) as Box<dyn MigrationTrait>)
                 }
@@ -139,6 +141,28 @@ async fn assert_layout(db: &DatabaseConnection) {
     );
 }
 
+fn assert_existing_database_preserved(
+    before: &BTreeMap<String, Vec<String>>,
+    after: &BTreeMap<String, Vec<String>>,
+) {
+    for entry in &before["schema"] {
+        assert!(
+            after["schema"].contains(entry),
+            "removed schema object: {entry}"
+        );
+    }
+    for (table, rows) in before {
+        if table == "schema" {
+            continue;
+        }
+        if table == "seaql_migrations" {
+            assert!(rows.iter().all(|row| after[table].contains(row)));
+        } else {
+            assert_eq!(rows, &after[table], "migration changed {table}");
+        }
+    }
+}
+
 #[tokio::test]
 async fn empty_and_populated_databases_upgrade_without_data_or_permission_loss() {
     assert_eq!(std::env::var("APP_ENV").as_deref(), Ok("test"));
@@ -187,7 +211,9 @@ async fn empty_and_populated_databases_upgrade_without_data_or_permission_loss()
     assert_layout(db).await;
     let after = snapshot(db).await;
     if baseline == "4.2.0" {
-        assert_eq!(before, after, "4.3 changed the existing 4.2 schema or data");
+        // The 4.6 upgrade adds an email index and the RenderCache ledger.
+        // Existing schema objects, migration receipts and business rows stay intact.
+        assert_existing_database_preserved(&before, &after);
     }
     for table in [
         "users",

@@ -76,6 +76,20 @@ impl UserProvider for AccountUserProvider {
             .await
     }
 
+    async fn rehash_password_for_sign_in(
+        &self,
+        user: &dyn Authenticatable,
+        credentials: &Value,
+        recorded_epoch: Option<u64>,
+    ) -> Result<Option<Arc<dyn Authenticatable>>, FrameworkError> {
+        Self::active_user(
+            self.inner
+                .rehash_password_for_sign_in(user, credentials, recorded_epoch)
+                .await?,
+        )
+        .await
+    }
+
     // Suspension limits sign-in and protected actions. Recovery and verification
     // keep their framework-owned token and verified-email requirements.
     async fn retrieve_by_email(&self, email: &str) -> Result<Option<AuthFlowUser>, FrameworkError> {

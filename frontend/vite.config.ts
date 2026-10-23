@@ -4,6 +4,8 @@ import tailwindcss from '@tailwindcss/vite'
 import inertia from '@inertiajs/vite'
 
 export default defineConfig(({ isSsrBuild }) => ({
+  // Load split chunks beside the entry URL the server supplies, including path prefixes.
+  base: './',
   plugins: [inertia({ ssr: { entry: 'src/ssr.ts', sourcemap: false } }), tailwindcss(), vue()],
   server: {
     // `suprnova serve` sets VITE_PORT to the port it resolved (the

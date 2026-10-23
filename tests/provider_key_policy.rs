@@ -5,6 +5,7 @@ use directory::billing::{self, Mode, SaveSettings};
 use suprnova::{DB, serde_json::json};
 
 #[tokio::test(flavor = "current_thread")]
+#[ignore = "Started with persisted credentials by verify-provider-administration.mjs"]
 async fn deployment_key_policy() {
     let _mail = common::setup().await;
     let before: String = DB::scalar(

@@ -1,4 +1,5 @@
 pub mod actions;
+pub mod agents;
 pub mod articles;
 pub mod audit;
 pub mod billing;
@@ -6,7 +7,9 @@ pub mod bootstrap;
 pub mod commands;
 pub mod config;
 pub mod controllers;
+pub mod email_address;
 pub mod listings;
+pub mod live;
 pub mod middleware;
 pub mod migrations;
 pub mod models;

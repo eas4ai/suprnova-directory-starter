@@ -36,8 +36,8 @@ function verifyPin(root) {
   });
   const packages = JSON.parse(metadata).packages;
   const app = packages.find(pkg => pkg.name === 'directory');
-  const revision = '2e0c5227b9090c47894169c0d545b40eb27c3641';
-  const selectedSource = `git+https://github.com/eas4ai/suprnova.git?tag=v4.3.0`;
+  const revision = 'cdf953217bfdae4d4a90d845ca78d14d02b54d53';
+  const selectedSource = `git+https://github.com/eas4ai/suprnova.git?tag=v4.6.0`;
   for (const name of ['suprnova', 'suprnova-payments-stripe', 'suprnova-payments-paddle']) {
     assert.equal(app?.dependencies.find(dependency => dependency.name === name)?.source,
       selectedSource, `${name} must use the agreed repaired framework revision`);
@@ -47,10 +47,10 @@ function verifyPin(root) {
       `${name} must resolve the published framework source without a local override`);
   }
   const markdown = packages.filter(pkg => pkg.name === 'suprnova-markdown');
-  const markdownRevision = 'c80dafb5f05e6de633472f73beec4d5101883389';
+  const markdownRevision = 'dd25f8561897a6b218c65370ee108510b1f1f3a5';
   assert.equal(markdown.length, 1, 'Markdown must have exactly one dependency identity');
   assert.equal(markdown[0].source,
-    `git+https://github.com/eas4ai/suprnova-markdown.git?rev=${markdownRevision}#${markdownRevision}`,
+    `git+https://github.com/eas4ai/suprnova-markdown.git?tag=v0.5.4#${markdownRevision}`,
     'Markdown must resolve the published compatible revision without a local override');
   assert.deepEqual(app.targets.filter(target => target.kind.includes('bin')).map(target => target.name).sort(), ['console', 'directory']);
   const lock = readFileSync(join(root, 'Cargo.lock'), 'utf8');
@@ -76,7 +76,7 @@ function build(root) {
 function database(root) {
   const databasePath = join(root, 'database.db');
   assert.ok(!existsSync(databasePath), 'Migration check must start with an empty database');
-  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'RUST_TEST_THREADS', 'RUST_MIN_STACK', 'FOUNDATION_SCRATCH_DIR', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
     APP_ENV: 'test',
     APP_DEBUG: 'false',
@@ -99,9 +99,9 @@ function database(root) {
 }
 
 function accounts(root, suite = 'foundation_accounts') {
-  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'RUST_TEST_THREADS', 'RUST_MIN_STACK', 'FOUNDATION_SCRATCH_DIR', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
-    TMPDIR: root, APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
+    TMPDIR: process.env.TMPDIR ?? root, APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
     MAIL_FROM: 'test@example.test', DATABASE_URL: `sqlite://${join(root, 'accounts.db')}`,
     DB_LOGGING: 'false', SESSION_SECURE: 'false',
     CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',

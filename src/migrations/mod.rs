@@ -41,6 +41,10 @@ impl MigratorTrait for Migrator {
             Box::new(m20260909_000012_create_demo_seed::Migration),
             Box::new(m20260910_000013_create_seo_controls::Migration),
             Box::new(CreateSessionsTable::new(SessionUserKey::Integer)),
+            Box::new(suprnova::auth::migrations::UniqueEmailIgnoringCase::on(
+                "users", "email",
+            )),
+            Box::new(suprnova::render_cache::migration::Migration),
         ]
     }
 }

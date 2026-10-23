@@ -7,11 +7,11 @@ import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const revision = '2e0c5227b9090c47894169c0d545b40eb27c3641';
-const tag = 'v4.3.0';
+const revision = 'cdf953217bfdae4d4a90d845ca78d14d02b54d53';
+const tag = 'v4.6.0';
 const source = resolve(process.argv[2] ?? join(dirname(fileURLToPath(import.meta.url)), '..'));
 const cargoHome = resolve(process.env.CARGO_HOME ?? join(homedir(), '.cargo'));
-const environment = Object.fromEntries(['PATH', 'HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+const environment = Object.fromEntries(['PATH', 'HOME', 'RUSTUP_HOME', 'RUST_TEST_THREADS', 'RUST_MIN_STACK', 'FOUNDATION_SCRATCH_DIR', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
 Object.assign(environment, {
   CARGO_HOME: cargoHome,
   CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2',
@@ -122,7 +122,7 @@ try {
   const scratch = resolve(process.env.FOUNDATION_SCRATCH_DIR ?? join(source, '../scratchpads'));
   mkdirSync(scratch, { recursive: true }); temporary = mkdtempSync(join(scratch, 'pinned-checkout-'));
   const working = join(temporary, 'repository'); mkdirSync(working);
-  environment.TMPDIR = temporary;
+  environment.TMPDIR = process.env.TMPDIR ?? temporary;
   const archive = join(temporary, 'source.tar');
   await run('git', ['-C', checkout, 'archive', '--format=tar', `--output=${archive}`, revision]);
   await run('tar', ['-xf', archive, '-C', working]);

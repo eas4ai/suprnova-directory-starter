@@ -28,12 +28,16 @@ use std::sync::Arc;
 #[allow(unused_imports)]
 use suprnova::{
     App, Auth, AuthConfig, AuthManager, CsrfMiddleware, DB, Frontend, IncludeMiddleware, Inertia,
-    InertiaConfig, LocaleMiddleware, LocaleShare, SessionConfig, SessionMiddleware, bind,
-    global_middleware, singleton,
+    InertiaConfig, InertiaRootTemplate, LocaleMiddleware, LocaleShare, SessionConfig,
+    SessionMiddleware, bind, global_middleware, singleton,
 };
 
 use crate::accounts::provider::AccountUserProvider;
 use crate::middleware;
+
+/// The root document used by each Inertia first visit.
+#[suprnova::inertia_root(path = "app.html")]
+pub struct AppDocument;
 
 /// Register process-wide services.
 ///
@@ -61,6 +65,9 @@ pub async fn register() {
     Auth::register_provider("users", Arc::new(AccountUserProvider::new()))
         .expect("register users provider");
 
+    crate::live::authorize();
+    App::singleton(crate::live::registry().expect("Live component registry"));
+
     // Example: Register a trait binding with runtime config
     // bind!(dyn Database, PostgresDB::new());
 
@@ -85,6 +92,18 @@ pub async fn register() {
 /// (the version middleware re-flashes the session before it bounces a
 /// stale client), locale and CSRF after the session they both depend on.
 pub fn register_http_stack() {
+    let catalog = suprnova::live::assets::live_asset_catalog().expect("Live async asset catalog");
+    let artifact = catalog.artifact(suprnova::live::assets::ArtifactRole::AsyncEsm);
+    suprnova::View::share(
+        "live_async_url",
+        format!(
+            "{}/{}/{}",
+            suprnova::live::assets::LIVE_ASSET_PATH_PREFIX,
+            catalog.identity(),
+            artifact.file()
+        ),
+    );
+    suprnova::View::share("live_async_sri", artifact.sri().to_owned());
     // Global middleware (runs on every request in registration order)
     // Run outside sessions so the policy also sees their final cookie headers.
     global_middleware!(middleware::private_pages::PrivatePages);
@@ -145,6 +164,7 @@ pub fn register_http_stack() {
     Inertia::install(
         &InertiaConfig::new()
             .frontend(Frontend::Vue)
+            .root_template(InertiaRootTemplate::of::<AppDocument>())
             .entry_points(["src/app.css"]),
     )
     .expect("Inertia install failed (production needs a built frontend manifest)");

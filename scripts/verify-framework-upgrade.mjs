@@ -29,12 +29,12 @@ function run(command, args, cwd = source, env = process.env, expected = 0) {
 
 function isolated() {
   working = snapshot(source, `directory-framework-${task}-`);
-  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'RUST_TEST_THREADS', 'RUST_MIN_STACK', 'FOUNDATION_SCRATCH_DIR', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
     APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
     APP_KEY: randomBytes(32).toString('base64url'), MAIL_FROM: 'test@example.test',
     DATABASE_URL: `sqlite://${join(working, `${task}.db`)}`, DB_LOGGING: 'false',
-    SESSION_SECURE: 'false', TMPDIR: working,
+    SESSION_SECURE: 'false', TMPDIR: process.env.TMPDIR ?? working,
     DIRECTORY_MEDIA_ROOT: join(working, 'storage/private/directory'),
     CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',
     CARGO_INCREMENTAL: '0', CARGO_TARGET_DIR: join(source, 'target'),
@@ -55,8 +55,8 @@ try {
   // These cheap prerequisite checks identify the old configuration before an
   // expensive run. They supplement, never replace, the behavioral checks below.
   if (task === 'build') {
-    assert.match(read('Cargo.toml'), /suprnova = .*tag = "v4\.3\.0"/, 'FWU-001: framework must select v4.3.0');
-    assert.match(read('Cargo.toml'), /suprnova-markdown = .*rev = "c80dafb5f05e6de633472f73beec4d5101883389"/, 'FWU-001: use the published compatible Markdown revision');
+    assert.match(read('Cargo.toml'), /suprnova = .*tag = "v4\.6\.0"/, 'FWU-001: framework must select v4.6.0');
+    assert.match(read('Cargo.toml'), /suprnova-markdown = .*tag = "v0.5.4"/, 'FWU-001: use the published compatible Markdown revision');
     run('node', ['scripts/verify-foundation.mjs', 'build']);
   } else if (task === 'migration') {
     assert.match(read('src/migrations/mod.rs'), /RbacToSpatieLayout/, 'FWU-002: existing RBAC data needs the framework compatibility migration');
@@ -78,6 +78,7 @@ try {
     run('bun', ['run', '--cwd', 'frontend', 'build:ssr'], working, env);
     run('cargo', ['build', '--locked', '--bins'], working, env);
     run('cargo', ['test', '--locked', '--test', 'framework_upgrade_cache', '--', '--nocapture'], working, { ...env, DATABASE_URL: 'sqlite::memory:' });
+    run('node', ['scripts/with-ssr.mjs', 'cargo', 'test', '--locked', '--test', 'page_budget', '--', '--nocapture'], working, env);
     run('node', ['scripts/with-ssr.mjs', 'node', 'frontend/tests/framework-upgrade.mjs'], working, env);
   } else if (task === 'console') {
     assert.match(read('src/bin/console.rs'), /ExitCode::from\([^)]*\.exit_code\(\)/, 'FWU-005: preserve the command exit code');

@@ -180,6 +180,20 @@ async fn required_rehash_is_forwarded() {
     assert!(!hashing::needs_rehash(&rewritten.password));
     LaravelDatabase::share(false);
 
+    // Exercise the new sign-in hook through the session guard, not just the provider.
+    let signing_in = account("rehash-sign-in@example.test").await;
+    LaravelDatabase::share(true);
+    let mut client = Client::new();
+    login(&mut client, &signing_in, PASSWORD).await;
+    LaravelDatabase::share(false);
+    let signed_in = User::find_by_email(&signing_in.email)
+        .await
+        .unwrap()
+        .unwrap();
+    assert!(signed_in.password.starts_with("$2y$"));
+    assert_ne!(signed_in.password, signing_in.password);
+    assert!(hashing::verify(PASSWORD, &signed_in.password).unwrap());
+
     let blocked = account("rehash-storage-failure@example.test").await;
     let db = DB::connection().unwrap();
     db.inner().execute_unprepared("CREATE TRIGGER reject_password_update BEFORE UPDATE OF password ON users BEGIN SELECT RAISE(ABORT, 'fixture password storage failure'); END").await.unwrap();
@@ -314,11 +328,104 @@ async fn suspension_blocks_existing_and_new_sign_ins() {
     );
 }
 
+async fn normalized_email_and_safe_login_returns() {
+    let mut client = Client::new();
+    assert_eq!(client.get("/register").await.status, 200);
+    let registered = client
+        .post(
+            "/register",
+            json!({
+                "name": "Normalized mailbox", "email": "  Mixed.Case@Example.Test  ",
+                "password": PASSWORD, "password_confirmation": PASSWORD,
+            }),
+        )
+        .await;
+    assert_eq!(registered.status, 302, "{}", registered.body);
+    let user = User::find_by_email("MIXED.CASE@EXAMPLE.TEST")
+        .await
+        .unwrap()
+        .unwrap();
+    assert_eq!(user.email, "mixed.case@example.test");
+
+    let mut guest = Client::new();
+    guest.get("/login?return_to=/dashboard/listings").await;
+    let signed_in = guest
+        .post(
+            "/login",
+            json!({"email": " MIXED.CASE@EXAMPLE.TEST ", "password": PASSWORD}),
+        )
+        .await;
+    assert_eq!(signed_in.status, 302);
+    assert_eq!(signed_in.location.as_deref(), Some("/dashboard/listings"));
+
+    let mut inertia = Client::new();
+    inertia.get("/login?return_to=/dashboard/listings").await;
+    let signed_in = inertia
+        .inertia_post("/login", json!({"email": user.email, "password": PASSWORD}))
+        .await;
+    assert_eq!(signed_in.status, 409);
+    assert_eq!(
+        signed_in.headers["x-inertia-location"],
+        "/dashboard/listings"
+    );
+    let rejected = guest.get("/login?return_to=//outside.example/path").await;
+    assert_eq!(rejected.location.as_deref(), Some("/dashboard"));
+
+    let mut external = Client::new();
+    external
+        .get("/login?return_to=https://outside.example/path")
+        .await;
+    let signed_in = external
+        .post("/login", json!({"email": user.email, "password": PASSWORD}))
+        .await;
+    assert_eq!(signed_in.location.as_deref(), Some("/dashboard"));
+
+    assert_inertia_validation_errors(&user.email).await;
+}
+
+async fn assert_inertia_validation_errors(registered_email: &str) {
+    let mut duplicate = Client::new();
+    for (path, body, field) in [
+        (
+            "/register",
+            json!({
+                "name": "Duplicate mailbox", "email": registered_email.to_ascii_uppercase(),
+                "password": PASSWORD, "password_confirmation": PASSWORD,
+            }),
+            "email",
+        ),
+        (
+            "/register",
+            json!({
+                "name": "n".repeat(256), "email": "long-name@example.test",
+                "password": PASSWORD, "password_confirmation": PASSWORD,
+            }),
+            "name",
+        ),
+        (
+            "/forgot-password",
+            json!({
+                "email": format!("{}@example.test", "a".repeat(250)),
+            }),
+            "email",
+        ),
+    ] {
+        duplicate.get(path).await;
+        let refused = duplicate.inertia_post(path, body).await;
+        assert_eq!(refused.status, 303);
+        assert_eq!(refused.location.as_deref(), Some(path));
+        let page = duplicate.inertia_get(path).await;
+        let page: suprnova::serde_json::Value = suprnova::serde_json::from_str(&page.body).unwrap();
+        assert!(page["props"]["errors"][field].is_string());
+    }
+}
+
 #[tokio::test]
 async fn upgrade_preserves_authentication_boundaries() {
-    common::setup().await;
+    let _mail = common::setup().await;
     mailbox_verification_preserves_the_atomic_provider_boundary().await;
     required_rehash_is_forwarded().await;
+    normalized_email_and_safe_login_returns().await;
     csrf_rotation_rejects_old_tokens().await;
     password_change_rejects_existing_sessions().await;
     suspension_blocks_existing_and_new_sign_ins().await;

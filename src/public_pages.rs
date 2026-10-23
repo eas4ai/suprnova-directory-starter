@@ -277,6 +277,9 @@ pub fn config() -> Result<InertiaConfig, FrameworkError> {
     }
     let config = InertiaConfig::new()
         .frontend(Frontend::Vue)
+        .root_template(suprnova::InertiaRootTemplate::of::<
+            crate::bootstrap::AppDocument,
+        >())
         .entry_points(["src/app.css"])
         .ssr(url)
         .ssr_timeout(std::time::Duration::from_secs(3))

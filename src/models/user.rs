@@ -50,7 +50,7 @@ impl User {
     /// Find a user by their email address.
     pub async fn find_by_email(email: &str) -> Result<Option<Self>, FrameworkError> {
         <Self as suprnova::eloquent::Model>::query()
-            .filter("email", email)
+            .where_raw("LOWER(email) = LOWER(?)", vec![email.into()])
             .first()
             .await
     }

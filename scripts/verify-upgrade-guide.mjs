@@ -20,27 +20,27 @@ try {
   assert.ok(prose.includes(`package versions are ${version}`), 'Guide package versions differ');
   assert.ok(prose.includes('no new starter release tag is implied'), 'Do not relabel the existing starter release');
 
-  const frameworkRevision = '2e0c5227b9090c47894169c0d545b40eb27c3641';
-  const markdownRevision = 'c80dafb5f05e6de633472f73beec4d5101883389';
+  const frameworkRevision = 'cdf953217bfdae4d4a90d845ca78d14d02b54d53';
+  const markdownRevision = 'dd25f8561897a6b218c65370ee108510b1f1f3a5';
   for (const name of ['suprnova', 'suprnova-payments-stripe', 'suprnova-payments-paddle', 'suprnova-markdown']) {
     const revision = name === 'suprnova-markdown' ? markdownRevision : frameworkRevision;
     const dependency = manifest.split('\n').find(line => line.startsWith(`${name} = `));
     const isMarkdown = name === 'suprnova-markdown';
-    const selector = isMarkdown ? `rev = "${revision}"` : 'tag = "v4.3.0"';
+    const selector = isMarkdown ? `tag = "v0.5.4"` : 'tag = "v4.6.0"';
     assert.ok(dependency?.includes(selector), `${name} source selector differs`);
     const locked = lock.split('[[package]]').find(block => block.includes(`\nname = "${name}"\n`));
-    const lockedSelector = isMarkdown ? `rev=${revision}` : 'tag=v4.3.0';
+    const lockedSelector = isMarkdown ? `tag=v0.5.4` : 'tag=v4.6.0';
     assert.ok(locked?.includes(`?${lockedSelector}#${revision}`), `${name} lock revision differs`);
     assert.ok(guide.includes(`\`${revision}\``), `Guide omits ${name} revision`);
-    if (name === 'suprnova') assert.ok(locked.includes('\nversion = "4.3.0"\n'), 'Framework version differs');
+    if (name === 'suprnova') assert.ok(locked.includes('\nversion = "4.6.0"\n'), 'Framework version differs');
   }
-  assert.ok(guide.includes('Suprnova 3.2.1 → 4.3.0'), 'Framework upgrade is missing');
-  assert.ok(guide.includes('Markdown v0.5.0'), 'Markdown release is missing');
+  assert.ok(guide.includes('Suprnova 4.3.0 → 4.6.0'), 'Framework upgrade is missing');
+  assert.ok(guide.includes('Markdown v0.5.4'), 'Markdown release is missing');
   const frontend = JSON.parse(read('frontend/package.json'));
   for (const name of ['@inertiajs/core', '@inertiajs/vue3', '@inertiajs/vite']) {
-    assert.equal(frontend.dependencies?.[name] ?? frontend.devDependencies?.[name], '3.8.0', `${name} version differs`);
+    assert.equal(frontend.dependencies?.[name] ?? frontend.devDependencies?.[name], '^3.8.0', `${name} version differs`);
   }
-  assert.ok(prose.includes('Inertia Vue, core and Vite packages are pinned to 3.8.0'), 'Guide omits Inertia versions');
+  assert.ok(prose.includes("The Inertia Vue, core and Vite packages use the kit's `^3.8.0` ranges"), 'Guide omits Inertia versions');
 
   for (const boundary of [
     'APP_KEY', 'DATABASE_URL', 'DIRECTORY_MEDIA_ROOT', 'matching encryption key',

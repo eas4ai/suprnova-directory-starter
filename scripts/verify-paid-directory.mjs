@@ -30,12 +30,12 @@ function run(command, args, env) {
 try {
   assert.ok(requirements, 'Choose directory or payments verification.');
   working = snapshot(source, 'directory-paid-');
-  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'RUST_TEST_THREADS', 'RUST_MIN_STACK', 'FOUNDATION_SCRATCH_DIR', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
     APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
     APP_KEY: randomBytes(32).toString('base64url'), MAIL_FROM: 'test@example.test',
     DATABASE_URL: `sqlite://${join(working, 'directory.db')}`, DB_LOGGING: 'false', SESSION_SECURE: 'false',
-    DIRECTORY_MEDIA_ROOT: join(working, 'storage/private/directory'), TMPDIR: working,
+    DIRECTORY_MEDIA_ROOT: join(working, 'storage/private/directory'), TMPDIR: process.env.TMPDIR ?? working,
     CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',
     CARGO_INCREMENTAL: '0', CARGO_TARGET_DIR: join(source, 'target'),
   });

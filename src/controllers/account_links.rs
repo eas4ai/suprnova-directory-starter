@@ -61,10 +61,18 @@ pub struct ResetPasswordProps {
 
 #[derive(Deserialize, Validate)]
 pub struct SendResetRequest {
-    #[validate(email(message = "Enter a valid email address."))]
+    #[validate(
+        email(message = "Enter a valid email address."),
+        length(max = 254, message = "Email must be at most 254 characters.")
+    )]
     pub email: String,
 }
-impl FormRequest for SendResetRequest {}
+impl FormRequest for SendResetRequest {
+    fn prepare_for_validation(req: &mut Request) -> Result<(), FrameworkError> {
+        req.transform_input("email", |email| crate::email_address::normalize(&email));
+        Ok(())
+    }
+}
 
 #[derive(Deserialize, Validate)]
 pub struct ResetPasswordRequest {

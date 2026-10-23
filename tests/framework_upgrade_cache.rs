@@ -1,7 +1,29 @@
+#[allow(dead_code)] // This shared fixture also serves other integration suites.
 mod common;
 
 use common::Client;
 use suprnova::{HttpResponse, serde_json::json};
+
+async fn assert_immutable_build_assets(client: &mut Client) {
+    let manifest: suprnova::serde_json::Value = suprnova::serde_json::from_str(
+        &std::fs::read_to_string("public/assets/.vite/manifest.json").unwrap(),
+    )
+    .unwrap();
+    for entry in manifest.as_object().unwrap().values() {
+        let file = entry["file"].as_str().unwrap();
+        let asset = client.get(&format!("/assets/{file}")).await;
+        assert_eq!(asset.status, 200, "{file}");
+        assert_eq!(
+            asset.headers["cache-control"], "public, max-age=31536000, immutable",
+            "{file}"
+        );
+        assert_eq!(
+            asset.headers.get_all("set-cookie").iter().count(),
+            0,
+            "{file}"
+        );
+    }
+}
 
 #[tokio::test]
 async fn public_responses_omit_cookies_and_session_writes_become_private() {
@@ -18,6 +40,7 @@ async fn public_responses_omit_cookies_and_session_writes_become_private() {
         })
         .into();
     let mut client = Client::with_router(router);
+    assert_immutable_build_assets(&mut client).await;
     let public = client.get("/__cache_fixture").await;
     assert_eq!(public.status, 200);
     assert_eq!(public.headers["cache-control"], "public, max-age=60");

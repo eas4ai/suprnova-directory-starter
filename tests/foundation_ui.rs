@@ -1,3 +1,4 @@
+#[allow(dead_code)] // This shared fixture also serves other integration suites.
 mod common;
 use common::Client;
 use directory::models::user::User;

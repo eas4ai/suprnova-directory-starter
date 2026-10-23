@@ -36,12 +36,18 @@ impl Install {
         command
             .current_dir(&self.path)
             .env_clear()
+            .env("TMPDIR", std::env::temp_dir())
             .env("APP_ENV", environment)
             .env("APP_NAME", "Demo test")
             .env("APP_URL", "https://demo.example.test")
             .env("DATABASE_URL", &self.url)
             .env("MAIL_MAILER", "log")
             .arg("directory:demo");
+        for key in ["RUST_MIN_STACK", "RUST_TEST_THREADS"] {
+            if let Some(value) = std::env::var_os(key) {
+                command.env(key, value);
+            }
+        }
         if override_production {
             command.arg("--allow-production");
         }

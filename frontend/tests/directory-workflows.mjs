@@ -164,7 +164,9 @@ try {
   await visitor.getByRole('button', { name: 'Search', exact: true }).click();
   // The unfiltered page already has two cards. Wait for the submitted query's
   // document and locale hydration before editing the next form.
-  await expect(visitor).toHaveURL(origin + '/listings?q=Pagination&category=software');
+  await expect(visitor).toHaveURL(url => url.origin === origin
+    && url.pathname === '/listings' && url.searchParams.size === 2
+    && url.searchParams.get('q') === 'Pagination' && url.searchParams.get('category') === 'software');
   await visitor.waitForLoadState('networkidle');
   await expect(visitor.locator('.directory-card')).toHaveCount(2);
   await visitor.getByLabel('Search listings', { exact: true }).fill('No public listing matches this fixture');

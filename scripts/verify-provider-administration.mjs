@@ -31,9 +31,9 @@ function run(label, command, args, env, expected = 0) {
 
 try {
   working = snapshot(source, 'directory-providers-');
-  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
+  const env = Object.fromEntries(['PATH', 'HOME', 'CARGO_HOME', 'RUSTUP_HOME', 'RUST_TEST_THREADS', 'RUST_MIN_STACK', 'FOUNDATION_SCRATCH_DIR', 'TMPDIR'].filter(key => process.env[key]).map(key => [key, process.env[key]]));
   Object.assign(env, {
-    TMPDIR: working, APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
+    TMPDIR: process.env.TMPDIR ?? working, APP_ENV: 'test', APP_DEBUG: 'false', APP_URL: 'http://directory.test',
     APP_KEY: randomBytes(32).toString('base64url'), MAIL_FROM: 'test@example.test',
     DATABASE_URL: `sqlite://${join(working, 'providers.db')}`, DB_LOGGING: 'false', SESSION_SECURE: 'false',
     CARGO_BUILD_JOBS: process.env.CARGO_BUILD_JOBS ?? '2', CARGO_PROFILE_DEV_DEBUG: '0',
@@ -48,7 +48,7 @@ try {
   run('first administrator grant', consoleBin, ['admin:access', 'grant', '--user-id', userId], env);
   run('idempotent administrator grant', consoleBin, ['admin:access', 'grant', '--user-id', userId], env);
   run('unknown administrator rejected', consoleBin, ['admin:access', 'grant', '--user-id', '9223372036854775807'], env, 1);
-  const keyProbe = ['test', '--locked', '--test', 'provider_key_policy', '--', '--nocapture'];
+  const keyProbe = ['test', '--locked', '--test', 'provider_key_policy', '--', '--ignored', '--nocapture'];
   run('restart with the original key', 'cargo', keyProbe, { ...env, BILLING_KEY_EXPECT: 'accept' });
   for (const [name, key] of [['missing', ''], ['default', Buffer.alloc(32).toString('base64url')], ['wrong', randomBytes(32).toString('base64url')]]) {
     const probeEnv = { ...env, APP_KEY: key, BILLING_KEY_EXPECT: 'reject' };

@@ -26,8 +26,8 @@ See [the roadmap](docs/spec/roadmap.md) for the current verification status.
 
 ## Prerequisites
 
-Starter version 1.1.0 selects Suprnova and payment adapter tag `v4.6.1` at release
-commit `5112862367b76a2ea3875d0135ca4ca1ec602c32`, with Markdown tag `v0.5.5`.
+Starter version 1.1.1 selects Suprnova and payment adapter tag `v4.6.2` at release
+commit `1c8b2d07b65b120337b06c975522f850a340a418`, with Markdown tag `v0.5.6`.
 See [UPGRADE.md](UPGRADE.md) when updating an existing installation.
 
 - Rust 1.95 and Cargo for the verified setup; the package declares a 1.94 minimum.

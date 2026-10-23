@@ -1,5 +1,13 @@
 # Upgrade Guide
 
+## Suprnova Directory Starter 1.1.0 → 1.1.1
+
+Suprnova 4.6.2 and suprnova-markdown 0.5.6, which add to the framework's
+search and error surfaces and change nothing a deployed copy of this starter
+uses. Pin `suprnova` to `tag = "v4.6.2"` and `suprnova-markdown` to
+`tag = "v0.5.6"` in `Cargo.toml`, run `cargo update -p suprnova -p suprnova-markdown`,
+and redeploy. Nothing else changes.
+
 ## Suprnova 4.3.0 → 4.6.1
 
 Release `v1.1.0` moves the starter from Suprnova 4.3.0, released as `v1.0.2`,

@@ -48,11 +48,11 @@ impl MigrationTrait for Migration {
             Table::create()
                 .table(Alias::new("article_media"))
                 .col(text("id").primary_key())
-                .col(&mut integer("owner_id"))
-                .col(&mut text("storage_key"))
-                .col(&mut integer("width"))
-                .col(&mut integer("height"))
-                .col(&mut integer("created_at"))
+                .col(integer("owner_id"))
+                .col(text("storage_key"))
+                .col(integer("width"))
+                .col(integer("height"))
+                .col(integer("created_at"))
                 .foreign_key(&mut foreign("article_media", "owner_id", "users", "id"))
                 .to_owned(),
         )
@@ -60,15 +60,15 @@ impl MigrationTrait for Migration {
         m.create_table(
             Table::create()
                 .table(Alias::new("articles"))
-                .col(&mut id())
-                .col(&mut integer("author_id"))
-                .col(&mut text("slug"))
-                .col(&mut integer("version"))
-                .col(&mut nullable(integer("current_revision_id")))
-                .col(&mut nullable(integer("published_revision_id")))
-                .col(&mut nullable(integer("published_at")))
-                .col(&mut integer("created_at"))
-                .col(&mut integer("updated_at"))
+                .col(id())
+                .col(integer("author_id"))
+                .col(text("slug"))
+                .col(integer("version"))
+                .col(nullable(integer("current_revision_id")))
+                .col(nullable(integer("published_revision_id")))
+                .col(nullable(integer("published_at")))
+                .col(integer("created_at"))
+                .col(integer("updated_at"))
                 .foreign_key(&mut foreign("articles", "author_id", "users", "id"))
                 .to_owned(),
         )
@@ -76,16 +76,16 @@ impl MigrationTrait for Migration {
         m.create_table(
             Table::create()
                 .table(Alias::new("article_revisions"))
-                .col(&mut id())
-                .col(&mut integer("article_id"))
-                .col(&mut text("slug"))
-                .col(&mut text("title"))
-                .col(&mut text("summary"))
-                .col(&mut text("search_text"))
-                .col(&mut text("body"))
-                .col(&mut nullable(text("media_id")))
-                .col(&mut text("media_alt"))
-                .col(&mut integer("created_at"))
+                .col(id())
+                .col(integer("article_id"))
+                .col(text("slug"))
+                .col(text("title"))
+                .col(text("summary"))
+                .col(text("search_text"))
+                .col(text("body"))
+                .col(nullable(text("media_id")))
+                .col(text("media_alt"))
+                .col(integer("created_at"))
                 .foreign_key(&mut foreign(
                     "article_revisions",
                     "article_id",
@@ -105,7 +105,7 @@ impl MigrationTrait for Migration {
             Table::create()
                 .table(Alias::new("article_slugs"))
                 .col(text("slug").primary_key())
-                .col(&mut integer("article_id"))
+                .col(integer("article_id"))
                 .foreign_key(&mut foreign(
                     "article_slugs",
                     "article_id",
@@ -118,12 +118,12 @@ impl MigrationTrait for Migration {
         m.create_table(
             Table::create()
                 .table(Alias::new("article_terms"))
-                .col(&mut id())
-                .col(&mut text("kind"))
-                .col(&mut text("slug"))
-                .col(&mut text("name"))
+                .col(id())
+                .col(text("kind"))
+                .col(text("slug"))
+                .col(text("name"))
                 .col(ColumnDef::new(Alias::new("active")).boolean().not_null())
-                .col(&mut integer("version"))
+                .col(integer("version"))
                 .index(
                     Index::create()
                         .unique()
@@ -136,8 +136,8 @@ impl MigrationTrait for Migration {
         m.create_table(
             Table::create()
                 .table(Alias::new("article_revision_terms"))
-                .col(&mut integer("revision_id"))
-                .col(&mut integer("term_id"))
+                .col(integer("revision_id"))
+                .col(integer("term_id"))
                 .primary_key(
                     Index::create()
                         .col(Alias::new("revision_id"))
@@ -163,7 +163,7 @@ impl MigrationTrait for Migration {
             Table::create()
                 .table(Alias::new("taxonomy_write_lock"))
                 .col(integer("id").primary_key())
-                .col(&mut integer("version"))
+                .col(integer("version"))
                 .to_owned(),
         )
         .await?;

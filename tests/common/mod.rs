@@ -65,16 +65,8 @@ impl Client {
 
     #[allow(dead_code)]
     pub async fn post_with_csrf_token(&mut self, path: &str, body: Value, token: &str) -> Response {
-        self.exchange_bytes(
-            "POST",
-            path,
-            body.to_string().into_bytes(),
-            "application/json",
-            false,
-            false,
-            &[("X-XSRF-TOKEN", token)],
-        )
-        .await
+        self.signed_request(path, body.to_string().into_bytes(), "X-XSRF-TOKEN", token)
+            .await
     }
 
     pub async fn get(&mut self, path: &str) -> Response {
@@ -114,9 +106,11 @@ impl Client {
         self.exchange_bytes(
             method,
             path,
-            body.map(|value| value.to_string().into_bytes())
-                .unwrap_or_default(),
-            "application/json",
+            (
+                "application/json",
+                body.map(|value| value.to_string().into_bytes())
+                    .unwrap_or_default(),
+            ),
             csrf,
             inertia,
             &[],
@@ -133,25 +127,25 @@ impl Client {
         content_type: &str,
         csrf: bool,
     ) -> Response {
-        self.exchange_bytes(method, path, body, content_type, csrf, false, &[])
+        self.exchange_bytes(method, path, (content_type, body), csrf, false, &[])
             .await
     }
 
+    /// Post JSON with an explicit security header instead of automatic CSRF.
     pub async fn signed_request(
         &mut self,
         path: &str,
         bytes: Vec<u8>,
         header: &str,
-        signature: &str,
+        value: &str,
     ) -> Response {
         self.exchange_bytes(
             "POST",
             path,
-            bytes,
-            "application/json",
+            ("application/json", bytes),
             false,
             false,
-            &[(header, signature)],
+            &[(header, value)],
         )
         .await
     }
@@ -160,12 +154,12 @@ impl Client {
         &mut self,
         method: &str,
         path: &str,
-        payload: Vec<u8>,
-        content_type: &str,
+        body: (&str, Vec<u8>),
         csrf: bool,
         inertia: bool,
         headers: &[(&str, &str)],
     ) -> Response {
+        let (content_type, payload) = body;
         // One real Hyper connection per exchange; both tasks are aborted on
         // timeout or panic as well as normal completion.
         let (client, server) = tokio::io::duplex(64 * 1024);

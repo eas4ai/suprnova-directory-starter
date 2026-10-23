@@ -111,19 +111,18 @@ pub async fn save(
             "Choose between one and five active categories.",
         ));
     }
-    if let Some(media_id) = &input.media_id {
-        if media::Entity::find_by_id(media_id)
+    if let Some(media_id) = &input.media_id
+        && media::Entity::find_by_id(media_id)
             .filter(media::Column::OwnerId.eq(actor_id))
             .one(&transaction)
             .await
             .map_err(database_error)?
             .is_none()
-        {
-            return Err(invalid(
-                "media_id",
-                "Upload an image owned by your account.",
-            ));
-        }
+    {
+        return Err(invalid(
+            "media_id",
+            "Upload an image owned by your account.",
+        ));
     }
     let proposed = revision::ActiveModel {
         seo: Set(input.seo.encode()?),

@@ -123,18 +123,17 @@ pub async fn save(actor: i64, id: Option<i64>, input: SaveArticle) -> Result<i64
             ));
         }
     }
-    if let Some(id) = &input.media_id {
-        if media::Entity::find_by_id(id)
+    if let Some(id) = &input.media_id
+        && media::Entity::find_by_id(id)
             .one(&tx)
             .await
             .map_err(database_error)?
             .is_none()
-        {
-            return Err(invalid(
-                "media_id",
-                "Upload an article image before attaching it.",
-            ));
-        }
+    {
+        return Err(invalid(
+            "media_id",
+            "Upload an article image before attaching it.",
+        ));
     }
     let proposed = revision::ActiveModel {
         seo: Set(input.seo.encode()?),

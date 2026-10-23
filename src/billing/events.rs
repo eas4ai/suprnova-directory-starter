@@ -44,7 +44,7 @@ fn verify_paddle_reversal(body: &Value, bytes: &[u8], signature: &str, key: &str
         .split(';')
         .find_map(|part| part.strip_prefix("ts="))
         .and_then(|v| v.parse::<i64>().ok());
-    if !timestamp.is_some_and(|time| time <= chrono::Utc::now().timestamp() + 5) {
+    if timestamp.is_none_or(|time| time > chrono::Utc::now().timestamp() + 5) {
         return false;
     }
     let Ok(text) = std::str::from_utf8(bytes) else {
@@ -174,17 +174,15 @@ pub async fn accept(
         remote_addr: None,
     };
     let mut authenticated = None;
-    if let Some(purchase) = &candidate {
-        if let Ok(adapter) = gateway::adapter(purchase) {
-            if adapter.verify(&context).is_ok()
-                || (provider == Provider::Paddle
-                    && gateway::credentials(purchase).is_ok_and(|credentials| {
-                        verify_paddle_reversal(&body, bytes, signature, &credentials.webhook_key)
-                    }))
-            {
-                authenticated = Some((adapter, format!("purchase:{}", purchase.id)));
-            }
-        }
+    if let Some(purchase) = &candidate
+        && let Ok(adapter) = gateway::adapter(purchase)
+        && (adapter.verify(&context).is_ok()
+            || (provider == Provider::Paddle
+                && gateway::credentials(purchase).is_ok_and(|credentials| {
+                    verify_paddle_reversal(&body, bytes, signature, &credentials.webhook_key)
+                })))
+    {
+        authenticated = Some((adapter, format!("purchase:{}", purchase.id)));
     }
     // Key rotation can overlap with retained purchase keys. Disabled profiles
     // still authenticate existing events; enablement controls new checkout only.

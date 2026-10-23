@@ -78,8 +78,11 @@ fn request(request: &str, path: &str, marker: &str) -> Vec<(String, String)> {
     let target = first.next().unwrap();
     let (actual, query) = target.split_once('?').unwrap_or((target, ""));
     assert_eq!(actual, path);
-    assert!(request.lines().any(|line| line.to_ascii_lowercase()
-        == format!("authorization: bearer {marker}").to_ascii_lowercase()));
+    assert!(
+        request
+            .lines()
+            .any(|line| line.eq_ignore_ascii_case(&format!("authorization: bearer {marker}")))
+    );
     query
         .split('&')
         .filter(|part| !part.is_empty())

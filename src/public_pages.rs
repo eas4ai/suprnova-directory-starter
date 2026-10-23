@@ -272,8 +272,7 @@ pub fn config() -> Result<InertiaConfig, FrameworkError> {
     {
         return Err(FrameworkError::internal(
             "SSR_URL must be an HTTP origin for the internal rendering worker.",
-        )
-        .into());
+        ));
     }
     let config = InertiaConfig::new()
         .frontend(Frontend::Vue)

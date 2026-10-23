@@ -155,10 +155,10 @@ fn prepare_root(configured: &Path) -> Result<PathBuf, MediaError> {
     {
         return Err(MediaError::UnsafeRoot);
     }
-    if let Ok(public) = Path::new("public").canonicalize() {
-        if root.starts_with(public) {
-            return Err(MediaError::UnsafeRoot);
-        }
+    if let Ok(public) = Path::new("public").canonicalize()
+        && root.starts_with(public)
+    {
+        return Err(MediaError::UnsafeRoot);
     }
     Ok(root)
 }

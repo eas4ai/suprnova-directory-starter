@@ -74,6 +74,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
+## Suprnova 4.6 Vue kit (MIT)
+
+The 1.1.0 upgrade adapts the backend Live router, gate registration, root document,
+email normalization and public page budget test, plus Vue agent, stream and static
+client helpers from `suprnova-cli/src/templates/files/` in the Suprnova repository.
+The framework dependency selects `v4.6.0` at
+`cdf953217bfdae4d4a90d845ca78d14d02b54d53`. The page budget router and shared
+`live::authorize()` template fixes come from framework main at
+`4fa8e7c5220d5f5541a83832f925a93819fc2d11`, after that tag. The full Suprnova MIT
+notice above applies to these copied and adapted files too.
+
+The framework and both payment adapters now resolve tag `v4.6.0`.
+`suprnova-markdown` resolves tag `v0.5.4` at
+`dd25f8561897a6b218c65370ee108510b1f1f3a5` under MIT. The Vue kit's
+`webmcp-types` 0.1.10 development dependency is MIT-licensed; retain its package
+notice when distributing its declarations. Inertia uses the current kit's
+`^3.8.0` package ranges. Exact direct and transitive versions remain in the locks.
+
 ## Dependencies and assets
 
 `Cargo.lock` records Rust dependency versions and checksums, including the exact

@@ -34,6 +34,12 @@ export default defineConfig(({ isSsrBuild }) => ({
         manifest: true,
         rollupOptions: {
           input: ['src/main.ts', 'src/app.css'],
+          output: {
+            manualChunks(id) {
+              if (id.includes('/node_modules/@inertiajs/')) return 'inertia'
+              if (id.includes('/node_modules/vue/') || id.includes('/node_modules/@vue/')) return 'vue'
+            },
+          },
         },
       },
 }))

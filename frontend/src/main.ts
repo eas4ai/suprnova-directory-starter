@@ -3,15 +3,20 @@ import type { SharedProps } from './types/shared'
 import './app.css'
 import './directory.css'
 import './editorial.css'
-import { createInertiaApp } from '@inertiajs/vue3'
+import { createInertiaApp, router } from '@inertiajs/vue3'
 import { createApp, createSSRApp, h } from 'vue'
 import { initLang } from './lib/lang'
 import { resolvePage } from './resolve'
+import { installPageTools } from './lib/agents'
+import { staticHttpClient } from './lib/static'
 
 // Inertia's HTTP client reads the current XSRF-TOKEN cookie on each request.
 // Do not cache the page's meta token: authentication rotates the session.
 
+installPageTools(router)
+
 createInertiaApp({
+  http: staticHttpClient(),
   resolve: resolvePage,
   async setup({ el, App, props, plugin }) {
     // `el` is `null` when `setup` runs server-side - @inertiajs/vue3's
